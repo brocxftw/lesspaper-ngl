@@ -132,6 +132,7 @@ LESSPAPER_NGL_VERSION_TAG=""
 assert_ok "resolve empty falls back to prerelease" config_resolve_version_tag
 assert_eq "resolve empty version" "${LESSPAPER_NGL_VERSION}" "0.1.24-beta.2"
 assert_eq "resolve empty tag" "${LESSPAPER_NGL_VERSION_TAG}" "v0.1.24-beta.2"
+# shellcheck disable=SC2317
 github_latest_tag() { printf 'v0.1.23\n'; }
 
 # Explicit request wins over values hydrated from install-state / .env (issue #65).
