@@ -17,39 +17,25 @@ End users must **not** run `docker login ghcr.io`.
 
 ## Install
 
-Stable (newest non-prerelease):
+Newest beta (moving pointer; Compose/`env.example` are pinned to the current `vX.Y.Z-beta.N`):
 
 ```bash
 mkdir lesspaper-ngl
 cd lesspaper-ngl
 
 curl -fsSL -o docker-compose.yml \
-  https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/docker-compose.yml
+  https://github.com/brocxftw/lesspaper-ngl/releases/download/beta/docker-compose.yml
 curl -fsSL -o env.example \
-  https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/env.example
+  https://github.com/brocxftw/lesspaper-ngl/releases/download/beta/env.example
 
 cp env.example .env
 ```
 
-### Pre-release / beta
+GitHub’s `/releases/latest/download/` is unpublished until a stable `vX.Y.Z` exists.
 
-`releases/latest` never points at a prerelease. Download assets from a specific prerelease tag instead:
+To pin an exact prerelease instead of the moving `beta` pointer, replace `beta` in those URLs with a tag from [Releases](https://github.com/brocxftw/lesspaper-ngl/releases) (for example `v0.1.24-beta.8`).
 
-```bash
-TAG=v0.1.24-beta.5   # example — pick a tag from GitHub Releases
-
-mkdir lesspaper-ngl
-cd lesspaper-ngl
-
-curl -fsSL -o docker-compose.yml \
-  "https://github.com/brocxftw/lesspaper-ngl/releases/download/${TAG}/docker-compose.yml"
-curl -fsSL -o env.example \
-  "https://github.com/brocxftw/lesspaper-ngl/releases/download/${TAG}/env.example"
-
-cp env.example .env
-```
-
-Ensure `.env` sets `LESSPAPER_NGL_VERSION` (legacy `FOLIUM_VERSION` still accepted) to the tag without the leading `v` (for example `0.1.24-beta.5`). Prefer that pin over the moving GHCR `beta` tag.
+Ensure `.env` sets `LESSPAPER_NGL_VERSION` (legacy `FOLIUM_VERSION` still accepted) to the tag without the leading `v` (for example `0.1.24-beta.8`). The `beta` Release’s `env.example` already has that pin.
 
 For the installer-based beta path, see [installer.md](installer.md#pre-release--beta).
 

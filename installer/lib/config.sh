@@ -8,13 +8,25 @@ github_latest_tag() {
     | python3 -c 'import json,sys; print(json.load(sys.stdin)["tag_name"])'
 }
 
-# Published tags, including GitHub prereleases (vX.Y.Z-beta.N). Drafts are omitted.
+# Moving GitHub Release/tag names used as channel pointers, not installable versions.
+github_is_channel_pointer_tag() {
+  local tag="${1:-}"
+  tag="$(config_strip_v_prefix "${tag}")"
+  [[ "${tag}" == "beta" || "${tag}" == "latest" ]]
+}
+
+# Published tags, including GitHub prereleases (vX.Y.Z-beta.N). Drafts and
+# moving channel pointers (`beta`, `latest`) are omitted.
 github_filter_release_tags() {
   python3 -c 'import json,sys
+channel={"beta","latest"}
 for rel in json.load(sys.stdin):
     if rel.get("draft"):
         continue
-    print(rel["tag_name"])
+    tag=rel.get("tag_name") or ""
+    if tag in channel or tag.lstrip("v") in channel:
+        continue
+    print(tag)
 '
 }
 
@@ -36,6 +48,9 @@ github_latest_prerelease_tag() {
   local tag
   while IFS= read -r tag; do
     [[ -n "${tag}" ]] || continue
+    if github_is_channel_pointer_tag "${tag}"; then
+      continue
+    fi
     if github_tag_is_prerelease "${tag}"; then
       printf '%s\n' "${tag}"
       return 0
@@ -83,7 +98,7 @@ config_resolve_version_tag() {
   elif [[ -n "${LESSPAPER_NGL_VERSION:-}" ]]; then
     raw="${LESSPAPER_NGL_VERSION}"
   else
-    raw="$(github_latest_tag)" || return 1
+    raw="$(github_latest_tag || github_latest_prerelease_tag)" || return 1
   fi
   local stripped
   stripped="$(config_strip_v_prefix "${raw}")"

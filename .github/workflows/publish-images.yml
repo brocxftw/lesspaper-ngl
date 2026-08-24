@@ -227,3 +227,19 @@ jobs:
               "${channel_args[@]}" \
               "${assets[@]}"
           fi
+          # GitHub has no /releases/latest/beta/ URL. Keep a moving Release/tag
+          # named `beta` so operators can curl /releases/download/beta/<asset>.
+          if [[ "$STABLE" != "true" ]]; then
+            if gh release view beta >/dev/null 2>&1; then
+              gh release delete beta --yes --cleanup-tag
+            else
+              git push origin --delete beta 2>/dev/null || true
+            fi
+            gh release create beta \
+              --title "lesspaper-ngl beta (v${VERSION})" \
+              --notes "Moving pointer to the current beta. Currently v${VERSION}." \
+              --prerelease \
+              --latest=false \
+              --target "${GITHUB_SHA}" \
+              "${assets[@]}"
+          fi

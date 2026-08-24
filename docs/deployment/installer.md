@@ -8,29 +8,24 @@ Review the installer script, then run it. It is a single file (no tarball):
 
 ```bash
 curl -fsSL -o install-lesspaper-ngl.sh \
-  https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/install-lesspaper-ngl.sh
+  https://github.com/brocxftw/lesspaper-ngl/releases/download/beta/install-lesspaper-ngl.sh
 less install-lesspaper-ngl.sh
 bash install-lesspaper-ngl.sh
 ```
 
-Releases also publish `install-folium.sh` as an identical transition shim (same contents as `install-lesspaper-ngl.sh`).
+That `beta` URL is a moving pointer to the newest prerelease. Do not treat `| bash` as the only option. Pin an exact tag from [Releases](https://github.com/brocxftw/lesspaper-ngl/releases) if you need a specific `vX.Y.Z-beta.N`.
 
-`releases/latest` is the newest **stable** release. Do not treat `| bash` as the only option. Pin a release by downloading that tag’s asset:
-
-```bash
-curl -fsSL -o install-lesspaper-ngl.sh \
-  https://github.com/brocxftw/lesspaper-ngl/releases/download/v0.1.16/install-lesspaper-ngl.sh
-```
+Releases also publish `install-folium.sh` as an identical transition shim (same contents as `install-lesspaper-ngl.sh`). GitHub’s `/releases/latest/download/` is unpublished until a stable `vX.Y.Z` exists.
 
 ### Pre-release / beta
 
-Prereleases use tags like `vX.Y.Z-beta.N`. They are published as GitHub **prereleases** and do not replace `releases/latest`.
+Prereleases use tags like `vX.Y.Z-beta.N`. They are published as GitHub **prereleases**. The moving Release/tag `beta` always holds the current prerelease installer and Compose assets (and GHCR publishes a moving `beta` image tag).
 
-**Interactive:** download the installer from a prerelease tag, or use any recent installer and choose a **Beta**-labelled tag in the version picker:
+**Interactive:** download the moving beta installer, then pick a **Beta**-labelled tag in the version picker if you want a pin other than the newest prerelease:
 
 ```bash
 curl -fsSL -o install-lesspaper-ngl.sh \
-  https://github.com/brocxftw/lesspaper-ngl/releases/download/v0.1.24-beta.5/install-lesspaper-ngl.sh
+  https://github.com/brocxftw/lesspaper-ngl/releases/download/beta/install-lesspaper-ngl.sh
 less install-lesspaper-ngl.sh
 bash install-lesspaper-ngl.sh
 ```
@@ -137,11 +132,11 @@ LESSPAPER_NGL_UI=none LESSPAPER_NGL_NONINTERACTIVE=1 \
   LESSPAPER_NGL_RELEASE_COMPOSE_FILE=/path/to/docker-compose.yml \
   bash installer/install.sh --noninteractive
 
-# Update existing install to latest stable (secrets kept automatically)
-bash install-lesspaper-ngl.sh --noninteractive --update --version latest --json
+# Update existing install to newest beta (secrets kept automatically)
+bash install-lesspaper-ngl.sh --noninteractive --update --version beta --json
 
-# Update to newest beta prerelease
-bash install-lesspaper-ngl.sh --noninteractive --update --version beta --preserve-secrets --json
+# Update to a pinned prerelease
+bash install-lesspaper-ngl.sh --noninteractive --update --version v0.1.24-beta.5 --preserve-secrets --json
 ```
 
 CLI flags (aliases for the matching `LESSPAPER_NGL_*` env vars; legacy `FOLIUM_*` still accepted):
@@ -155,8 +150,8 @@ CLI flags (aliases for the matching `LESSPAPER_NGL_*` env vars; legacy `FOLIUM_*
 | `--json` | Print one JSON summary line on completion |
 
 Version aliases resolve to a **pinned** tag before writing `.env` / state:
-`latest` → GitHub `releases/latest` (stable); `beta` → newest prerelease
-(`vX.Y.Z-beta.N`). Moving image tags are never stored as the installed version.
+`beta` → newest prerelease (`vX.Y.Z-beta.N`); `latest` → GitHub `releases/latest`
+(stable; unpublished until a non-prerelease exists). Moving image tags are never stored as the installed version.
 
 Exit codes:
 
@@ -215,4 +210,4 @@ Each `v*` GitHub Release includes:
 - `default.env.example` (compatibility alias; GitHub rejects a leading-dot `.env.example` asset name)
 - `checksums.txt`
 
-The installer version picker lists **prereleases** (`vX.Y.Z-beta.N`, labelled Beta) as well as stable tags. GitHub `releases/latest` and the menu’s “Latest stable” entry still refer to the current **stable** release; prereleases do not replace it. Prefer pinning an exact `vX.Y.Z-beta.N` tag (or `--version beta`, which resolves to one) rather than relying on the moving GHCR image tag `beta`.
+Prerelease publishes also refresh a moving GitHub Release/tag named `beta` with those same assets, so `/releases/download/beta/<asset>` always tracks the newest prerelease. The installer version picker lists **prereleases** (`vX.Y.Z-beta.N`, labelled Beta) and omits the moving channel tags `beta` / `latest`. Until a stable `vX.Y.Z` exists, curl the moving installer at `/releases/download/beta/install-lesspaper-ngl.sh` (or pass `--version beta`). That resolves to a pinned `vX.Y.Z-beta.N` before writing state.

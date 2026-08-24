@@ -35,6 +35,9 @@ ctl_update_latest_prerelease_tag() {
   while IFS= read -r tag; do
     [[ -n "${tag}" ]] || continue
     plain="$(config_strip_v_prefix "${tag}")"
+    if [[ "${plain}" == "beta" || "${plain}" == "latest" ]]; then
+      continue
+    fi
     if [[ "${plain}" == *-* ]]; then
       printf '%s\n' "${tag}"
       return 0
@@ -44,10 +47,14 @@ ctl_update_latest_prerelease_tag() {
       -H "Accept: application/vnd.github+json" \
       "https://api.github.com/repos/${repo}/releases?per_page=30" \
       | python3 -c 'import json,sys
+channel={"beta","latest"}
 for rel in json.load(sys.stdin):
     if rel.get("draft"):
         continue
-    print(rel["tag_name"])
+    tag=rel.get("tag_name") or ""
+    if tag in channel or tag.lstrip("v") in channel:
+        continue
+    print(tag)
 '
   )
   return 1
@@ -68,9 +75,7 @@ ctl_update_installer_url() {
       printf 'https://github.com/%s/releases/latest/download/%s' "${repo}" "${asset}"
       ;;
     beta)
-      local tag
-      tag="$(ctl_update_latest_prerelease_tag)" || return 1
-      printf 'https://github.com/%s/releases/download/%s/%s' "${repo}" "${tag}" "${asset}"
+      printf 'https://github.com/%s/releases/download/beta/%s' "${repo}" "${asset}"
       ;;
     v*)
       printf 'https://github.com/%s/releases/download/%s/%s' "${repo}" "${target}" "${asset}"
