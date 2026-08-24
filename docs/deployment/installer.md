@@ -7,17 +7,19 @@ Primary install path for operators. A [manual Compose install](install.md) remai
 Review the installer script, then run it. It is a single file (no tarball):
 
 ```bash
-curl -fsSL -o install-folium.sh \
-  https://github.com/brocxftw/folium/releases/latest/download/install-folium.sh
-less install-folium.sh
-bash install-folium.sh
+curl -fsSL -o install-lesspaper-ngl.sh \
+  https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/install-lesspaper-ngl.sh
+less install-lesspaper-ngl.sh
+bash install-lesspaper-ngl.sh
 ```
+
+Releases also publish `install-folium.sh` as an identical transition shim (same contents as `install-lesspaper-ngl.sh`).
 
 `releases/latest` is the newest **stable** release. Do not treat `| bash` as the only option. Pin a release by downloading that tag’s asset:
 
 ```bash
-curl -fsSL -o install-folium.sh \
-  https://github.com/brocxftw/folium/releases/download/v0.1.16/install-folium.sh
+curl -fsSL -o install-lesspaper-ngl.sh \
+  https://github.com/brocxftw/lesspaper-ngl/releases/download/v0.1.16/install-lesspaper-ngl.sh
 ```
 
 ### Pre-release / beta
@@ -27,26 +29,26 @@ Prereleases use tags like `vX.Y.Z-beta.N`. They are published as GitHub **prerel
 **Interactive:** download the installer from a prerelease tag, or use any recent installer and choose a **Beta**-labelled tag in the version picker:
 
 ```bash
-curl -fsSL -o install-folium.sh \
-  https://github.com/brocxftw/folium/releases/download/v0.1.24-beta.5/install-folium.sh
-less install-folium.sh
-bash install-folium.sh
+curl -fsSL -o install-lesspaper-ngl.sh \
+  https://github.com/brocxftw/lesspaper-ngl/releases/download/v0.1.24-beta.5/install-lesspaper-ngl.sh
+less install-lesspaper-ngl.sh
+bash install-lesspaper-ngl.sh
 ```
 
 **Non-interactive** (fresh install or update):
 
 ```bash
 # Newest prerelease
-bash install-folium.sh --noninteractive --version beta --json
+bash install-lesspaper-ngl.sh --noninteractive --version beta --json
 
 # Exact prerelease pin
-bash install-folium.sh --noninteractive --version v0.1.24-beta.5 --json
+bash install-lesspaper-ngl.sh --noninteractive --version v0.1.24-beta.5 --json
 
 # Update existing install to newest beta (preserves secrets / bind)
-bash install-folium.sh --noninteractive --update --version beta --json
+bash install-lesspaper-ngl.sh --noninteractive --update --version beta --json
 ```
 
-CLI `--version` and process-environment `FOLIUM_VERSION` / `FOLIUM_VERSION_TAG` take precedence over the version already stored in `install-state.json` or `.env`. The installer still resolves aliases to a pinned `vX.Y.Z-beta.N` before writing state.
+CLI `--version` and process-environment `LESSPAPER_NGL_VERSION` / `LESSPAPER_NGL_VERSION_TAG` take precedence over the version already stored in `install-state.json` or `.env`. The installer still resolves aliases to a pinned `vX.Y.Z-beta.N` before writing state.
 
 The script is a packed copy of `installer/install.sh` plus its libraries. It starts a **whiptail** TUI and then downloads that release’s `docker-compose.yml`.
 
@@ -55,7 +57,8 @@ From a git checkout (contributors; modular sources):
 ```bash
 bash installer/install.sh
 # rebuild the curl-able file:
-bash installer/pack.sh /tmp/install-folium.sh
+bash installer/pack.sh /tmp/install-lesspaper-ngl.sh
+# also writes install-folium.sh alongside when the outfile basename is install-lesspaper-ngl.sh
 ```
 
 ## What the installer does
@@ -65,90 +68,90 @@ bash installer/pack.sh /tmp/install-folium.sh
 3. Detects an existing install and offers **Update** (pull a pinned release image), Reconfigure, Repair, or Exit. It never silently rewrites `.env` secrets.
 4. Chooses **pre-built GHCR images** (default) or **build from source** (clones the selected tag into `INSTALL_DIR/src`).
 5. Pins a real `vX.Y.Z` or `vX.Y.Z-beta.N` release. It never stores `latest` or the moving `beta` image tag as the installed version.
-6. Writes `/opt/folium` by default (you may choose another directory; `/root` and `/tmp` are allowed at your own risk with a confirmation). Release `docker-compose.yml`, a small overlay (bind/port/`group_add` only), and `.env` (`chmod 600`). Backup files go to `$INSTALL_DIR/data/backups` (not the installer config snapshot folder).
+6. Writes `/opt/lesspaper-ngl` by default for fresh installs (you may choose another directory; `/root` and `/tmp` are allowed at your own risk with a confirmation). Existing installs under `/opt/folium` are still discovered and are not force-moved. Release `docker-compose.yml`, a small overlay (bind/port/`group_add` only), and `.env` (`chmod 600`). Backup files go to `$INSTALL_DIR/data/backups` (not the installer config snapshot folder).
 7. Publishes **only the UI port** (default **9398**). The API host port (default **9099**) is unpublished unless you opt in. Nginx in `web` already proxies `/api`, `/health`, and `/mcp`.
 8. Waits for `GET /health`, `/health/database`, `/health/storage`, and `/health/worker`. AI health is ignored.
-9. Installs `/usr/local/bin/folium` (`status`, `start`, `stop`, `restart`, `logs`, `doctor`, `update`). `uninstall` remains a stub in v1.
+9. Installs `/usr/local/bin/lesspaper-ngl` (`status`, `start`, `stop`, `restart`, `logs`, `doctor`, `update`) and a `/usr/local/bin/folium` shim. `uninstall` remains a stub in v1.
 
 Secrets are generated with `openssl rand`. The bootstrap admin password is shown **once** on the success screen and is not written to the installer log. The welcome screen shows the exact log file path for that run (for example `/tmp/folium-install-20260817-123456.log`).
 
 The TUI keeps a blue screen behind a **grey** dialog card. Cancel is labeled **Back**, and menus also include an explicit **Back** item where useful. Ctrl+C cancels immediately (restores the terminal; existing data is not deleted). Install progress (pull/build/start/health) is shown with a gauge; Compose output goes to the log file.
 
-There is no timezone prompt. Folium timestamps are UTC.
+There is no timezone prompt. lesspaper-ngl timestamps are UTC.
 
 ## Layout
 
 ```text
-/opt/folium/
+/opt/lesspaper-ngl/
   docker-compose.yml
   docker-compose.override.yml
   .env                    # mode 600
   install-state.json      # no secrets
-  backups/                # installer config snapshots only — not Folium bundles
+  backups/                # installer config snapshots only — not lesspaper-ngl bundles
   data/backups/           # default host bind for /backups (.folium bundles)
   data/paddleocr/         # always local, even if documents are on NAS
-  installer/              # packed `folium` CLI (or modular copy from a git install)
+  installer/              # packed `lesspaper-ngl` CLI (or modular copy from a git install)
 ```
 
 Paddle OCR cache is always under the install directory. Document/consume/export binds may be existing host paths, including NFS/CIFS mounts **already present**. The installer does not edit `/etc/fstab` and does not install NAS client packages.
 
-`FRONTEND_ORIGIN` lists every browser URL you will use (comma-separated), for example `https://docs.example.com,http://192.168.1.10:9398`. If you use a reverse proxy on HTTPS but keep an HTTP LAN origin in the list, set `FOLIUM_SECURE_COOKIES=true` so session cookies use the `Secure` flag. The installer does not install Caddy or nginx on the host.
+`FRONTEND_ORIGIN` lists every browser URL you will use (comma-separated), for example `https://docs.example.com,http://192.168.1.10:9398`. If you use a reverse proxy on HTTPS but keep an HTTP LAN origin in the list, set `LESSPAPER_NGL_SECURE_COOKIES=true` so session cookies use the `Secure` flag. The installer does not install Caddy or nginx on the host.
 
 **MCP:** Streamable HTTP at `{origin}/mcp` through the UI port (recommended). Requires a Bearer API token from Settings → Profile. Optional: publish the API port and use `http://host:9099/mcp` directly.
 
-Non-interactive installs under `/root` or `/tmp` require `FOLIUM_ACCEPT_RISKY_PATH=1`.
+Non-interactive installs under `/root` or `/tmp` require `LESSPAPER_NGL_ACCEPT_RISKY_PATH=1`.
 
 ## Management CLI
 
 ```bash
-folium status
-folium start
-folium stop
-folium restart
-folium logs
-folium doctor
-folium update                 # newest beta (default); also: latest | vX.Y.Z[-beta.N]
+lesspaper-ngl status
+lesspaper-ngl start
+lesspaper-ngl stop
+lesspaper-ngl restart
+lesspaper-ngl logs
+lesspaper-ngl doctor
+lesspaper-ngl update                 # newest beta (default); also: latest | vX.Y.Z[-beta.N]
 ```
 
-`folium update` downloads a fresh release installer and runs `--noninteractive --update`. Override the install directory with `FOLIUM_INSTALL_DIR`. The CLI also reads `/etc/folium/install-dir`.
+`lesspaper-ngl update` downloads a fresh release installer and runs `--noninteractive --update`. Override the install directory with `LESSPAPER_NGL_INSTALL_DIR`. The CLI also reads `/etc/lesspaper-ngl/install-dir` (and legacy `/etc/folium/install-dir`).
 
 Hosts still on an older CLI stub need one installer re-run before `update` is available.
 
 ## Non-interactive (automation / CI / agents)
 
 `--noninteractive` is the automation entry point. When an existing install is
-discovered (via `/etc/folium/install-dir`, `install-state.json`, or
-`FOLIUM_INSTALL_DIR` with `.env` + Compose), the installer runs the **update**
+discovered (via `/etc/lesspaper-ngl/install-dir`, legacy `/etc/folium/install-dir`, `/opt/folium`, `install-state.json`, or
+`LESSPAPER_NGL_INSTALL_DIR` with `.env` + Compose), the installer runs the **update**
 path: secrets, bind, ports, and storage paths are preserved from `.env`. A
 fresh install only runs when no existing install is found.
 
 ```bash
 # Fresh install of a pinned release
-FOLIUM_UI=none FOLIUM_NONINTERACTIVE=1 \
-  FOLIUM_VERSION=0.1.16 FOLIUM_VERSION_TAG=v0.1.16 \
-  FOLIUM_INSTALL_DIR=/tmp/folium-installer-smoke \
-  FOLIUM_BIND=127.0.0.1 FOLIUM_HTTP_PORT=18080 \
-  FOLIUM_COMPOSE_PROJECT=folium-installer-smoke \
-  FOLIUM_SKIP_CLI=1 \
-  FOLIUM_ACCEPT_RISKY_PATH=1 \
-  FOLIUM_RELEASE_COMPOSE_FILE=/path/to/docker-compose.yml \
+LESSPAPER_NGL_UI=none LESSPAPER_NGL_NONINTERACTIVE=1 \
+  LESSPAPER_NGL_VERSION=0.1.16 LESSPAPER_NGL_VERSION_TAG=v0.1.16 \
+  LESSPAPER_NGL_INSTALL_DIR=/tmp/folium-installer-smoke \
+  LESSPAPER_NGL_BIND=127.0.0.1 LESSPAPER_NGL_HTTP_PORT=18080 \
+  LESSPAPER_NGL_COMPOSE_PROJECT=folium-installer-smoke \
+  LESSPAPER_NGL_SKIP_CLI=1 \
+  LESSPAPER_NGL_ACCEPT_RISKY_PATH=1 \
+  LESSPAPER_NGL_RELEASE_COMPOSE_FILE=/path/to/docker-compose.yml \
   bash installer/install.sh --noninteractive
 
 # Update existing install to latest stable (secrets kept automatically)
-bash install-folium.sh --noninteractive --update --version latest --json
+bash install-lesspaper-ngl.sh --noninteractive --update --version latest --json
 
 # Update to newest beta prerelease
-bash install-folium.sh --noninteractive --update --version beta --preserve-secrets --json
+bash install-lesspaper-ngl.sh --noninteractive --update --version beta --preserve-secrets --json
 ```
 
-CLI flags (aliases for the matching `FOLIUM_*` env vars):
+CLI flags (aliases for the matching `LESSPAPER_NGL_*` env vars; legacy `FOLIUM_*` still accepted):
 
 | Flag | Effect |
 |------|--------|
-| `--noninteractive` | No TUI (`FOLIUM_UI=none`) |
+| `--noninteractive` | No TUI (`LESSPAPER_NGL_UI=none`) |
 | `--update` | Force update path (implies `--noninteractive`) |
 | `--version <tag>` | Pin `vX.Y.Z` / `vX.Y.Z-beta.N`, or aliases `latest` / `beta` |
-| `--preserve-secrets` | Keep existing `.env` secrets (`FOLIUM_KEEP_SECRETS=1`) |
+| `--preserve-secrets` | Keep existing `.env` secrets (`LESSPAPER_NGL_KEEP_SECRETS=1`) |
 | `--json` | Print one JSON summary line on completion |
 
 Version aliases resolve to a **pinned** tag before writing `.env` / state:
@@ -168,10 +171,10 @@ Exit codes:
 `--json` emits a single line such as:
 
 ```json
-{"version":"0.1.24-beta.2","version_tag":"v0.1.24-beta.2","healthy":true,"install_dir":"/opt/folium","frontend_origin":"https://docs.example.com","mode":"update"}
+{"version":"0.1.24-beta.2","version_tag":"v0.1.24-beta.2","healthy":true,"install_dir":"/opt/lesspaper-ngl","frontend_origin":"https://docs.example.com","mode":"update"}
 ```
 
-Non-interactive installs under `/root` or `/tmp` require `FOLIUM_ACCEPT_RISKY_PATH=1`.
+Non-interactive installs under `/root` or `/tmp` require `LESSPAPER_NGL_ACCEPT_RISKY_PATH=1`.
 
 ## Tests
 
@@ -188,7 +191,7 @@ CI runs ShellCheck and `installer/tests/run.sh`.
 | Case | Coverage |
 |------|----------|
 | Happy path, pre-built images, localhost:18080 | `smoke.sh` / operator TUI |
-| Existing install: Update / Reconfigure / Repair / Exit | TUI on a host with `/opt/folium` |
+| Existing install: Update / Reconfigure / Repair / Exit | TUI on a host with `/opt/lesspaper-ngl` or legacy `/opt/folium` |
 | Source build (`git clone` + `compose.source.yaml`) | Manual |
 | LAN bind `0.0.0.0` + detected IPv4 origin | Manual |
 | Comma-separated `FRONTEND_ORIGIN` (proxy + LAN) | Manual |
@@ -199,13 +202,14 @@ CI runs ShellCheck and `installer/tests/run.sh`.
 | Docker missing → get.docker.com | Manual / VM |
 | Ctrl+C during TUI | Restores tty; does not delete data |
 
-A development host that already runs Folium on 9398/9099 must use another Compose project name and HTTP port for installer smokes.
+A development host that already runs lesspaper-ngl on 9398/9099 must use another Compose project name and HTTP port for installer smokes.
 
 ## Release assets
 
 Each `v*` GitHub Release includes:
 
-- `install-folium.sh` (standalone installer; the only file operators need to curl)
+- `install-lesspaper-ngl.sh` (standalone installer; preferred)
+- `install-folium.sh` (identical transition shim)
 - `docker-compose.yml`
 - `env.example` (canonical env template)
 - `default.env.example` (compatibility alias; GitHub rejects a leading-dot `.env.example` asset name)

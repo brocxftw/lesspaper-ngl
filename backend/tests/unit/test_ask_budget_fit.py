@@ -5,7 +5,7 @@ from __future__ import annotations
 import uuid
 from types import SimpleNamespace
 
-from folium.ai.rag import RetrievedChunk, _fit_chunks_to_budget
+from lesspaper_ngl.ai.rag import RetrievedChunk, _fit_chunks_to_budget
 
 
 def _chunk(text: str, token_count: int) -> RetrievedChunk:

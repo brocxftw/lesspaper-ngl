@@ -8,15 +8,15 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from folium.ai.assignments import ResolvedAssignment
-from folium.ai.health import (
+from lesspaper_ngl.ai.assignments import ResolvedAssignment
+from lesspaper_ngl.ai.health import (
     HEALTH_PROBE_INTERVAL_SECONDS,
     derive_ocr_capability,
     derive_role_capability,
     probe_assigned_providers,
 )
-from folium.models import AIWorkloadRole
-from folium.workers.processor import _provider_reachable_for_jobs
+from lesspaper_ngl.models import AIWorkloadRole
+from lesspaper_ngl.workers.processor import _provider_reachable_for_jobs
 
 
 def _resolved(
@@ -149,7 +149,7 @@ def test_ocr_not_configured_when_disabled() -> None:
     settings = MagicMock()
     settings.ocr_enabled = False
     settings.ocr_language = "eng"
-    with patch("folium.ai.health.get_settings", return_value=settings):
+    with patch("lesspaper_ngl.ai.health.get_settings", return_value=settings):
         cap = derive_ocr_capability()
     assert cap.status == "not_configured"
     assert cap.capability == "ocr"
@@ -160,9 +160,9 @@ def test_ocr_unavailable_when_paddle_missing() -> None:
     settings.ocr_enabled = True
     settings.ocr_language = "eng"
     with (
-        patch("folium.ai.health.get_settings", return_value=settings),
-        patch("folium.ai.health.paddle_ocr_available", return_value=False),
-        patch("folium.ai.health.get_paddle_import_error", return_value="no paddle"),
+        patch("lesspaper_ngl.ai.health.get_settings", return_value=settings),
+        patch("lesspaper_ngl.ai.health.paddle_ocr_available", return_value=False),
+        patch("lesspaper_ngl.ai.health.get_paddle_import_error", return_value="no paddle"),
     ):
         cap = derive_ocr_capability()
     assert cap.status == "unavailable"
@@ -174,8 +174,8 @@ def test_ocr_available_when_enabled_and_importable() -> None:
     settings.ocr_enabled = True
     settings.ocr_language = "eng"
     with (
-        patch("folium.ai.health.get_settings", return_value=settings),
-        patch("folium.ai.health.paddle_ocr_available", return_value=True),
+        patch("lesspaper_ngl.ai.health.get_settings", return_value=settings),
+        patch("lesspaper_ngl.ai.health.paddle_ocr_available", return_value=True),
     ):
         cap = derive_ocr_capability()
     assert cap.status == "available"
@@ -256,10 +256,10 @@ async def test_probe_assigned_providers_releases_session_before_http() -> None:
     adapter.aclose = AsyncMock()
 
     with (
-        patch("folium.ai.health.session_scope", fake_scope),
-        patch("folium.ai.health._list_assigned_provider_ids", list_ids),
-        patch("folium.ai.health.get_adapter", return_value=adapter),
-        patch("folium.ai.health.is_provider_busy", return_value=False),
+        patch("lesspaper_ngl.ai.health.session_scope", fake_scope),
+        patch("lesspaper_ngl.ai.health._list_assigned_provider_ids", list_ids),
+        patch("lesspaper_ngl.ai.health.get_adapter", return_value=adapter),
+        patch("lesspaper_ngl.ai.health.is_provider_busy", return_value=False),
     ):
         count = await probe_assigned_providers()
 

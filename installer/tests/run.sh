@@ -22,7 +22,7 @@ source "${ROOT}/lib/docker.sh"
 # shellcheck source=../lib/ctl_update.sh
 source "${ROOT}/lib/ctl_update.sh"
 
-FOLIUM_LOG_FILE="/dev/null"
+LESSPAPER_NGL_LOG_FILE="/dev/null"
 FAILED=0
 PASSED=0
 
@@ -71,6 +71,26 @@ assert_fail "reject latest" config_is_pinned_version "latest"
 assert_fail "reject moving beta tag" config_is_pinned_version "beta"
 assert_fail "reject empty" config_is_pinned_version ""
 
+
+assert_eq "default install dir" "${LESSPAPER_NGL_DEFAULT_INSTALL_DIR}" "/opt/lesspaper-ngl"
+assert_eq "default project" "${LESSPAPER_NGL_DEFAULT_PROJECT}" "lesspaper-ngl"
+assert_eq "default github repo" "${LESSPAPER_NGL_GITHUB_REPO}" "brocxftw/lesspaper-ngl"
+
+# Dual discovery: new pointer preferred, legacy accepted
+DISC_TMP="$(mktemp -d)"
+mkdir -p "${DISC_TMP}/new" "${DISC_TMP}/legacy"
+echo '{"schema":1}' >"${DISC_TMP}/new/install-state.json"
+echo '{"schema":1}' >"${DISC_TMP}/legacy/install-state.json"
+# Simulate pointer files via temp etc — state_discover_dir reads absolute /etc paths,
+# so exercise the env override path and /opt fallbacks via INSTALL_DIR.
+LESSPAPER_NGL_INSTALL_DIR="${DISC_TMP}/new"
+assert_eq "discover via new install dir env" "$(state_discover_dir)" "${DISC_TMP}/new"
+unset LESSPAPER_NGL_INSTALL_DIR
+FOLIUM_INSTALL_DIR="${DISC_TMP}/legacy"
+assert_eq "discover via legacy FOLIUM_INSTALL_DIR" "$(state_discover_dir)" "${DISC_TMP}/legacy"
+unset FOLIUM_INSTALL_DIR
+rm -rf "${DISC_TMP}"
+
 assert_eq "menu latest stable" "$(github_release_menu_label "v0.1.23" "v0.1.23")" "Latest stable"
 assert_eq "menu beta" "$(github_release_menu_label "v0.1.24-beta.1" "v0.1.23")" "Beta"
 assert_eq "menu older stable" "$(github_release_menu_label "v0.1.22" "v0.1.23")" "v0.1.22"
@@ -82,65 +102,65 @@ github_latest_tag() { printf 'v0.1.23\n'; }
 # shellcheck disable=SC2317
 github_latest_prerelease_tag() { printf 'v0.1.24-beta.2\n'; }
 
-FOLIUM_VERSION="latest"
-FOLIUM_VERSION_TAG=""
+LESSPAPER_NGL_VERSION="latest"
+LESSPAPER_NGL_VERSION_TAG=""
 assert_ok "resolve latest alias" config_resolve_version_tag
-assert_eq "resolve latest version" "${FOLIUM_VERSION}" "0.1.23"
-assert_eq "resolve latest tag" "${FOLIUM_VERSION_TAG}" "v0.1.23"
+assert_eq "resolve latest version" "${LESSPAPER_NGL_VERSION}" "0.1.23"
+assert_eq "resolve latest tag" "${LESSPAPER_NGL_VERSION_TAG}" "v0.1.23"
 
-FOLIUM_VERSION="beta"
-FOLIUM_VERSION_TAG=""
+LESSPAPER_NGL_VERSION="beta"
+LESSPAPER_NGL_VERSION_TAG=""
 assert_ok "resolve beta alias" config_resolve_version_tag
-assert_eq "resolve beta version" "${FOLIUM_VERSION}" "0.1.24-beta.2"
-assert_eq "resolve beta tag" "${FOLIUM_VERSION_TAG}" "v0.1.24-beta.2"
+assert_eq "resolve beta version" "${LESSPAPER_NGL_VERSION}" "0.1.24-beta.2"
+assert_eq "resolve beta tag" "${LESSPAPER_NGL_VERSION_TAG}" "v0.1.24-beta.2"
 
-FOLIUM_VERSION="0.1.20"
-FOLIUM_VERSION_TAG=""
+LESSPAPER_NGL_VERSION="0.1.20"
+LESSPAPER_NGL_VERSION_TAG=""
 assert_ok "resolve pinned plain" config_resolve_version_tag
-assert_eq "resolve pinned version" "${FOLIUM_VERSION}" "0.1.20"
-assert_eq "resolve pinned tag" "${FOLIUM_VERSION_TAG}" "v0.1.20"
+assert_eq "resolve pinned version" "${LESSPAPER_NGL_VERSION}" "0.1.20"
+assert_eq "resolve pinned tag" "${LESSPAPER_NGL_VERSION_TAG}" "v0.1.20"
 
-FOLIUM_VERSION=""
-FOLIUM_VERSION_TAG="v0.1.19-beta.1"
+LESSPAPER_NGL_VERSION=""
+LESSPAPER_NGL_VERSION_TAG="v0.1.19-beta.1"
 assert_ok "resolve from version_tag" config_resolve_version_tag
-assert_eq "resolve from tag version" "${FOLIUM_VERSION}" "0.1.19-beta.1"
+assert_eq "resolve from tag version" "${LESSPAPER_NGL_VERSION}" "0.1.19-beta.1"
 
 # Explicit request wins over values hydrated from install-state / .env (issue #65).
-FOLIUM_VERSION="0.1.24-beta.2"
-FOLIUM_VERSION_TAG="v0.1.24-beta.2"
+LESSPAPER_NGL_VERSION="0.1.24-beta.2"
+LESSPAPER_NGL_VERSION_TAG="v0.1.24-beta.2"
 config_prefer_requested_version "beta" "beta"
-assert_eq "prefer requested version" "${FOLIUM_VERSION}" "beta"
-assert_eq "prefer requested tag" "${FOLIUM_VERSION_TAG}" "beta"
+assert_eq "prefer requested version" "${LESSPAPER_NGL_VERSION}" "beta"
+assert_eq "prefer requested tag" "${LESSPAPER_NGL_VERSION_TAG}" "beta"
 assert_ok "resolve preferred beta alias" config_resolve_version_tag
-assert_eq "preferred beta resolves version" "${FOLIUM_VERSION}" "0.1.24-beta.2"
-assert_eq "preferred beta resolves tag" "${FOLIUM_VERSION_TAG}" "v0.1.24-beta.2"
+assert_eq "preferred beta resolves version" "${LESSPAPER_NGL_VERSION}" "0.1.24-beta.2"
+assert_eq "preferred beta resolves tag" "${LESSPAPER_NGL_VERSION_TAG}" "v0.1.24-beta.2"
 
-FOLIUM_VERSION="0.1.24-beta.2"
-FOLIUM_VERSION_TAG="v0.1.24-beta.2"
+LESSPAPER_NGL_VERSION="0.1.24-beta.2"
+LESSPAPER_NGL_VERSION_TAG="v0.1.24-beta.2"
 config_prefer_requested_version "0.1.24-beta.5" "v0.1.24-beta.5"
-assert_eq "prefer pinned version" "${FOLIUM_VERSION}" "0.1.24-beta.5"
-assert_eq "prefer pinned tag" "${FOLIUM_VERSION_TAG}" "v0.1.24-beta.5"
+assert_eq "prefer pinned version" "${LESSPAPER_NGL_VERSION}" "0.1.24-beta.5"
+assert_eq "prefer pinned tag" "${LESSPAPER_NGL_VERSION_TAG}" "v0.1.24-beta.5"
 
-FOLIUM_VERSION="0.1.24-beta.2"
-FOLIUM_VERSION_TAG="v0.1.24-beta.2"
+LESSPAPER_NGL_VERSION="0.1.24-beta.2"
+LESSPAPER_NGL_VERSION_TAG="v0.1.24-beta.2"
 config_prefer_requested_version "" ""
-assert_eq "empty prior keeps hydrated version" "${FOLIUM_VERSION}" "0.1.24-beta.2"
-assert_eq "empty prior keeps hydrated tag" "${FOLIUM_VERSION_TAG}" "v0.1.24-beta.2"
+assert_eq "empty prior keeps hydrated version" "${LESSPAPER_NGL_VERSION}" "0.1.24-beta.2"
+assert_eq "empty prior keeps hydrated tag" "${LESSPAPER_NGL_VERSION_TAG}" "v0.1.24-beta.2"
 
-# .env may bump FOLIUM_VERSION while install-state still has the old version_tag.
-FOLIUM_VERSION="0.1.24-beta.5"
-FOLIUM_VERSION_TAG="v0.1.24-beta.2"
+# .env may bump LESSPAPER_NGL_VERSION while install-state still has the old version_tag.
+LESSPAPER_NGL_VERSION="0.1.24-beta.5"
+LESSPAPER_NGL_VERSION_TAG="v0.1.24-beta.2"
 config_sync_version_tag
-assert_eq "sync version from env pin" "${FOLIUM_VERSION}" "0.1.24-beta.5"
-assert_eq "sync tag from env pin" "${FOLIUM_VERSION_TAG}" "v0.1.24-beta.5"
+assert_eq "sync version from env pin" "${LESSPAPER_NGL_VERSION}" "0.1.24-beta.5"
+assert_eq "sync tag from env pin" "${LESSPAPER_NGL_VERSION_TAG}" "v0.1.24-beta.5"
 
-FOLIUM_VERSION="beta"
-FOLIUM_VERSION_TAG="v0.1.24-beta.2"
+LESSPAPER_NGL_VERSION="beta"
+LESSPAPER_NGL_VERSION_TAG="v0.1.24-beta.2"
 config_sync_version_tag
-assert_eq "sync alias version" "${FOLIUM_VERSION}" "beta"
-assert_eq "sync alias tag" "${FOLIUM_VERSION_TAG}" "beta"
+assert_eq "sync alias version" "${LESSPAPER_NGL_VERSION}" "beta"
+assert_eq "sync alias tag" "${LESSPAPER_NGL_VERSION_TAG}" "beta"
 
-# folium update: default target + installer asset URL selection
+# lesspaper-ngl update: default target + installer asset URL selection
 assert_eq "update default version" "$(ctl_update_default_version)" "beta"
 assert_eq "update normalize empty" "$(ctl_update_normalize_target "")" "beta"
 assert_eq "update normalize beta" "$(ctl_update_normalize_target "beta")" "beta"
@@ -153,13 +173,13 @@ assert_fail "update normalize junk" ctl_update_normalize_target "not-a-version"
 ctl_update_latest_prerelease_tag() { printf 'v0.1.24-beta.5\n'; }
 assert_eq "update url latest" \
   "$(ctl_update_installer_url "latest")" \
-  "https://github.com/brocxftw/folium/releases/latest/download/install-folium.sh"
+  "https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/install-lesspaper-ngl.sh"
 assert_eq "update url beta" \
   "$(ctl_update_installer_url "beta")" \
-  "https://github.com/brocxftw/folium/releases/download/v0.1.24-beta.5/install-folium.sh"
+  "https://github.com/brocxftw/lesspaper-ngl/releases/download/v0.1.24-beta.5/install-lesspaper-ngl.sh"
 assert_eq "update url pin" \
   "$(ctl_update_installer_url "v0.1.20")" \
-  "https://github.com/brocxftw/folium/releases/download/v0.1.20/install-folium.sh"
+  "https://github.com/brocxftw/lesspaper-ngl/releases/download/v0.1.20/install-lesspaper-ngl.sh"
 unset -f ctl_update_latest_prerelease_tag
 # shellcheck source=../lib/ctl_update.sh
 source "${ROOT}/lib/ctl_update.sh"
@@ -195,35 +215,52 @@ FOLIUM_DOCUMENTS_HOST=/opt/folium/data/documents
 FOLIUM_CONSUME_HOST=/opt/folium/data/consume
 FOLIUM_EXPORT_HOST=/opt/folium/data/export
 FOLIUM_PADDLE_CACHE_HOST=/opt/folium/data/paddleocr
+CUSTOM_OPERATOR_KEY=leave-me-alone
 ENV
 chmod 600 "${KEEP_TMP}/.env"
-FOLIUM_INSTALL_DIR="${KEEP_TMP}"
-FOLIUM_KEEP_SECRETS=0
-FOLIUM_SECRET_KEY=""
-FOLIUM_ENCRYPTION_KEY=""
+LESSPAPER_NGL_INSTALL_DIR="${KEEP_TMP}"
+LESSPAPER_NGL_KEEP_SECRETS=0
+LESSPAPER_NGL_SECRET_KEY=""
+LESSPAPER_NGL_ENCRYPTION_KEY=""
 POSTGRES_PASSWORD=""
-FOLIUM_ADMIN_PASSWORD=""
-FOLIUM_BIND=""
-FOLIUM_FRONTEND_ORIGIN=""
-# Inline the load_existing_defaults .env branch (install.sh is not sourced here).
-if [[ -f "${FOLIUM_INSTALL_DIR}/.env" ]]; then
-  FOLIUM_KEEP_SECRETS=1
-  FOLIUM_SECRET_KEY="$(config_env_get FOLIUM_SECRET_KEY || true)"
-  FOLIUM_ENCRYPTION_KEY="$(config_env_get FOLIUM_ENCRYPTION_KEY || true)"
+LESSPAPER_NGL_ADMIN_PASSWORD=""
+LESSPAPER_NGL_BIND=""
+LESSPAPER_NGL_FRONTEND_ORIGIN=""
+LESSPAPER_NGL_COMPOSE_PROJECT=""
+# Dual-read legacy keys (install.sh load_existing_defaults path).
+if [[ -f "${LESSPAPER_NGL_INSTALL_DIR}/.env" ]]; then
+  LESSPAPER_NGL_KEEP_SECRETS=1
+  LESSPAPER_NGL_SECRET_KEY="$(config_env_get_any LESSPAPER_NGL_SECRET_KEY FOLIUM_SECRET_KEY || true)"
+  LESSPAPER_NGL_ENCRYPTION_KEY="$(config_env_get_any LESSPAPER_NGL_ENCRYPTION_KEY FOLIUM_ENCRYPTION_KEY || true)"
   POSTGRES_PASSWORD="$(config_env_get POSTGRES_PASSWORD || true)"
-  FOLIUM_ADMIN_PASSWORD="$(config_env_get FOLIUM_ADMIN_PASSWORD || true)"
-  FOLIUM_BIND="$(config_env_get FOLIUM_BIND || true)"
-  FOLIUM_FRONTEND_ORIGIN="$(config_env_get FRONTEND_ORIGIN || true)"
+  LESSPAPER_NGL_ADMIN_PASSWORD="$(config_env_get_any LESSPAPER_NGL_ADMIN_PASSWORD FOLIUM_ADMIN_PASSWORD || true)"
+  LESSPAPER_NGL_BIND="$(config_env_get_any LESSPAPER_NGL_BIND FOLIUM_BIND || true)"
+  LESSPAPER_NGL_FRONTEND_ORIGIN="$(config_env_get FRONTEND_ORIGIN || true)"
+  LESSPAPER_NGL_COMPOSE_PROJECT="$(config_env_get COMPOSE_PROJECT_NAME || true)"
 fi
-assert_eq "keep secrets flag" "${FOLIUM_KEEP_SECRETS}" "1"
-assert_eq "keep secret key" "${FOLIUM_SECRET_KEY}" "keep-secret-key-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-assert_eq "keep bind" "${FOLIUM_BIND}" "0.0.0.0"
-assert_eq "keep frontend origin" "${FOLIUM_FRONTEND_ORIGIN}" "https://docs.example.com"
-# Updating FOLIUM_VERSION alone must not rewrite secrets.
-config_env_set FOLIUM_VERSION "0.1.24-beta.2"
-assert_ok "update version only" grep -q '^FOLIUM_VERSION=0.1.24-beta.2$' "${KEEP_TMP}/.env"
-assert_ok "secrets still present after version bump" grep -q '^FOLIUM_SECRET_KEY=keep-secret-key-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$' "${KEEP_TMP}/.env"
-assert_ok "bind still present after version bump" grep -q '^FOLIUM_BIND=0.0.0.0$' "${KEEP_TMP}/.env"
+assert_eq "keep secrets flag" "${LESSPAPER_NGL_KEEP_SECRETS}" "1"
+assert_eq "keep secret key" "${LESSPAPER_NGL_SECRET_KEY}" "keep-secret-key-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+assert_eq "keep bind" "${LESSPAPER_NGL_BIND}" "0.0.0.0"
+assert_eq "keep frontend origin" "${LESSPAPER_NGL_FRONTEND_ORIGIN}" "https://docs.example.com"
+assert_eq "compose project preserved from .env" "${LESSPAPER_NGL_COMPOSE_PROJECT}" "folium"
+
+# One-shot env migration FOLIUM_* → LESSPAPER_NGL_*
+config_migrate_folium_env "${KEEP_TMP}/.env"
+bak_hits="$(compgen -G "${KEEP_TMP}/.env.bak.*" | wc -l | tr -d ' ')"
+assert_ok "migration backup exists" test "${bak_hits}" -ge 1
+assert_ok "migrated version key" grep -q '^LESSPAPER_NGL_VERSION=0.1.16$' "${KEEP_TMP}/.env"
+assert_ok "migrated secret key" grep -q '^LESSPAPER_NGL_SECRET_KEY=keep-secret-key-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$' "${KEEP_TMP}/.env"
+assert_ok "migrated bind" grep -q '^LESSPAPER_NGL_BIND=0.0.0.0$' "${KEEP_TMP}/.env"
+assert_fail "legacy version removed" grep -q '^FOLIUM_VERSION=' "${KEEP_TMP}/.env"
+assert_ok "postgres untouched" grep -q '^POSTGRES_PASSWORD=keep-postgres-password$' "${KEEP_TMP}/.env"
+assert_ok "compose project untouched" grep -q '^COMPOSE_PROJECT_NAME=folium$' "${KEEP_TMP}/.env"
+assert_ok "frontend origin untouched" grep -q '^FRONTEND_ORIGIN=https://docs.example.com$' "${KEEP_TMP}/.env"
+assert_ok "unknown operator key intact" grep -q '^CUSTOM_OPERATOR_KEY=leave-me-alone$' "${KEEP_TMP}/.env"
+# Updating LESSPAPER_NGL_VERSION alone must not rewrite secrets.
+config_env_set LESSPAPER_NGL_VERSION "0.1.24-beta.2"
+assert_ok "update version only" grep -q '^LESSPAPER_NGL_VERSION=0.1.24-beta.2$' "${KEEP_TMP}/.env"
+assert_ok "secrets still present after version bump" grep -q '^LESSPAPER_NGL_SECRET_KEY=keep-secret-key-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$' "${KEEP_TMP}/.env"
+assert_ok "bind still present after version bump" grep -q '^LESSPAPER_NGL_BIND=0.0.0.0$' "${KEEP_TMP}/.env"
 rm -rf "${KEEP_TMP}"
 
 assert_ok "forbid /" storage_is_critical_forbidden_path "/"
@@ -231,6 +268,7 @@ assert_ok "forbid /etc" storage_is_critical_forbidden_path "/etc"
 assert_ok "forbid /usr/bin" storage_is_critical_forbidden_path "/usr/bin"
 assert_ok "forbid /boot" storage_is_critical_forbidden_path "/boot"
 assert_fail "allow /opt/folium" storage_is_critical_forbidden_path "/opt/folium"
+assert_fail "allow /opt/lesspaper-ngl" storage_is_critical_forbidden_path "/opt/lesspaper-ngl"
 assert_fail "allow /mnt/data/docs" storage_is_critical_forbidden_path "/mnt/data/docs"
 assert_fail "allow /root/sandbox" storage_is_critical_forbidden_path "/root/sandbox/folium"
 assert_ok "risky /root/sandbox" storage_is_risky_install_path "/root/sandbox/folium"
@@ -246,8 +284,8 @@ assert_fail "port junk" network_port_valid "abc"
 assert_eq "origin loopback" "$(network_origin_for 127.0.0.1 9398 "")" "http://127.0.0.1:9398"
 assert_eq "origin public" "$(network_origin_for 0.0.0.0 9398 "https://docs.example.com/")" "https://docs.example.com"
 
-redacted="$(printf 'FOLIUM_SECRET_KEY=abc\nPOSTGRES_PASSWORD=s3cret\nFRONTEND_ORIGIN=http://x\n' | _folium_redact)"
-assert_eq "redact secret key" "$(printf '%s\n' "${redacted}" | sed -n '1p')" "FOLIUM_SECRET_KEY=***REDACTED***"
+redacted="$(printf 'LESSPAPER_NGL_SECRET_KEY=abc\nPOSTGRES_PASSWORD=s3cret\nFRONTEND_ORIGIN=http://x\n' | _lesspaper_ngl_redact)"
+assert_eq "redact secret key" "$(printf '%s\n' "${redacted}" | sed -n '1p')" "LESSPAPER_NGL_SECRET_KEY=***REDACTED***"
 assert_eq "redact password" "$(printf '%s\n' "${redacted}" | sed -n '2p')" "POSTGRES_PASSWORD=***REDACTED***"
 assert_eq "keep origin" "$(printf '%s\n' "${redacted}" | sed -n '3p')" "FRONTEND_ORIGIN=http://x"
 
@@ -274,47 +312,47 @@ else
   printf 'ok  compose strip web port\n'
 fi
 
-FOLIUM_INSTALL_DIR="${TMP}"
-FOLIUM_BIND="127.0.0.1"
-FOLIUM_HTTP_PORT="18080"
-FOLIUM_EXPOSE_API="0"
-FOLIUM_EXTRA_GID="10000"
+LESSPAPER_NGL_INSTALL_DIR="${TMP}"
+LESSPAPER_NGL_BIND="127.0.0.1"
+LESSPAPER_NGL_HTTP_PORT="18080"
+LESSPAPER_NGL_EXPOSE_API="0"
+LESSPAPER_NGL_EXTRA_GID="10000"
 config_write_override
-assert_ok "override has ui port" grep -q '\${FOLIUM_BIND}:\${FOLIUM_HTTP_PORT}:80' "${TMP}/docker-compose.override.yml"
+assert_ok "override has ui port" grep -q 'LESSPAPER_NGL_BIND' "${TMP}/docker-compose.override.yml"
 assert_ok "override has extra gid" grep -q '10000' "${TMP}/docker-compose.override.yml"
 assert_fail "override omits api publish" grep -q '9099:8000' "${TMP}/docker-compose.override.yml"
 
-FOLIUM_EXPOSE_API="1"
-FOLIUM_API_PORT="9099"
+LESSPAPER_NGL_EXPOSE_API="1"
+LESSPAPER_NGL_API_PORT="9099"
 config_write_override
-assert_ok "override can publish api" grep -q '\${FOLIUM_BIND}:\${FOLIUM_API_PORT}:8000' "${TMP}/docker-compose.override.yml"
+assert_ok "override can publish api" grep -q 'LESSPAPER_NGL_API_PORT' "${TMP}/docker-compose.override.yml"
 
 assert_ok "blocked invalid port" network_port_blocked "0"
 
-FOLIUM_VERSION="0.1.16"
-FOLIUM_SECRET_KEY="unit-test-secret"
-FOLIUM_ENCRYPTION_KEY="unit-test-encryption"
+LESSPAPER_NGL_VERSION="0.1.16"
+LESSPAPER_NGL_SECRET_KEY="unit-test-secret"
+LESSPAPER_NGL_ENCRYPTION_KEY="unit-test-encryption"
 POSTGRES_PASSWORD="unit-test-postgres"
-FOLIUM_ADMIN_PASSWORD="unit-test-admin"
-FOLIUM_FRONTEND_ORIGIN="http://127.0.0.1:18080"
-FOLIUM_DOCS_PATH="${TMP}/data/documents"
-FOLIUM_CONSUME_PATH="${TMP}/data/consume"
-FOLIUM_EXPORT_PATH="${TMP}/data/export"
-FOLIUM_PADDLE_PATH="${TMP}/data/paddleocr"
-FOLIUM_COMPOSE_PROJECT="folium-unit"
-mkdir -p "${FOLIUM_DOCS_PATH}" "${FOLIUM_CONSUME_PATH}" "${FOLIUM_EXPORT_PATH}" "${FOLIUM_PADDLE_PATH}"
+LESSPAPER_NGL_ADMIN_PASSWORD="unit-test-admin"
+LESSPAPER_NGL_FRONTEND_ORIGIN="http://127.0.0.1:18080"
+LESSPAPER_NGL_DOCS_PATH="${TMP}/data/documents"
+LESSPAPER_NGL_CONSUME_PATH="${TMP}/data/consume"
+LESSPAPER_NGL_EXPORT_PATH="${TMP}/data/export"
+LESSPAPER_NGL_PADDLE_PATH="${TMP}/data/paddleocr"
+LESSPAPER_NGL_COMPOSE_PROJECT="lesspaper-ngl-unit"
+mkdir -p "${LESSPAPER_NGL_DOCS_PATH}" "${LESSPAPER_NGL_CONSUME_PATH}" "${LESSPAPER_NGL_EXPORT_PATH}" "${LESSPAPER_NGL_PADDLE_PATH}"
 config_write_env
 mode="$(stat -c '%a' "${TMP}/.env")"
 assert_eq "env mode 600" "${mode}" "600"
-assert_ok "env pins version" grep -q '^FOLIUM_VERSION=0.1.16$' "${TMP}/.env"
-assert_ok "env has backups host" grep -q '^FOLIUM_BACKUPS_HOST=' "${TMP}/.env"
+assert_ok "env pins version" grep -q '^LESSPAPER_NGL_VERSION=0.1.16$' "${TMP}/.env"
+assert_ok "env has backups host" grep -q '^LESSPAPER_NGL_BACKUPS_HOST=' "${TMP}/.env"
 assert_ok "env has backups path" grep -q '^BACKUPS_PATH=/backups$' "${TMP}/.env"
-assert_fail "env not latest" grep -q '^FOLIUM_VERSION=latest$' "${TMP}/.env"
-config_env_set FOLIUM_VERSION "0.1.17"
-assert_ok "env set version" grep -q '^FOLIUM_VERSION=0.1.17$' "${TMP}/.env"
-config_env_set FOLIUM_VERSION "0.1.16"
+assert_fail "env not latest" grep -q '^LESSPAPER_NGL_VERSION=latest$' "${TMP}/.env"
+config_env_set LESSPAPER_NGL_VERSION "0.1.17"
+assert_ok "env set version" grep -q '^LESSPAPER_NGL_VERSION=0.1.17$' "${TMP}/.env"
+config_env_set LESSPAPER_NGL_VERSION "0.1.16"
 
-export FOLIUM_METHOD=image FOLIUM_VERSION_TAG=v0.1.16
+export LESSPAPER_NGL_METHOD=image LESSPAPER_NGL_VERSION_TAG=v0.1.16
 state_write
 assert_ok "state exists" test -f "${TMP}/install-state.json"
 assert_fail "state has no secret key" grep -qi 'unit-test-secret' "${TMP}/install-state.json"
@@ -322,10 +360,10 @@ assert_fail "state has no admin password" grep -qi 'unit-test-admin' "${TMP}/ins
 assert_eq "state version" "$(python3 -c 'import json; print(json.load(open("'"${TMP}"'/install-state.json"))["version"])')" "0.1.16"
 
 if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; then
-  FOLIUM_EXPOSE_API="0"
-  FOLIUM_EXTRA_GID=""
+  LESSPAPER_NGL_EXPOSE_API="0"
+  LESSPAPER_NGL_EXTRA_GID=""
   config_write_override
-  if (cd "${TMP}" && docker compose -p folium-unit -f docker-compose.yml -f docker-compose.override.yml config >/dev/null); then
+  if (cd "${TMP}" && docker compose -p lesspaper-ngl-unit -f docker-compose.yml -f docker-compose.override.yml config >/dev/null); then
     PASSED=$((PASSED + 1))
     printf 'ok  docker compose config\n'
   else
@@ -336,7 +374,8 @@ else
   printf 'skip docker compose config (docker not available)\n'
 fi
 
-PACK="$(mktemp)"
+PACK_DIR="$(mktemp -d)"
+PACK="${PACK_DIR}/install-lesspaper-ngl.sh"
 if bash "${ROOT}/pack.sh" "${PACK}" && bash -n "${PACK}"; then
   PASSED=$((PASSED + 1))
   printf 'ok  pack.sh bash -n\n'
@@ -344,17 +383,25 @@ else
   FAILED=$((FAILED + 1))
   printf 'FAIL pack.sh\n'
 fi
-if grep -q '^FOLIUM_PACKED=1$' "${PACK}" \
-  && grep -q 'folium_install_packed_ctl' "${PACK}" \
-  && grep -q 'Folium interactive installer' "${PACK}" \
-  && grep -q 'ctl_update_installer_url' "${PACK}"; then
+if [[ -f "${PACK_DIR}/install-folium.sh" ]] && cmp -s "${PACK}" "${PACK_DIR}/install-folium.sh"; then
+  PASSED=$((PASSED + 1))
+  printf 'ok  pack produces install-folium.sh copy\n'
+else
+  FAILED=$((FAILED + 1))
+  printf 'FAIL pack did not produce identical install-folium.sh\n'
+fi
+if grep -q '^LESSPAPER_NGL_PACKED=1$' "${PACK}" \
+  && grep -q 'lesspaper_ngl_install_packed_ctl' "${PACK}" \
+  && grep -q 'lesspaper-ngl interactive installer' "${PACK}" \
+  && grep -q 'ctl_update_installer_url' "${PACK}" \
+  && grep -q '/usr/local/bin/lesspaper-ngl' "${PACK}"; then
   PASSED=$((PASSED + 1))
   printf 'ok  packed installer is standalone\n'
 else
   FAILED=$((FAILED + 1))
   printf 'FAIL packed installer missing expected markers\n'
 fi
-rm -f "${PACK}"
+rm -rf "${PACK_DIR}"
 
 printf '\n%d passed, %d failed\n' "${PASSED}" "${FAILED}"
 [[ "${FAILED}" -eq 0 ]]

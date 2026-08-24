@@ -49,7 +49,7 @@ describe("AIChatPanel", () => {
       />,
     );
     expect(screen.getByText("Generating answer…")).toBeInTheDocument();
-    expect(screen.getByText("Folium")).toBeInTheDocument();
+    expect(screen.getByText("lesspaper-ngl")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Generating answer" })).toBeDisabled();
   });
 

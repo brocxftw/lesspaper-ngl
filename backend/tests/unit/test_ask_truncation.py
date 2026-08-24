@@ -8,10 +8,10 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from folium.ai.base import ChatResult
-from folium.ai.rag import OUTPUT_TRUNCATED_MESSAGE, AskResult, ask
-from folium.core.exceptions import ValidationError
-from folium.models import AIProfileName, PrivacyMode
+from lesspaper_ngl.ai.base import ChatResult
+from lesspaper_ngl.ai.rag import OUTPUT_TRUNCATED_MESSAGE, AskResult, ask
+from lesspaper_ngl.core.exceptions import ValidationError
+from lesspaper_ngl.models import AIProfileName, PrivacyMode
 
 
 class _FakeAdapter:
@@ -81,12 +81,12 @@ async def test_length_finish_without_citations_raises_truncation(
     async def _fake_retrieve(*_a, **_k):
         return retrieved
 
-    monkeypatch.setattr("folium.ai.rag.resolve_scope_document_ids", _fake_resolve)
-    monkeypatch.setattr("folium.ai.rag.hybrid_retrieve", _fake_retrieve)
-    monkeypatch.setattr("folium.ai.rag.assert_ai_quota", AsyncMock())
-    monkeypatch.setattr("folium.ai.rag.record_usage", AsyncMock())
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.resolve_scope_document_ids", _fake_resolve)
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.hybrid_retrieve", _fake_retrieve)
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.assert_ai_quota", AsyncMock())
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.record_usage", AsyncMock())
     monkeypatch.setattr(
-        "folium.ai.rag.PrivacyGate.assert_can_qa",
+        "lesspaper_ngl.ai.rag.PrivacyGate.assert_can_qa",
         lambda self: None,
     )
 
@@ -125,7 +125,7 @@ async def test_numeric_passage_citations_are_accepted(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Models often emit [1] for Passage 1; that must not be treated as no evidence."""
-    from folium.ai.rag import expand_numeric_passage_citations, parse_citations
+    from lesspaper_ngl.ai.rag import expand_numeric_passage_citations, parse_citations
 
     chunk_id = uuid.uuid4()
     chunk = SimpleNamespace(
@@ -161,11 +161,11 @@ async def test_numeric_passage_citations_are_accepted(
     async def _fake_retrieve(*_a, **_k):
         return retrieved
 
-    monkeypatch.setattr("folium.ai.rag.resolve_scope_document_ids", _fake_resolve)
-    monkeypatch.setattr("folium.ai.rag.hybrid_retrieve", _fake_retrieve)
-    monkeypatch.setattr("folium.ai.rag.assert_ai_quota", AsyncMock())
-    monkeypatch.setattr("folium.ai.rag.record_usage", AsyncMock())
-    monkeypatch.setattr("folium.ai.rag.PrivacyGate.assert_can_qa", lambda self: None)
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.resolve_scope_document_ids", _fake_resolve)
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.hybrid_retrieve", _fake_retrieve)
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.assert_ai_quota", AsyncMock())
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.record_usage", AsyncMock())
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.PrivacyGate.assert_can_qa", lambda self: None)
 
     provider = SimpleNamespace(
         name="local",
@@ -223,11 +223,11 @@ async def test_complete_answer_without_citations_is_insufficient_evidence(
     async def _fake_retrieve(*_a, **_k):
         return retrieved
 
-    monkeypatch.setattr("folium.ai.rag.resolve_scope_document_ids", _fake_resolve)
-    monkeypatch.setattr("folium.ai.rag.hybrid_retrieve", _fake_retrieve)
-    monkeypatch.setattr("folium.ai.rag.assert_ai_quota", AsyncMock())
-    monkeypatch.setattr("folium.ai.rag.record_usage", AsyncMock())
-    monkeypatch.setattr("folium.ai.rag.PrivacyGate.assert_can_qa", lambda self: None)
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.resolve_scope_document_ids", _fake_resolve)
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.hybrid_retrieve", _fake_retrieve)
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.assert_ai_quota", AsyncMock())
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.record_usage", AsyncMock())
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.PrivacyGate.assert_can_qa", lambda self: None)
 
     provider = SimpleNamespace(
         name="local",
@@ -284,11 +284,11 @@ async def test_length_finish_with_early_citations_raises_truncation(
     async def _fake_retrieve(*_a, **_k):
         return retrieved
 
-    monkeypatch.setattr("folium.ai.rag.resolve_scope_document_ids", _fake_resolve)
-    monkeypatch.setattr("folium.ai.rag.hybrid_retrieve", _fake_retrieve)
-    monkeypatch.setattr("folium.ai.rag.assert_ai_quota", AsyncMock())
-    monkeypatch.setattr("folium.ai.rag.record_usage", AsyncMock())
-    monkeypatch.setattr("folium.ai.rag.PrivacyGate.assert_can_qa", lambda self: None)
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.resolve_scope_document_ids", _fake_resolve)
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.hybrid_retrieve", _fake_retrieve)
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.assert_ai_quota", AsyncMock())
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.record_usage", AsyncMock())
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.PrivacyGate.assert_can_qa", lambda self: None)
 
     provider = SimpleNamespace(
         name="local",
@@ -350,11 +350,11 @@ async def test_incomplete_trailing_citation_raises_truncation(
     async def _fake_retrieve(*_a, **_k):
         return retrieved
 
-    monkeypatch.setattr("folium.ai.rag.resolve_scope_document_ids", _fake_resolve)
-    monkeypatch.setattr("folium.ai.rag.hybrid_retrieve", _fake_retrieve)
-    monkeypatch.setattr("folium.ai.rag.assert_ai_quota", AsyncMock())
-    monkeypatch.setattr("folium.ai.rag.record_usage", AsyncMock())
-    monkeypatch.setattr("folium.ai.rag.PrivacyGate.assert_can_qa", lambda self: None)
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.resolve_scope_document_ids", _fake_resolve)
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.hybrid_retrieve", _fake_retrieve)
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.assert_ai_quota", AsyncMock())
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.record_usage", AsyncMock())
+    monkeypatch.setattr("lesspaper_ngl.ai.rag.PrivacyGate.assert_can_qa", lambda self: None)
 
     provider = SimpleNamespace(
         name="local",

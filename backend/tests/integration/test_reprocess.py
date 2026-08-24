@@ -9,8 +9,8 @@ from httpx import AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from folium.ai.embeddings import pad_embedding
-from folium.models import Document, DocumentChunk, Job, JobStatus, JobType
+from lesspaper_ngl.ai.embeddings import pad_embedding
+from lesspaper_ngl.models import Document, DocumentChunk, Job, JobStatus, JobType
 
 
 async def _assign_ai_models(auth_client: AsyncClient) -> str:

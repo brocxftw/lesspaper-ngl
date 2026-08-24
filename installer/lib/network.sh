@@ -31,7 +31,7 @@ network_port_is_ours() {
   local port="$1"
   docker_info_ok || return 1
   docker_bin ps \
-    --filter "label=com.docker.compose.project=${FOLIUM_COMPOSE_PROJECT:-folium}" \
+    --filter "label=com.docker.compose.project=${LESSPAPER_NGL_COMPOSE_PROJECT:-lesspaper-ngl}" \
     --format '{{.Ports}}' 2>/dev/null | grep -Eq ":${port}->|:0\.0\.0\.0:${port}->|127\.0\.0\.1:${port}->"
 }
 
@@ -83,6 +83,6 @@ network_origin_for() {
 }
 
 network_health_base() {
-  local port="${FOLIUM_HTTP_PORT:-9398}"
+  local port="${LESSPAPER_NGL_HTTP_PORT:-9398}"
   printf 'http://127.0.0.1:%s' "${port}"
 }

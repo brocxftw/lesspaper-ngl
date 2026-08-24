@@ -41,18 +41,18 @@ jobs:
         env:
           DATABASE_URL: postgresql+asyncpg://folium:folium@localhost:5433/folium_test
           DATABASE_URL_SYNC: postgresql+psycopg://folium:folium@localhost:5433/folium_test
-          FOLIUM_SECRET_KEY: ci-secret
-          FOLIUM_ENCRYPTION_KEY: ci-encryption
-          FOLIUM_ENV: test
-          FOLIUM_ADMIN_USERNAME: admin
-          FOLIUM_ADMIN_PASSWORD: testpass
-          DOCUMENTS_PATH: /tmp/folium-ci/documents
-          CONSUME_PATH: /tmp/folium-ci/consume
-          EXPORT_PATH: /tmp/folium-ci/export
-          BACKUPS_PATH: /tmp/folium-ci/backups
+          LESSPAPER_NGL_SECRET_KEY: ci-secret
+          LESSPAPER_NGL_ENCRYPTION_KEY: ci-encryption
+          LESSPAPER_NGL_ENV: test
+          LESSPAPER_NGL_ADMIN_USERNAME: admin
+          LESSPAPER_NGL_ADMIN_PASSWORD: testpass
+          DOCUMENTS_PATH: /tmp/lesspaper-ngl-ci/documents
+          CONSUME_PATH: /tmp/lesspaper-ngl-ci/consume
+          EXPORT_PATH: /tmp/lesspaper-ngl-ci/export
+          BACKUPS_PATH: /tmp/lesspaper-ngl-ci/backups
           FRONTEND_ORIGIN: http://test
         run: |
-          mkdir -p /tmp/folium-ci/{documents,consume,export,backups}
+          mkdir -p /tmp/lesspaper-ngl-ci/{documents,consume,export,backups}
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends postgresql-client-17 || sudo apt-get install -y --no-install-recommends postgresql-client
           docker run --rm --network host -e PGPASSWORD=folium pgvector/pgvector:pg17 \
@@ -84,10 +84,10 @@ jobs:
         run: |
           cp .env.example .env
           {
-            echo "FOLIUM_SECRET_KEY=ci-compose-config-only"
-            echo "FOLIUM_ENCRYPTION_KEY=ci-compose-config-only"
+            echo "LESSPAPER_NGL_SECRET_KEY=ci-compose-config-only"
+            echo "LESSPAPER_NGL_ENCRYPTION_KEY=ci-compose-config-only"
             echo "POSTGRES_PASSWORD=ci-compose-config-only"
-            echo "FOLIUM_ADMIN_PASSWORD=ci-compose-config-only"
+            echo "LESSPAPER_NGL_ADMIN_PASSWORD=ci-compose-config-only"
           } >> .env
           docker compose -f docker-compose.yml config
       - name: Validate development overlay
@@ -102,12 +102,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y shellcheck
           shellcheck -x -P installer installer/install.sh installer/pack.sh \
-            installer/folium-ctl.sh installer/lib/*.sh \
+            installer/lesspaper-ngl-ctl.sh installer/lib/*.sh \
             installer/tests/run.sh installer/tests/smoke.sh
       - name: Installer helper tests
         run: bash installer/tests/run.sh
       - name: Packed single-file installer
         run: |
-          bash installer/pack.sh /tmp/install-folium.sh
-          bash -n /tmp/install-folium.sh
+          bash installer/pack.sh /tmp/install-lesspaper-ngl.sh
+          bash -n /tmp/install-lesspaper-ngl.sh
+          test -x /tmp/install-lesspaper-ngl.sh
           test -x /tmp/install-folium.sh
+          cmp -s /tmp/install-lesspaper-ngl.sh /tmp/install-folium.sh

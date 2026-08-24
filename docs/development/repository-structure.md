@@ -4,7 +4,7 @@
 backend/          FastAPI application, Alembic, pytest
 frontend/         Vite React SPA
 docker/           Dockerfiles, nginx, backend entrypoint
-installer/        Whiptail TUI installer, bootstrap, `folium` CLI
+installer/        Whiptail TUI installer, bootstrap, `lesspaper_ngl` CLI
 docs/             Engineering documentation (this tree)
 .github/          CI workflow only
 data/             Local bind-mount placeholders (gitignored content)
@@ -12,7 +12,7 @@ data/             Local bind-mount placeholders (gitignored content)
 
 Root files: `docker-compose.yml`, `.env.example`, `Makefile`, `ubiquitous-language.md`, `README.md`.
 
-**Backend layout:** `src/folium/{api,ai,auth,core,db,models,ocr,search,services,storage,workers}`.
+**Backend layout:** `src/lesspaper_ngl/{api,ai,auth,core,db,models,ocr,search,services,storage,workers}`.
 
 **Frontend layout:** `src/features/*` (pages), `src/components/*` (domain + ui), `src/lib/api`.
 

@@ -18,6 +18,6 @@ No CONTRIBUTING.md or governance docs exist in-repo. The following is **only** w
 
 Do not treat issues/plans (`notes.md`, `*.plan.md`) as specifications without checking current code.
 
-Contributions are under the same [GNU AGPL v3.0](../../LICENSE) as the rest of Folium.
+Contributions are under the same [GNU AGPL v3.0](../../LICENSE) as the rest of lesspaper-ngl.
 
 There is **no** documented CLA, code of conduct, or security disclosure process in the repository (**Confirmed** absence).

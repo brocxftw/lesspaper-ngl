@@ -194,7 +194,7 @@ export function AIChatPanel({
   onCitationClick,
   showScopeSelector = true,
   className,
-  title = "Ask Folium",
+  title = "Ask lesspaper-ngl",
   description = "Single-turn answers with citations from the selected scope.",
   compactComposer = false,
 }: AIChatPanelProps) {
@@ -427,7 +427,7 @@ export function AIChatPanel({
             <div className="rounded-xl border border-surface-border bg-surface p-3.5">
               <div className="mb-2 flex items-center gap-2 text-xs text-text-muted">
                 <Leaf className="h-3.5 w-3.5 text-accent" />
-                Folium
+                lesspaper-ngl
               </div>
               <p
                 className="flex items-center gap-2 text-sm text-text-secondary"

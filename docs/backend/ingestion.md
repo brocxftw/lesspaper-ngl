@@ -1,6 +1,6 @@
 # Ingestion
 
-Preparing evidence: get bytes into Folium, extract text, optionally suggest filing, then human **Process**.
+Preparing evidence: get bytes into lesspaper-ngl, extract text, optionally suggest filing, then human **Process**.
 
 ---
 

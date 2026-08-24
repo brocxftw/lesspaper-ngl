@@ -6,7 +6,7 @@
 
 1. Process environment variables (always win)
 2. Env files `.env` then `../.env` relative to CWD
-3. Field defaults in `folium.core.config.Settings`
+3. Field defaults in `lesspaper_ngl.core.config.Settings`
 
 Compose injects `DATABASE_URL*` and path env on `api`/`worker`, overriding `.env` database host (`db` vs `localhost`).
 
@@ -22,7 +22,7 @@ Additional runtime reads:
 
 | Variable | Reader | Notes |
 |----------|--------|-------|
-| `FOLIUM_VERSION` | `folium.core.version` | Not a `Settings` field |
+| `LESSPAPER_NGL_VERSION` | `lesspaper_ngl.core.version` | Not a `Settings` field |
 | `PADDLE_PDX_*` | Paddle / Dockerfile | OCR cache; not in Settings |
 
 ---
@@ -37,10 +37,10 @@ Additional runtime reads:
 
 ## Storage paths
 
-`DOCUMENTS_PATH`, `CONSUME_PATH`, `EXPORT_PATH` must match Compose volume **targets**. Host sources are Compose-only (`FOLIUM_DOCUMENTS_HOST`, …).
+`DOCUMENTS_PATH`, `CONSUME_PATH`, `EXPORT_PATH` must match Compose volume **targets**. Host sources are Compose-only (`LESSPAPER_NGL_DOCUMENTS_HOST`, …).
 
 ---
 
 ## Frontend
 
-Vite/nginx do not load Folium `Settings`. CSRF cookie name is hard-coded in the SPA. `FRONTEND_ORIGIN` is a comma-separated list of browser URLs (CORS + MCP). Set `FOLIUM_SECURE_COOKIES=true` when users reach the UI over HTTPS via a reverse proxy but an HTTP LAN URL remains in the list.
+Vite/nginx do not load lesspaper-ngl `Settings`. CSRF cookie name is hard-coded in the SPA. `FRONTEND_ORIGIN` is a comma-separated list of browser URLs (CORS + MCP). Set `LESSPAPER_NGL_SECURE_COOKIES=true` when users reach the UI over HTTPS via a reverse proxy but an HTTP LAN URL remains in the list.

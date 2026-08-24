@@ -8,10 +8,10 @@ from pathlib import Path
 import pytest
 from httpx import ASGITransport, AsyncClient
 
-from folium.core.config import get_settings
-from folium.db.session import dispose_engine
-from folium.main import app
-from folium.storage.service import StorageService
+from lesspaper_ngl.core.config import get_settings
+from lesspaper_ngl.db.session import dispose_engine
+from lesspaper_ngl.main import app
+from lesspaper_ngl.storage.service import StorageService
 from tests.conftest import login
 
 

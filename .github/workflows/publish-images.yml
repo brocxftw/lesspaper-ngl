@@ -54,7 +54,7 @@ jobs:
       - id: backend_tags
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/brocxftw/folium-backend
+          images: ghcr.io/brocxftw/lesspaper-ngl-backend
           flavor: |
             latest=false
           tags: |
@@ -68,7 +68,7 @@ jobs:
       - id: web_tags
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/brocxftw/folium-web
+          images: ghcr.io/brocxftw/lesspaper-ngl-web
           flavor: |
             latest=false
           tags: |
@@ -89,11 +89,11 @@ jobs:
           tags: ${{ steps.backend_tags.outputs.tags }}
           labels: ${{ steps.backend_tags.outputs.labels }}
           build-args: |
-            FOLIUM_VERSION=${{ steps.meta.outputs.version }}
-            FOLIUM_BUILD_REVISION=${{ steps.meta.outputs.revision }}
-            FOLIUM_BUILD_DATE=${{ steps.meta.outputs.created }}
-          cache-from: type=gha,scope=folium-backend
-          cache-to: type=gha,mode=max,scope=folium-backend
+            LESSPAPER_NGL_VERSION=${{ steps.meta.outputs.version }}
+            LESSPAPER_NGL_BUILD_REVISION=${{ steps.meta.outputs.revision }}
+            LESSPAPER_NGL_BUILD_DATE=${{ steps.meta.outputs.created }}
+          cache-from: type=gha,scope=lesspaper-ngl-backend
+          cache-to: type=gha,mode=max,scope=lesspaper-ngl-backend
 
       - name: Build web image
         uses: docker/build-push-action@v6
@@ -105,41 +105,41 @@ jobs:
           tags: ${{ steps.web_tags.outputs.tags }}
           labels: ${{ steps.web_tags.outputs.labels }}
           build-args: |
-            FOLIUM_VERSION=${{ steps.meta.outputs.version }}
-            FOLIUM_BUILD_REVISION=${{ steps.meta.outputs.revision }}
-            FOLIUM_BUILD_DATE=${{ steps.meta.outputs.created }}
-          cache-from: type=gha,scope=folium-web
-          cache-to: type=gha,mode=max,scope=folium-web
+            LESSPAPER_NGL_VERSION=${{ steps.meta.outputs.version }}
+            LESSPAPER_NGL_BUILD_REVISION=${{ steps.meta.outputs.revision }}
+            LESSPAPER_NGL_BUILD_DATE=${{ steps.meta.outputs.created }}
+          cache-from: type=gha,scope=lesspaper-ngl-web
+          cache-to: type=gha,mode=max,scope=lesspaper-ngl-web
 
       - name: Compose smoke test
         env:
-          FOLIUM_VERSION: ${{ steps.meta.outputs.version }}
+          LESSPAPER_NGL_VERSION: ${{ steps.meta.outputs.version }}
         run: |
           set -euo pipefail
           smoke="$(mktemp -d)"
           cp docker-compose.yml "$smoke/docker-compose.yml"
           cat > "$smoke/.env" <<'EOF'
-          FOLIUM_VERSION=${{ steps.meta.outputs.version }}
-          FOLIUM_SECRET_KEY=ci-smoke-secret-not-for-production
-          FOLIUM_ENCRYPTION_KEY=ci-smoke-encryption-not-for-production
+          LESSPAPER_NGL_VERSION=${{ steps.meta.outputs.version }}
+          LESSPAPER_NGL_SECRET_KEY=ci-smoke-secret-not-for-production
+          LESSPAPER_NGL_ENCRYPTION_KEY=ci-smoke-encryption-not-for-production
           POSTGRES_USER=folium
           POSTGRES_PASSWORD=ci-smoke-postgres-not-for-production
           POSTGRES_DB=folium
-          FOLIUM_ADMIN_USERNAME=admin
-          FOLIUM_ADMIN_PASSWORD=ci-smoke-admin-not-for-production
+          LESSPAPER_NGL_ADMIN_USERNAME=admin
+          LESSPAPER_NGL_ADMIN_PASSWORD=ci-smoke-admin-not-for-production
           FRONTEND_ORIGIN=http://localhost:9398
           ALLOW_REGISTRATION=false
-          FOLIUM_ENV=production
+          LESSPAPER_NGL_ENV=production
           AI_PRIVACY_MODE=local_only
-          FOLIUM_DOCUMENTS_HOST=./data/documents
-          FOLIUM_CONSUME_HOST=./data/consume
-          FOLIUM_EXPORT_HOST=./data/export
-          FOLIUM_PADDLE_CACHE_HOST=./data/paddleocr
+          LESSPAPER_NGL_DOCUMENTS_HOST=./data/documents
+          LESSPAPER_NGL_CONSUME_HOST=./data/consume
+          LESSPAPER_NGL_EXPORT_HOST=./data/export
+          LESSPAPER_NGL_PADDLE_CACHE_HOST=./data/paddleocr
           EOF
           mkdir -p "$smoke/data"/{documents,consume,export,paddleocr}
           chmod -R a+rwx "$smoke/data"
           cd "$smoke"
-          docker compose -p folium-smoke up -d
+          docker compose -p lesspaper-ngl-smoke up -d
           ok=0
           for _ in $(seq 1 48); do
             if curl -sf http://127.0.0.1:9099/health | grep -q '"status"'; then
@@ -148,14 +148,14 @@ jobs:
             fi
             sleep 5
           done
-          docker compose -p folium-smoke ps
+          docker compose -p lesspaper-ngl-smoke ps
           if [[ "$ok" != 1 ]]; then
-            docker compose -p folium-smoke logs
+            docker compose -p lesspaper-ngl-smoke logs
             exit 1
           fi
           curl -sf http://127.0.0.1:9099/health
           curl -sf http://127.0.0.1:9398/health
-          docker compose -p folium-smoke down
+          docker compose -p lesspaper-ngl-smoke down
           test -d "$smoke/data/documents"
 
       - name: Push backend image
@@ -168,10 +168,10 @@ jobs:
           tags: ${{ steps.backend_tags.outputs.tags }}
           labels: ${{ steps.backend_tags.outputs.labels }}
           build-args: |
-            FOLIUM_VERSION=${{ steps.meta.outputs.version }}
-            FOLIUM_BUILD_REVISION=${{ steps.meta.outputs.revision }}
-            FOLIUM_BUILD_DATE=${{ steps.meta.outputs.created }}
-          cache-from: type=gha,scope=folium-backend
+            LESSPAPER_NGL_VERSION=${{ steps.meta.outputs.version }}
+            LESSPAPER_NGL_BUILD_REVISION=${{ steps.meta.outputs.revision }}
+            LESSPAPER_NGL_BUILD_DATE=${{ steps.meta.outputs.created }}
+          cache-from: type=gha,scope=lesspaper-ngl-backend
 
       - name: Push web image
         uses: docker/build-push-action@v6
@@ -183,10 +183,10 @@ jobs:
           tags: ${{ steps.web_tags.outputs.tags }}
           labels: ${{ steps.web_tags.outputs.labels }}
           build-args: |
-            FOLIUM_VERSION=${{ steps.meta.outputs.version }}
-            FOLIUM_BUILD_REVISION=${{ steps.meta.outputs.revision }}
-            FOLIUM_BUILD_DATE=${{ steps.meta.outputs.created }}
-          cache-from: type=gha,scope=folium-web
+            LESSPAPER_NGL_VERSION=${{ steps.meta.outputs.version }}
+            LESSPAPER_NGL_BUILD_REVISION=${{ steps.meta.outputs.revision }}
+            LESSPAPER_NGL_BUILD_DATE=${{ steps.meta.outputs.created }}
+          cache-from: type=gha,scope=lesspaper-ngl-web
 
       - name: GitHub Release assets
         if: github.ref_type == 'tag'
@@ -197,27 +197,25 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p dist
-          sed "s/\${FOLIUM_VERSION:-latest}/\${FOLIUM_VERSION:-${VERSION}}/g" docker-compose.yml \
-            > dist/docker-compose.yml
-          sed "s/^FOLIUM_VERSION=.*/FOLIUM_VERSION=${VERSION}/" .env.example \
-            > dist/env.example
+          python3 scripts/pin-release-compose.py --version "${VERSION}"
           cp dist/env.example dist/default.env.example
-          bash installer/pack.sh dist/install-folium.sh
+          bash installer/pack.sh dist/install-lesspaper-ngl.sh
           (cd dist && sha256sum \
             docker-compose.yml env.example default.env.example \
-            install-folium.sh > checksums.txt)
+            install-lesspaper-ngl.sh install-folium.sh > checksums.txt)
           assets=(
             dist/docker-compose.yml
             dist/env.example
             dist/default.env.example
+            dist/install-lesspaper-ngl.sh
             dist/install-folium.sh
             dist/checksums.txt
           )
           if [[ "$STABLE" == "true" ]]; then
-            title="Folium v${VERSION}"
+            title="lesspaper-ngl v${VERSION}"
             channel_args=(--latest)
           else
-            title="Folium v${VERSION} (beta)"
+            title="lesspaper-ngl v${VERSION} (beta)"
             channel_args=(--prerelease --latest=false)
           fi
           if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then

@@ -10,13 +10,13 @@ import pytest
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from folium.backup.manifest import FORMAT_VERSION, BackupManifest
-from folium.backup.paths import bundle_path, repository_path
-from folium.backup.retention import apply_retention
-from folium.backup.schedule import next_run_after
-from folium.backup.verify import check_version_compatibility
-from folium.core.exceptions import ValidationError
-from folium.models import BackupScheduleType, BackupSettings
+from lesspaper_ngl.backup.manifest import FORMAT_VERSION, BackupManifest
+from lesspaper_ngl.backup.paths import bundle_path, repository_path
+from lesspaper_ngl.backup.retention import apply_retention
+from lesspaper_ngl.backup.schedule import next_run_after
+from lesspaper_ngl.backup.verify import check_version_compatibility
+from lesspaper_ngl.core.exceptions import ValidationError
+from lesspaper_ngl.models import BackupScheduleType, BackupSettings
 
 
 def test_manifest_round_trip() -> None:
@@ -59,7 +59,7 @@ def test_unsupported_format_rejected() -> None:
 
 
 def test_newer_backup_version_rejected(monkeypatch: pytest.MonkeyPatch) -> None:
-    import folium.backup.verify as verify_mod
+    import lesspaper_ngl.backup.verify as verify_mod
 
     # Pin a semver app version so CI shallow-checkout SHAs do not skip this gate.
     monkeypatch.setattr(verify_mod, "__version__", "0.1.0")
@@ -81,7 +81,7 @@ def test_newer_backup_version_rejected(monkeypatch: pytest.MonkeyPatch) -> None:
 
 def test_non_semver_app_version_does_not_reject_backup(monkeypatch: pytest.MonkeyPatch) -> None:
     """CI shallow checkouts often resolve __version__ to a git SHA via describe --always."""
-    import folium.backup.verify as verify_mod
+    import lesspaper_ngl.backup.verify as verify_mod
 
     monkeypatch.setattr(verify_mod, "__version__", "76c5f13")
     manifest = BackupManifest(
@@ -101,7 +101,7 @@ def test_non_semver_app_version_does_not_reject_backup(monkeypatch: pytest.Monke
 
 
 def test_path_traversal_rejected(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    from folium.core.config import get_settings
+    from lesspaper_ngl.core.config import get_settings
 
     monkeypatch.setenv("BACKUPS_PATH", str(tmp_path))
     get_settings.cache_clear()
@@ -121,7 +121,7 @@ def test_schedule_daily_advances() -> None:
 
 
 def test_checksum_mismatch(tmp_path: Path) -> None:
-    from folium.backup.bundle import verify_checksums, write_checksums
+    from lesspaper_ngl.backup.bundle import verify_checksums, write_checksums
 
     file_a = tmp_path / "a.txt"
     file_a.write_text("hello", encoding="utf-8")
@@ -133,8 +133,8 @@ def test_checksum_mismatch(tmp_path: Path) -> None:
 
 @pytest.mark.asyncio
 async def test_retention_skips_failed_backups(db_session: AsyncSession) -> None:
-    from folium.models import BackupRecord, BackupRecordStatus, BackupVerificationStatus
-    from folium.services.backup import get_or_create_settings
+    from lesspaper_ngl.models import BackupRecord, BackupRecordStatus, BackupVerificationStatus
+    from lesspaper_ngl.services.backup import get_or_create_settings
 
     policy = await get_or_create_settings(db_session)
     policy.retention_count = 1
@@ -189,7 +189,7 @@ def test_schedule_weekly_and_missed_daily_fires_once() -> None:
 
 
 def test_older_schema_is_compatible(monkeypatch: pytest.MonkeyPatch) -> None:
-    import folium.backup.verify as verify_mod
+    import lesspaper_ngl.backup.verify as verify_mod
 
     monkeypatch.setattr(verify_mod, "__version__", "0.2.0")
     manifest = BackupManifest(
@@ -209,7 +209,7 @@ def test_older_schema_is_compatible(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_copy_file_tolerates_utime_failure(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    from folium.backup.bundle import copy_file
+    from lesspaper_ngl.backup.bundle import copy_file
 
     src = tmp_path / "src.txt"
     dest = tmp_path / "nested" / "dest.txt"
@@ -231,11 +231,11 @@ def test_copy_file_tolerates_utime_failure(tmp_path: Path, monkeypatch: pytest.M
 
 
 def test_corrupt_dump_rejected(tmp_path: Path) -> None:
-    from folium.backup.dump import pg_tools_available, validate_dump_readable
+    from lesspaper_ngl.backup.dump import pg_tools_available, validate_dump_readable
 
     if not pg_tools_available():
         pytest.skip("PostgreSQL 17 client (pg_restore) is not available")
-    dump = tmp_path / "folium.dump"
+    dump = tmp_path / "lesspaper_ngl.dump"
     dump.write_bytes(b"not-a-postgres-dump")
     with pytest.raises(RuntimeError, match="not readable"):
         validate_dump_readable(dump)
@@ -244,7 +244,7 @@ def test_corrupt_dump_rejected(tmp_path: Path) -> None:
 def test_tar_path_traversal_rejected(tmp_path: Path) -> None:
     import tarfile
 
-    from folium.backup.bundle import extract_bundle
+    from lesspaper_ngl.backup.bundle import extract_bundle
 
     archive = tmp_path / "evil.tar"
     with tarfile.open(archive, "w") as tar:
@@ -258,8 +258,8 @@ def test_tar_path_traversal_rejected(tmp_path: Path) -> None:
 
 
 def test_interrupted_temp_not_published(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    from folium.core.config import get_settings
-    from folium.services.backup import startup_cleanup
+    from lesspaper_ngl.core.config import get_settings
+    from lesspaper_ngl.services.backup import startup_cleanup
 
     monkeypatch.setenv("BACKUPS_PATH", str(tmp_path))
     get_settings.cache_clear()

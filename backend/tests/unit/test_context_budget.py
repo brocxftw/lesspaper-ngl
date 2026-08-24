@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from folium.ai.profiles import (
+from lesspaper_ngl.ai.profiles import (
     CONTEXT_SAFETY_MARGIN,
     PROFILE_PRESETS,
     compute_budget,

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from folium.ai.filing_context import (
+from lesspaper_ngl.ai.filing_context import (
     FILING_TEXT_TOKEN_BUDGET,
     PageText,
     build_filing_sample,
@@ -12,7 +12,7 @@ from folium.ai.filing_context import (
     rank_tag_candidates,
     tokenize_for_candidates,
 )
-from folium.services.chunking import estimate_tokens
+from lesspaper_ngl.services.chunking import estimate_tokens
 
 
 def test_short_document_returns_full_text() -> None:
@@ -167,7 +167,7 @@ def test_rank_tag_candidates_empty_when_no_overlap() -> None:
 def test_filing_prompt_examples_are_neutral() -> None:
     from pathlib import Path
 
-    source = Path(__file__).resolve().parents[2] / "src/folium/workers/processor.py"
+    source = Path(__file__).resolve().parents[2] / "src/lesspaper_ngl/workers/processor.py"
     text = source.read_text(encoding="utf-8")
     assert "Finance / Salary / 2025" not in text
     assert "Topic / PersonOrOrg" in text

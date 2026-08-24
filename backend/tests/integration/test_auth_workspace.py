@@ -48,7 +48,7 @@ async def test_admin_cannot_delete_self(auth_client: AsyncClient) -> None:
 async def test_password_reset_flow(auth_client: AsyncClient) -> None:
     from httpx import ASGITransport
 
-    from folium.main import app
+    from lesspaper_ngl.main import app
 
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as guest:
         reg = await guest.post(
@@ -118,7 +118,7 @@ async def test_password_reset_flow(auth_client: AsyncClient) -> None:
 async def test_password_reset_reject(auth_client: AsyncClient) -> None:
     from httpx import ASGITransport
 
-    from folium.main import app
+    from lesspaper_ngl.main import app
 
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as guest:
         reg = await guest.post(

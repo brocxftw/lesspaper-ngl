@@ -7,7 +7,7 @@ import uuid
 import pytest
 from httpx import AsyncClient
 
-from folium.storage.service import StorageService
+from lesspaper_ngl.storage.service import StorageService
 
 
 @pytest.mark.asyncio

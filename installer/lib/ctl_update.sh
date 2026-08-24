@@ -1,4 +1,4 @@
-# Helpers for `folium update` (download release installer + noninteractive --update).
+# Helpers for `lesspaper-ngl update` (download release installer + noninteractive --update).
 # shellcheck shell=bash
 
 ctl_update_default_version() {
@@ -31,6 +31,7 @@ ctl_update_normalize_target() {
 # Newest GitHub prerelease tag (vX.Y.Z-beta.N). Override in unit tests.
 ctl_update_latest_prerelease_tag() {
   local tag plain
+  local repo="${LESSPAPER_NGL_GITHUB_REPO:-${FOLIUM_GITHUB_REPO:-brocxftw/lesspaper-ngl}}"
   while IFS= read -r tag; do
     [[ -n "${tag}" ]] || continue
     plain="$(config_strip_v_prefix "${tag}")"
@@ -41,7 +42,7 @@ ctl_update_latest_prerelease_tag() {
   done < <(
     curl -fsSL --max-time 20 \
       -H "Accept: application/vnd.github+json" \
-      "https://api.github.com/repos/${FOLIUM_GITHUB_REPO:-brocxftw/folium}/releases?per_page=30" \
+      "https://api.github.com/repos/${repo}/releases?per_page=30" \
       | python3 -c 'import json,sys
 for rel in json.load(sys.stdin):
     if rel.get("draft"):
@@ -52,21 +53,27 @@ for rel in json.load(sys.stdin):
   return 1
 }
 
-# Download URL for install-folium.sh for a normalized target (latest|beta|v…).
+# Preferred asset is install-lesspaper-ngl.sh; callers may fall back to install-folium.sh.
+ctl_update_installer_asset_names() {
+  printf '%s\n' "install-lesspaper-ngl.sh" "install-folium.sh"
+}
+
+# Download URL for the preferred installer asset for a normalized target (latest|beta|v…).
 ctl_update_installer_url() {
   local target="${1:-}"
-  local repo="${FOLIUM_GITHUB_REPO:-brocxftw/folium}"
+  local asset="${2:-install-lesspaper-ngl.sh}"
+  local repo="${LESSPAPER_NGL_GITHUB_REPO:-${FOLIUM_GITHUB_REPO:-brocxftw/lesspaper-ngl}}"
   case "${target}" in
     latest)
-      printf 'https://github.com/%s/releases/latest/download/install-folium.sh' "${repo}"
+      printf 'https://github.com/%s/releases/latest/download/%s' "${repo}" "${asset}"
       ;;
     beta)
       local tag
       tag="$(ctl_update_latest_prerelease_tag)" || return 1
-      printf 'https://github.com/%s/releases/download/%s/install-folium.sh' "${repo}" "${tag}"
+      printf 'https://github.com/%s/releases/download/%s/%s' "${repo}" "${tag}" "${asset}"
       ;;
     v*)
-      printf 'https://github.com/%s/releases/download/%s/install-folium.sh' "${repo}" "${target}"
+      printf 'https://github.com/%s/releases/download/%s/%s' "${repo}" "${target}" "${asset}"
       ;;
     *)
       return 1

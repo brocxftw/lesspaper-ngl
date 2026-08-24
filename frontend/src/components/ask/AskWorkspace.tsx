@@ -32,7 +32,7 @@ export function AskWorkspace() {
     <div className="flex h-full flex-col items-center justify-center gap-4 bg-surface-muted p-8">
       <div className="max-w-md text-center">
         <Sparkles className="mx-auto mb-3 h-10 w-10 text-text-muted/40" />
-        <h1 className="text-lg font-semibold text-text-primary">Ask Folium</h1>
+        <h1 className="text-lg font-semibold text-text-primary">Ask lesspaper-ngl</h1>
         <p className="mt-1 text-sm text-text-secondary">
           Open the Ask panel to question your library with citations. Prefer
           launching Ask from Documents so folder, selection, and search scopes

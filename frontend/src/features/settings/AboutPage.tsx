@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAbout, useSession } from "@/lib/api/hooks";
 import { Button } from "@/components/ui/Button";
-import foliumLogo from "@/assets/brand/folium_logo.svg";
+import lesspaperNglLogo from "@/assets/brand/lesspaper-ngl_logo.svg";
 import {
   SettingsCard,
   SettingsContent,
@@ -25,17 +25,17 @@ export function AboutPage() {
     <SettingsContent>
       <SettingsPageHeader
         title="About"
-        description="What version this is, and how Folium handles your data."
+        description="What version this is, and how lesspaper-ngl handles your data."
       />
       {isLoading ? (
         <SettingsEmptyState>Loading product information…</SettingsEmptyState>
       ) : error || !data ? (
         <p role="alert" className="text-danger">Product metadata is unavailable.</p>
       ) : (
-        <SettingsSection title="Folium">
+        <SettingsSection title="lesspaper-ngl">
           <SettingsCard>
             <div className="flex flex-wrap items-start gap-4">
-              <img src={foliumLogo} alt="" width={48} height={48} className="h-12 w-12" />
+              <img src={lesspaperNglLogo} alt="lesspaper-ngl" width={48} height={48} className="h-12 w-12" />
               <div className="min-w-0 flex-1">
                 <p className="text-base font-semibold text-text-primary">{data.product}</p>
                 <p className="mt-1 text-sm text-text-secondary">{data.description}</p>
@@ -69,8 +69,8 @@ export function AboutPage() {
       <SettingsSection title="Privacy & data handling">
         <SettingsCard>
           <div className="space-y-3 text-sm leading-6 text-text-secondary">
-            <p>Folium stores your documents, text, metadata and search indexes on the system you or your administrator control. It is local-first by design.</p>
-            <p>AI is optional. If a remote AI provider is enabled, Folium may send document content according to the configured privacy policy.</p>
+            <p>lesspaper-ngl stores your documents, text, metadata and search indexes on the system you or your administrator control. It is local-first by design.</p>
+            <p>AI is optional. If a remote AI provider is enabled, lesspaper-ngl may send document content according to the configured privacy policy.</p>
             <p>Provider credentials are encrypted and never shown in full. Logs are redacted so prompts, document text, cookies and tokens are not kept.</p>
           </div>
           {session?.user.is_admin ? (
@@ -81,7 +81,7 @@ export function AboutPage() {
               Review AI Policy →
             </Link>
           ) : (
-            <p className="mt-4 text-sm text-text-muted">AI Policy is managed by your Folium administrator.</p>
+            <p className="mt-4 text-sm text-text-muted">AI Policy is managed by your lesspaper-ngl administrator.</p>
           )}
         </SettingsCard>
       </SettingsSection>

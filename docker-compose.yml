@@ -1,15 +1,19 @@
-# Public Folium Compose — pull pre-built images. No repository source required.
+# Public lesspaper-ngl Compose — pull pre-built images. No repository source required.
 #
-# Preferred: curl the standalone GitHub Release asset install-folium.sh. Manual:
+# Preferred: curl the standalone GitHub Release asset install-lesspaper-ngl.sh. Manual:
 #   copy this file and env.example from a GitHub Release, then:
 #   cp env.example .env
 #   # set secrets and POSTGRES_PASSWORD
 #   docker compose up -d
 #
-# Pin a release with FOLIUM_VERSION=X.Y.Z in .env (Release assets default to that tag).
+# Pin a release with LESSPAPER_NGL_VERSION=X.Y.Z in .env (Release assets default to that tag).
+# Legacy FOLIUM_VERSION / FOLIUM_*_HOST keys are still accepted for upgrades.
 # Contributors building from source: docker compose -f docker-compose.yml -f compose.dev.yaml up --build -d
 #
 # Extra host GIDs (e.g. CIFS): use a gitignored docker-compose.override.yml with group_add.
+#
+# Persistence note: volume key folium_pgdata and default Postgres role/db "folium" are
+# intentional historical identifiers — do not rename on existing installs.
 
 services:
   db:
@@ -29,7 +33,7 @@ services:
     # Keep Postgres on a local Docker volume — never on NFS.
 
   api:
-    image: ghcr.io/brocxftw/folium-backend:${FOLIUM_VERSION:-latest}
+    image: ghcr.io/brocxftw/lesspaper-ngl-backend:${LESSPAPER_NGL_VERSION:-${FOLIUM_VERSION:-latest}}
     restart: unless-stopped
     depends_on:
       db:
@@ -43,14 +47,14 @@ services:
       CONSUME_PATH: /consume
       EXPORT_PATH: /export
       BACKUPS_PATH: /backups
-      FOLIUM_DOCUMENTS_HOST_SOURCE: ${FOLIUM_DOCUMENTS_HOST_SOURCE:-}
+      LESSPAPER_NGL_DOCUMENTS_HOST_SOURCE: ${LESSPAPER_NGL_DOCUMENTS_HOST_SOURCE:-${FOLIUM_DOCUMENTS_HOST_SOURCE:-}}
       FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:9398}
     volumes:
-      - ${FOLIUM_DOCUMENTS_HOST:-./data/documents}:/documents
-      - ${FOLIUM_CONSUME_HOST:-./data/consume}:/consume
-      - ${FOLIUM_EXPORT_HOST:-./data/export}:/export
-      - ${FOLIUM_BACKUPS_HOST:-./data/backups}:/backups
-      - ${FOLIUM_PADDLE_CACHE_HOST:-./data/paddleocr}:/app/.paddleocr
+      - ${LESSPAPER_NGL_DOCUMENTS_HOST:-${FOLIUM_DOCUMENTS_HOST:-./data/documents}}:/documents
+      - ${LESSPAPER_NGL_CONSUME_HOST:-${FOLIUM_CONSUME_HOST:-./data/consume}}:/consume
+      - ${LESSPAPER_NGL_EXPORT_HOST:-${FOLIUM_EXPORT_HOST:-./data/export}}:/export
+      - ${LESSPAPER_NGL_BACKUPS_HOST:-${FOLIUM_BACKUPS_HOST:-./data/backups}}:/backups
+      - ${LESSPAPER_NGL_PADDLE_CACHE_HOST:-${FOLIUM_PADDLE_CACHE_HOST:-./data/paddleocr}}:/app/.paddleocr
     ports:
       - "9099:8000"
     healthcheck:
@@ -65,9 +69,9 @@ services:
       - no-new-privileges:true
 
   worker:
-    image: ghcr.io/brocxftw/folium-backend:${FOLIUM_VERSION:-latest}
+    image: ghcr.io/brocxftw/lesspaper-ngl-backend:${LESSPAPER_NGL_VERSION:-${FOLIUM_VERSION:-latest}}
     restart: unless-stopped
-    command: ["folium-worker"]
+    command: ["lesspaper-ngl-worker"]
     depends_on:
       db:
         condition: service_healthy
@@ -82,16 +86,16 @@ services:
       CONSUME_PATH: /consume
       EXPORT_PATH: /export
       BACKUPS_PATH: /backups
-      FOLIUM_DOCUMENTS_HOST_SOURCE: ${FOLIUM_DOCUMENTS_HOST_SOURCE:-}
+      LESSPAPER_NGL_DOCUMENTS_HOST_SOURCE: ${LESSPAPER_NGL_DOCUMENTS_HOST_SOURCE:-${FOLIUM_DOCUMENTS_HOST_SOURCE:-}}
     volumes:
-      - ${FOLIUM_DOCUMENTS_HOST:-./data/documents}:/documents
-      - ${FOLIUM_CONSUME_HOST:-./data/consume}:/consume
-      - ${FOLIUM_EXPORT_HOST:-./data/export}:/export
-      - ${FOLIUM_BACKUPS_HOST:-./data/backups}:/backups
-      - ${FOLIUM_PADDLE_CACHE_HOST:-./data/paddleocr}:/app/.paddleocr
+      - ${LESSPAPER_NGL_DOCUMENTS_HOST:-${FOLIUM_DOCUMENTS_HOST:-./data/documents}}:/documents
+      - ${LESSPAPER_NGL_CONSUME_HOST:-${FOLIUM_CONSUME_HOST:-./data/consume}}:/consume
+      - ${LESSPAPER_NGL_EXPORT_HOST:-${FOLIUM_EXPORT_HOST:-./data/export}}:/export
+      - ${LESSPAPER_NGL_BACKUPS_HOST:-${FOLIUM_BACKUPS_HOST:-./data/backups}}:/backups
+      - ${LESSPAPER_NGL_PADDLE_CACHE_HOST:-${FOLIUM_PADDLE_CACHE_HOST:-./data/paddleocr}}:/app/.paddleocr
     user: "1000:1000"
     healthcheck:
-      test: ["CMD", "python", "-m", "folium.workers.healthcheck"]
+      test: ["CMD", "python", "-m", "lesspaper_ngl.workers.healthcheck"]
       interval: 15s
       timeout: 8s
       retries: 8
@@ -100,7 +104,7 @@ services:
       - no-new-privileges:true
 
   web:
-    image: ghcr.io/brocxftw/folium-web:${FOLIUM_VERSION:-latest}
+    image: ghcr.io/brocxftw/lesspaper-ngl-web:${LESSPAPER_NGL_VERSION:-${FOLIUM_VERSION:-latest}}
     restart: unless-stopped
     depends_on:
       api:

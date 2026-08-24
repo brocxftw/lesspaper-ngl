@@ -7,9 +7,9 @@ from pathlib import Path
 import pymupdf
 import pytest
 
-from folium.core.config import Settings
-from folium.ocr import extractor
-from folium.ocr.extractor import extract_document
+from lesspaper_ngl.core.config import Settings
+from lesspaper_ngl.ocr import extractor
+from lesspaper_ngl.ocr.extractor import extract_document
 
 
 def _settings(**kwargs: object) -> Settings:
@@ -47,7 +47,7 @@ def test_pdf_force_ocr_uses_paddle(tmp_path: Path, monkeypatch: pytest.MonkeyPat
 
     def _fake_pages(path: Path, *, language: str, **_kwargs):
         assert language == "eng"
-        from folium.ocr.extractor import ExtractedPage
+        from lesspaper_ngl.ocr.extractor import ExtractedPage
 
         return [ExtractedPage(page_number=1, text="Paddle text")]
 
@@ -99,7 +99,7 @@ def test_pdf_ocr_uses_configured_dpi(tmp_path: Path, monkeypatch: pytest.MonkeyP
     seen_dpi: list[int] = []
 
     def _fake_pages(path: Path, *, language: str, dpi=None, settings=None, **_k):
-        from folium.ocr.extractor import ExtractedPage
+        from lesspaper_ngl.ocr.extractor import ExtractedPage
 
         seen_dpi.append(int(dpi))
         return [ExtractedPage(page_number=1, text="x")]

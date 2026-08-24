@@ -9,9 +9,9 @@ from httpx import AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from folium.models import Job, JobType, LibraryActivityCounters, User
-from folium.services import tags as tag_service
-from folium.workers.processor import mark_preflight_ready, process_text_extraction
+from lesspaper_ngl.models import Job, JobType, LibraryActivityCounters, User
+from lesspaper_ngl.services import tags as tag_service
+from lesspaper_ngl.workers.processor import mark_preflight_ready, process_text_extraction
 
 
 async def _admin_user_id(db_session: AsyncSession) -> uuid.UUID:

@@ -1,6 +1,6 @@
 # Runtime architecture
 
-How Folium processes actually run in the Compose stack versus local development.
+How lesspaper-ngl processes actually run in the Compose stack versus local development.
 
 ---
 
@@ -10,10 +10,10 @@ How Folium processes actually run in the Compose stack versus local development.
 |---------|---------|---------|------------|
 | `db` | PostgreSQL 17 + pgvector | image default | — |
 | `api` | Uvicorn FastAPI | entrypoint → `uvicorn folium.main:app --host 0.0.0.0 --port 8000` | healthy `db`; runs `alembic upgrade head` first |
-| `worker` | asyncio worker loop | `folium-worker` | healthy `db` and healthy `api` |
+| `worker` | asyncio worker loop | `lesspaper-ngl-worker` | healthy `db` and healthy `api` |
 | `web` | nginx | image default | healthy `api` |
 
-**Confirmed:** `api` and `worker` share `docker/Dockerfile.backend`. The worker does **not** run migrations (entrypoint skips Alembic when argv is `folium-worker`). Ordering `worker → api healthy` exists so schema is migrated before jobs run.
+**Confirmed:** `api` and `worker` share `docker/Dockerfile.backend`. The worker does **not** run migrations (entrypoint skips Alembic when argv is `lesspaper-ngl-worker`). Ordering `worker → api healthy` exists so schema is migrated before jobs run.
 
 Worker Compose healthcheck runs `python -m folium.workers.healthcheck` (90s stale window). A background task writes `app_settings.worker_heartbeat` about every 10s. That heartbeat is **not** part of `GET /health`.
 
@@ -60,7 +60,7 @@ Serves `frontend/dist`. Proxies API. SPA fallback `try_files` → `index.html`. 
 
 ## Source-built vs distributable
 
-Public Compose uses `image:` tags on GHCR (`ghcr.io/brocxftw/folium-backend` and `folium-web`). Contributors overlay `compose.dev.yaml` to `build:` from this tree.
+Public Compose uses `image:` tags on GHCR (`ghcr.io/brocxftw/lesspaper-ngl-backend` and `lesspaper-ngl-web`). Contributors overlay `compose.dev.yaml` to `build:` from this tree.
 
 - Frontend is compiled **inside** the `web` image; runtime `web` does not mount SPA source.
 - Backend image copies `backend/src` at **build** time. Public Compose does **not** bind-mount source. `docker-compose.debug.yml` **does** mount `./backend/src` for live API/worker code.
@@ -72,7 +72,7 @@ Operators: [interactive installer](../deployment/installer.md), or download Rele
 
 ## Identity and version
 
-`GET /health` `version` comes from `FOLIUM_VERSION` (leading `v` stripped), else `git describe`, else `0.1.0`. Published images set `FOLIUM_VERSION`, `FOLIUM_BUILD_REVISION`, and `FOLIUM_BUILD_DATE` at build time. Compose can pin the **image tag** with `FOLIUM_VERSION` independently of that metadata.
+`GET /health` `version` comes from `LESSPAPER_NGL_VERSION` (leading `v` stripped), else `git describe`, else `0.1.0`. Published images set `LESSPAPER_NGL_VERSION`, `LESSPAPER_NGL_BUILD_REVISION`, and `LESSPAPER_NGL_BUILD_DATE` at build time. Compose can pin the **image tag** with `LESSPAPER_NGL_VERSION` independently of that metadata.
 
 ---
 

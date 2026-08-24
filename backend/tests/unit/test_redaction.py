@@ -1,4 +1,4 @@
-from folium.core.redaction import csv_safe, redact, redact_text
+from lesspaper_ngl.core.redaction import csv_safe, redact, redact_text
 
 
 def test_recursive_redaction_removes_credentials_and_tokens() -> None:

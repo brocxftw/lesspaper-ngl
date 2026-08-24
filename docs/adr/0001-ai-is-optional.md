@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-Folium could have required an LLM for ingest, search, or health.
+lesspaper-ngl could have required an LLM for ingest, search, or health.
 
 ## Decision
 Document management, local OCR/text extraction, Inbox/Process, and PostgreSQL keyword search operate with **no** AI provider. Chat, embeddings, filing suggestions, and summaries run only when configured and privacy allows. `GET /health` does not include AI.

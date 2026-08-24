@@ -32,7 +32,7 @@ const { idleMutation, policy, usageSummary, health, assignments } = vi.hoisted((
     active_embedding_provider: null,
     active_embedding_model: null,
     active_embedding_dimension: null,
-    enforcement_note: "Folium enforces these controls in application code.",
+    enforcement_note: "lesspaper-ngl enforces these controls in application code.",
   },
   usageSummary: {
     range: "month",
@@ -156,7 +156,7 @@ describe("Artificial Intelligence settings tabs", () => {
       ) & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
     expect(screen.getByText("Filing suggestions")).toBeInTheDocument();
-    expect(screen.getByText("Ask Folium")).toBeInTheDocument();
+    expect(screen.getByText("Ask lesspaper-ngl")).toBeInTheDocument();
     expect(document.getElementById("providers")).toBeTruthy();
   });
 
@@ -176,7 +176,7 @@ describe("Artificial Intelligence settings tabs", () => {
     renderPage("?tab=controls");
     const switches = screen.getAllByRole("switch");
     const remoteSwitches = switches.filter((node) =>
-      ["Ask Folium", "Embeddings", "Vision"].includes(node.getAttribute("aria-label") ?? ""),
+      ["Ask lesspaper-ngl", "Embeddings", "Vision"].includes(node.getAttribute("aria-label") ?? ""),
     );
     for (const toggle of remoteSwitches) {
       expect(toggle).toBeDisabled();

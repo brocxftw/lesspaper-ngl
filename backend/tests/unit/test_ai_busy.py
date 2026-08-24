@@ -8,8 +8,8 @@ from unittest.mock import patch
 
 import pytest
 
-from folium.ai.busy import is_provider_busy, provider_chat_guard
-from folium.ai.health import probe_provider
+from lesspaper_ngl.ai.busy import is_provider_busy, provider_chat_guard
+from lesspaper_ngl.ai.health import probe_provider
 
 
 @pytest.mark.asyncio
@@ -26,6 +26,6 @@ async def test_probe_skips_busy_provider() -> None:
     provider_id = uuid.uuid4()
     provider = SimpleNamespace(id=provider_id, name="busy-llm")
     async with provider_chat_guard(provider_id):
-        with patch("folium.ai.health.get_adapter") as get_adapter:
+        with patch("lesspaper_ngl.ai.health.get_adapter") as get_adapter:
             await probe_provider(provider)  # type: ignore[arg-type]
             get_adapter.assert_not_called()

@@ -9,8 +9,8 @@ from httpx import AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from folium.models import Job, JobType
-from folium.workers.processor import process_text_extraction
+from lesspaper_ngl.models import Job, JobType
+from lesspaper_ngl.workers.processor import process_text_extraction
 
 
 @pytest.mark.asyncio

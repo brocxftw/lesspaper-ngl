@@ -1,6 +1,6 @@
 # Design system
 
-Folium does **not** ship a formal design-token package or Storybook. Visual language is encoded in CSS + primitives.
+lesspaper-ngl does **not** ship a formal design-token package or Storybook. Visual language is encoded in CSS + primitives.
 
 ## CSS
 

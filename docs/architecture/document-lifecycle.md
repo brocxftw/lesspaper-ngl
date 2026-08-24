@@ -6,7 +6,7 @@ A **Document** is the owned file record: content-addressed original, metadata, p
 
 ## Status models (do not invent a second one)
 
-Folium uses **several complementary fields**, not a single state machine:
+lesspaper-ngl uses **several complementary fields**, not a single state machine:
 
 | Field / derived | Where | Meaning |
 |-----------------|-------|---------|

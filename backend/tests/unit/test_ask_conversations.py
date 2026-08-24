@@ -6,8 +6,8 @@ import uuid
 from datetime import UTC, datetime
 from types import SimpleNamespace
 
-from folium.ai.rag import Citation
-from folium.services.ask_conversations import (
+from lesspaper_ngl.ai.rag import Citation
+from lesspaper_ngl.services.ask_conversations import (
     rewrite_answer_with_display_citations,
     select_history_for_model,
     sort_messages_chronologically,
@@ -88,7 +88,7 @@ def test_rewrite_multi_chunk_group_to_display_numbers() -> None:
 
 
 def test_rewrite_collapses_consecutive_duplicate_numbers() -> None:
-    from folium.services.ask_conversations import normalize_display_citation_text
+    from lesspaper_ngl.services.ask_conversations import normalize_display_citation_text
 
     assert normalize_display_citation_text("Focus on identity [5] [5]. More.") == (
         "Focus on identity [5]. More."

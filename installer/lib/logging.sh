@@ -1,9 +1,9 @@
 # Folium installer logging. Never write secrets.
 # shellcheck shell=bash
 
-FOLIUM_LOG_FILE="${FOLIUM_LOG_FILE:-}"
+LESSPAPER_NGL_LOG_FILE="${LESSPAPER_NGL_LOG_FILE:-}"
 
-_folium_redact() {
+_lesspaper_ngl_redact() {
   # Redact assignment values for sensitive keys and long hex tokens.
   sed -E \
     -e 's/([A-Za-z0-9_]*(PASSWORD|SECRET|KEY|TOKEN|ENCRYPTION)[A-Za-z0-9_]*)=.*/\1=***REDACTED***/Ig' \
@@ -14,17 +14,17 @@ _folium_redact() {
 log_init() {
   local ts
   ts="$(date -u +%Y%m%d-%H%M%S)"
-  FOLIUM_LOG_FILE="${FOLIUM_LOG_FILE:-/tmp/folium-install-${ts}.log}"
+  LESSPAPER_NGL_LOG_FILE="${LESSPAPER_NGL_LOG_FILE:-/tmp/lesspaper-ngl-install-${ts}.log}"
   umask 077
-  : >"${FOLIUM_LOG_FILE}"
-  log_info "Folium installer log started"
+  : >"${LESSPAPER_NGL_LOG_FILE}"
+  log_info "lesspaper-ngl installer log started"
   log_info "timestamp_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 }
 
 log_info() {
   local line
-  line="$(printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*" | _folium_redact)"
-  printf '%s\n' "${line}" >>"${FOLIUM_LOG_FILE:-/dev/null}"
+  line="$(printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*" | _lesspaper_ngl_redact)"
+  printf '%s\n' "${line}" >>"${LESSPAPER_NGL_LOG_FILE:-/dev/null}"
 }
 
 log_warn() {

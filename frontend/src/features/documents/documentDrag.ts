@@ -1,4 +1,7 @@
-/** Custom MIME type for internal document-ID drag payloads. */
+/** Custom MIME types for internal document-ID drag payloads. */
+export const LESSPAPER_NGL_DOCUMENT_IDS =
+  "application/x-lesspaper-ngl-document-ids";
+/** Legacy MIME — still accepted when reading drops during the rebrand transition. */
 export const FOLIUM_DOCUMENT_IDS = "application/x-folium-document-ids";
 
 /** Session flag — custom MIME types are often hidden from `types` during dragover. */
@@ -10,6 +13,7 @@ export function setDocumentDragData(
 ): void {
   const payload = JSON.stringify(documentIds);
   activeDocumentDragIds = documentIds;
+  dataTransfer.setData(LESSPAPER_NGL_DOCUMENT_IDS, payload);
   dataTransfer.setData(FOLIUM_DOCUMENT_IDS, payload);
   dataTransfer.setData("text/plain", payload);
   dataTransfer.effectAllowed = "move";
@@ -25,7 +29,10 @@ export function dataTransferHasDocuments(
   if (activeDocumentDragIds && activeDocumentDragIds.length > 0) return true;
   if (!dataTransfer) return false;
   const types = Array.from(dataTransfer.types ?? []);
-  return types.includes(FOLIUM_DOCUMENT_IDS);
+  return (
+    types.includes(LESSPAPER_NGL_DOCUMENT_IDS) ||
+    types.includes(FOLIUM_DOCUMENT_IDS)
+  );
 }
 
 export function getDocumentDragIds(
@@ -36,6 +43,7 @@ export function getDocumentDragIds(
   }
   if (!dataTransfer) return [];
   const raw =
+    dataTransfer.getData(LESSPAPER_NGL_DOCUMENT_IDS) ||
     dataTransfer.getData(FOLIUM_DOCUMENT_IDS) ||
     dataTransfer.getData("text/plain");
   if (!raw) return [];

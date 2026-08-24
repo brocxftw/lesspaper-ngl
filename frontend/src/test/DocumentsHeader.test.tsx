@@ -3,13 +3,13 @@ import { describe, expect, it } from "vitest";
 import { DocumentsHeader } from "@/features/documents/DocumentsHeader";
 
 describe("DocumentsHeader", () => {
-  it("renders library view tabs without search, Ask Folium, or Upload", () => {
+  it("renders library view tabs without search, Ask lesspaper-ngl, or Upload", () => {
     render(<DocumentsHeader view="all" onViewChange={() => undefined} />);
     expect(screen.getByRole("tab", { name: "All" })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "Recently added" })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "Unprocessed" })).toBeInTheDocument();
     expect(screen.queryByLabelText("Search library")).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Ask Folium" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Ask lesspaper-ngl" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Upload" })).not.toBeInTheDocument();
   });
 });

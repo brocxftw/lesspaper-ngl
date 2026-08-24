@@ -29,27 +29,27 @@ health_compose_ps_healthy() {
       *\(healthy\)*) ;;
       *) pending=$((pending + 1)) ;;
     esac
-  done < <(folium_compose ps --format '{{.Service}} {{.Status}}' 2>/dev/null || true)
+  done < <(lesspaper_ngl_compose ps --format '{{.Service}} {{.Status}}' 2>/dev/null || true)
   [[ "${pending}" -eq 0 ]]
 }
 
 health_services_present() {
   local out
-  out="$(folium_compose ps 2>/dev/null || true)"
+  out="$(lesspaper_ngl_compose ps 2>/dev/null || true)"
   [[ "${out}" == *db* && "${out}" == *api* && "${out}" == *worker* && "${out}" == *web* ]]
 }
 
 health_wait() {
-  local retries="${FOLIUM_HEALTH_RETRIES:-48}"
-  local sleep_s="${FOLIUM_HEALTH_SLEEP:-5}"
+  local retries="${LESSPAPER_NGL_HEALTH_RETRIES:-48}"
+  local sleep_s="${LESSPAPER_NGL_HEALTH_SLEEP:-5}"
   local base
   local i
   local ok=0
   base="$(network_health_base)"
   log_info "waiting for health at ${base} (${retries} attempts)"
   for i in $(seq 1 "${retries}"); do
-    if declare -F folium_health_progress >/dev/null 2>&1; then
-      folium_health_progress "${i}" "${retries}"
+    if declare -F lesspaper_ngl_health_progress >/dev/null 2>&1; then
+      lesspaper_ngl_health_progress "${i}" "${retries}"
     fi
     if health_services_present \
       && health_http_ok "${base}/health" "ok" \
@@ -73,7 +73,7 @@ health_snapshot() {
   local base
   base="$(network_health_base)"
   printf 'compose:\n'
-  folium_compose ps 2>/dev/null || true
+  lesspaper_ngl_compose ps 2>/dev/null || true
   printf '\nGET /health:\n'
   curl -sf "${base}/health" 2>/dev/null || printf 'unreachable\n'
   printf '\nGET /health/database:\n'

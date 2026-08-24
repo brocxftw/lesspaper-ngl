@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { ApiError } from "@/lib/api/client";
 import { cn } from "@/lib/utils";
-import foliumLogo from "@/assets/brand/folium_logo.svg";
+import lesspaperNglLogo from "@/assets/brand/lesspaper-ngl_logo.svg";
 import bgLogin from "@/assets/brand/bg_login_2.svg";
 
 const loginSchema = z.object({
@@ -85,7 +85,7 @@ export function LoginPage() {
         <div className="flex flex-col items-center gap-1.5 text-center">
           <div className="flex items-center gap-3">
             <img
-              src={foliumLogo}
+              src={lesspaperNglLogo}
               alt=""
               width={62}
               height={62}
@@ -93,7 +93,7 @@ export function LoginPage() {
               aria-hidden="true"
             />
             <h1 className="text-[56px] leading-none font-bold tracking-[-0.03em] text-text-primary">
-              Folium
+              lesspaper-ngl
             </h1>
           </div>
           <div className="flex items-center justify-center gap-[9px]">

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
 
-from folium.workers.healthcheck import heartbeat_is_fresh, parse_heartbeat_at
+from lesspaper_ngl.workers.healthcheck import heartbeat_is_fresh, parse_heartbeat_at
 
 
 def test_parse_heartbeat_at_accepts_iso() -> None:

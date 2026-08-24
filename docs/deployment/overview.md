@@ -1,8 +1,10 @@
 # Deployment overview
 
+Folium has been renamed to lesspaper-ngl.
+
 ## Supported model
 
-Operators typically run the [interactive installer](installer.md). The equivalent manual path is GitHub Release Compose + `env.example` — no git clone and no Folium image build.
+Operators typically run the [interactive installer](installer.md). The equivalent manual path is GitHub Release Compose + `env.example` — no git clone and no lesspaper-ngl image build.
 
 ```text
 download docker-compose.yml
@@ -13,7 +15,7 @@ docker compose up -d
 
 Step-by-step: [Installer](installer.md) (including [pre-release / beta](installer.md#pre-release--beta)) or [manual install](install.md).
 
-Postgres is pulled from Docker Hub (`pgvector/pgvector:pg17`). Folium `api`/`worker`/`web` are pulled from GHCR.
+Postgres is pulled from Docker Hub (`pgvector/pgvector:pg17`). lesspaper-ngl `api`/`worker`/`web` are pulled from GHCR.
 
 ## What you get
 
@@ -23,7 +25,7 @@ Postgres is pulled from Docker Hub (`pgvector/pgvector:pg17`). Folium `api`/`wor
 | http://localhost:9398/health | API liveness + version (nginx proxy) |
 | http://localhost:8000/docs | OpenAPI (published by public Compose; installer leaves 8000 unpublished unless opted in) |
 
-First boot creates the bootstrap admin from `FOLIUM_ADMIN_USERNAME` / `FOLIUM_ADMIN_PASSWORD` if no users exist.
+First boot creates the bootstrap admin from `LESSPAPER_NGL_ADMIN_USERNAME` / `LESSPAPER_NGL_ADMIN_PASSWORD` if no users exist.
 
 ## Contributors
 

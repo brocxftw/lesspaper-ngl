@@ -1,5 +1,5 @@
 [project]
-name = "folium"
+name = "lesspaper-ngl"
 version = "0.1.0"
 description = "Self-hosted AI-native document management system"
 readme = "README.md"
@@ -48,22 +48,26 @@ dev = [
 ]
 
 [project.scripts]
-folium = "folium.cli:main"
-folium-api = "folium.main:run_api"
-folium-worker = "folium.workers.main:run_worker"
+lesspaper-ngl = "lesspaper_ngl.cli:main"
+lesspaper-ngl-api = "lesspaper_ngl.main:run_api"
+lesspaper-ngl-worker = "lesspaper_ngl.workers.main:run_worker"
+# Temporary compatibility aliases for one release cycle.
+folium = "lesspaper_ngl.cli:main"
+folium-api = "lesspaper_ngl.main:run_api"
+folium-worker = "lesspaper_ngl.workers.main:run_worker"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/folium"]
+packages = ["src/lesspaper_ngl"]
 
 [tool.hatch.build.targets.wheel.sources]
 "src" = ""
 
 [tool.hatch.build.targets.sdist]
-include = ["src/folium", "alembic", "alembic.ini", "README.md"]
+include = ["src/lesspaper_ngl", "alembic", "alembic.ini", "README.md"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
@@ -100,7 +104,7 @@ python_version = "3.13"
 strict = true
 plugins = ["pydantic.mypy"]
 mypy_path = "src"
-packages = ["folium"]
+packages = ["lesspaper_ngl"]
 
 [[tool.mypy.overrides]]
 module = ["magic.*", "docx.*", "fitz.*", "pymupdf.*", "paddleocr.*", "paddle.*", "pgvector.*"]

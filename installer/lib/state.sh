@@ -2,7 +2,7 @@
 # shellcheck shell=bash
 
 state_file_path() {
-  printf '%s/install-state.json' "${FOLIUM_INSTALL_DIR:-/opt/folium}"
+  printf '%s/install-state.json' "${LESSPAPER_NGL_INSTALL_DIR:-/opt/lesspaper-ngl}"
 }
 
 state_exists() {
@@ -40,35 +40,35 @@ state_write() {
   local dest
   dest="$(state_file_path)"
   umask 022
-  mkdir -p "${FOLIUM_INSTALL_DIR}"
-  export FOLIUM_METHOD FOLIUM_VERSION FOLIUM_VERSION_TAG FOLIUM_INSTALL_DIR
-  export FOLIUM_BIND FOLIUM_HTTP_PORT FOLIUM_API_PORT FOLIUM_EXPOSE_API FOLIUM_FRONTEND_ORIGIN
-  export FOLIUM_DOCS_PATH FOLIUM_CONSUME_PATH FOLIUM_EXPORT_PATH FOLIUM_PADDLE_PATH
-  export FOLIUM_EXTRA_GID FOLIUM_COMPOSE_PROJECT
+  mkdir -p "${LESSPAPER_NGL_INSTALL_DIR}"
+  export LESSPAPER_NGL_METHOD LESSPAPER_NGL_VERSION LESSPAPER_NGL_VERSION_TAG LESSPAPER_NGL_INSTALL_DIR
+  export LESSPAPER_NGL_BIND LESSPAPER_NGL_HTTP_PORT LESSPAPER_NGL_API_PORT LESSPAPER_NGL_EXPOSE_API LESSPAPER_NGL_FRONTEND_ORIGIN
+  export LESSPAPER_NGL_DOCS_PATH LESSPAPER_NGL_CONSUME_PATH LESSPAPER_NGL_EXPORT_PATH LESSPAPER_NGL_PADDLE_PATH
+  export LESSPAPER_NGL_EXTRA_GID LESSPAPER_NGL_COMPOSE_PROJECT
   python3 - "${dest}" <<PY
 import json, os, sys
 dest = sys.argv[1]
 data = {
   "schema": 1,
-  "install_method": os.environ.get("FOLIUM_METHOD", "image"),
-  "version": os.environ.get("FOLIUM_VERSION", ""),
-  "version_tag": os.environ.get("FOLIUM_VERSION_TAG", ""),
-  "install_dir": os.environ.get("FOLIUM_INSTALL_DIR", ""),
+  "install_method": os.environ.get("LESSPAPER_NGL_METHOD", "image"),
+  "version": os.environ.get("LESSPAPER_NGL_VERSION", ""),
+  "version_tag": os.environ.get("LESSPAPER_NGL_VERSION_TAG", ""),
+  "install_dir": os.environ.get("LESSPAPER_NGL_INSTALL_DIR", ""),
   "network": {
-    "bind": os.environ.get("FOLIUM_BIND", "0.0.0.0"),
-    "port": int(os.environ.get("FOLIUM_HTTP_PORT", "9398")),
-    "api_port": int(os.environ.get("FOLIUM_API_PORT", "9099")),
-    "expose_api": os.environ.get("FOLIUM_EXPOSE_API", "0") == "1",
-    "frontend_origin": os.environ.get("FOLIUM_FRONTEND_ORIGIN", ""),
+    "bind": os.environ.get("LESSPAPER_NGL_BIND", "0.0.0.0"),
+    "port": int(os.environ.get("LESSPAPER_NGL_HTTP_PORT", "9398")),
+    "api_port": int(os.environ.get("LESSPAPER_NGL_API_PORT", "9099")),
+    "expose_api": os.environ.get("LESSPAPER_NGL_EXPOSE_API", "0") == "1",
+    "frontend_origin": os.environ.get("LESSPAPER_NGL_FRONTEND_ORIGIN", ""),
   },
   "storage": {
-    "documents": os.environ.get("FOLIUM_DOCS_PATH", ""),
-    "consume": os.environ.get("FOLIUM_CONSUME_PATH", ""),
-    "export": os.environ.get("FOLIUM_EXPORT_PATH", ""),
-    "paddle_cache": os.environ.get("FOLIUM_PADDLE_PATH", ""),
+    "documents": os.environ.get("LESSPAPER_NGL_DOCS_PATH", ""),
+    "consume": os.environ.get("LESSPAPER_NGL_CONSUME_PATH", ""),
+    "export": os.environ.get("LESSPAPER_NGL_EXPORT_PATH", ""),
+    "paddle_cache": os.environ.get("LESSPAPER_NGL_PADDLE_PATH", ""),
   },
-  "extra_gid": os.environ.get("FOLIUM_EXTRA_GID", ""),
-  "compose_project": os.environ.get("FOLIUM_COMPOSE_PROJECT", "folium"),
+  "extra_gid": os.environ.get("LESSPAPER_NGL_EXTRA_GID", ""),
+  "compose_project": os.environ.get("LESSPAPER_NGL_COMPOSE_PROJECT", "lesspaper-ngl"),
 }
 with open(dest, "w", encoding="utf-8") as fh:
     json.dump(data, fh, indent=2)
@@ -78,26 +78,46 @@ PY
 }
 
 state_write_pointer() {
-  if [[ "${FOLIUM_SKIP_CLI:-0}" == "1" ]]; then
+  if [[ "${LESSPAPER_NGL_SKIP_CLI:-0}" == "1" ]]; then
     return 0
   fi
+  # Always write the new pointer; also refresh legacy pointer for older tooling.
+  run_root mkdir -p /etc/lesspaper-ngl
+  printf '%s\n' "${LESSPAPER_NGL_INSTALL_DIR}" | run_root tee /etc/lesspaper-ngl/install-dir >/dev/null
+  run_root chmod 644 /etc/lesspaper-ngl/install-dir
   run_root mkdir -p /etc/folium
-  printf '%s\n' "${FOLIUM_INSTALL_DIR}" | run_root tee /etc/folium/install-dir >/dev/null
+  printf '%s\n' "${LESSPAPER_NGL_INSTALL_DIR}" | run_root tee /etc/folium/install-dir >/dev/null
   run_root chmod 644 /etc/folium/install-dir
 }
 
+# Discover either new or legacy install locations. Never force-moves the install dir.
 state_discover_dir() {
+  if [[ -n "${LESSPAPER_NGL_INSTALL_DIR:-}" && -f "${LESSPAPER_NGL_INSTALL_DIR}/install-state.json" ]]; then
+    printf '%s' "${LESSPAPER_NGL_INSTALL_DIR}"
+    return 0
+  fi
   if [[ -n "${FOLIUM_INSTALL_DIR:-}" && -f "${FOLIUM_INSTALL_DIR}/install-state.json" ]]; then
     printf '%s' "${FOLIUM_INSTALL_DIR}"
     return 0
   fi
+  local p
+  if [[ -f /etc/lesspaper-ngl/install-dir ]]; then
+    p="$(tr -d '\n' </etc/lesspaper-ngl/install-dir)"
+    if [[ -f "${p}/install-state.json" ]]; then
+      printf '%s' "${p}"
+      return 0
+    fi
+  fi
   if [[ -f /etc/folium/install-dir ]]; then
-    local p
     p="$(tr -d '\n' </etc/folium/install-dir)"
     if [[ -f "${p}/install-state.json" ]]; then
       printf '%s' "${p}"
       return 0
     fi
+  fi
+  if [[ -f /opt/lesspaper-ngl/install-state.json ]]; then
+    printf '%s' "/opt/lesspaper-ngl"
+    return 0
   fi
   if [[ -f /opt/folium/install-state.json ]]; then
     printf '%s' "/opt/folium"

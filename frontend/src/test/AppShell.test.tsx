@@ -2,7 +2,7 @@ import { fireEvent, render, screen, within, waitFor } from "@testing-library/rea
 import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { describe, expect, it, vi, afterEach } from "vitest";
 import { AppShell } from "@/components/layout/AppShell";
-import foliumLogo from "@/assets/brand/folium_logo.svg";
+import lesspaperNglLogo from "@/assets/brand/lesspaper-ngl_logo.svg";
 import type { SearchHit } from "@/lib/api/types";
 
 const { searchHits } = vi.hoisted(() => ({ searchHits: [] as SearchHit[] }));
@@ -133,14 +133,14 @@ describe("AppShell top navbar", () => {
     expect(navigation.querySelector("svg")).toBeNull();
   });
 
-  it("shows the supplied brand mark, Folium, and a Beta label under the name", () => {
+  it("shows the supplied brand mark, lesspaper-ngl, and a Beta label under the name", () => {
     renderShell();
     const header = screen.getByRole("banner");
-    const mark = header.querySelector(`img[src="${foliumLogo}"]`);
+    const mark = header.querySelector(`img[src="${lesspaperNglLogo}"]`);
     expect(mark).toBeInTheDocument();
     expect(mark).toHaveAttribute("width", "40");
     expect(mark).toHaveAttribute("height", "40");
-    expect(screen.getByText("Folium")).toBeInTheDocument();
+    expect(screen.getByText("lesspaper-ngl")).toBeInTheDocument();
     expect(screen.getByText("Beta")).toBeInTheDocument();
     expect(screen.queryByLabelText(/app version/i)).not.toBeInTheDocument();
   });
@@ -275,30 +275,30 @@ describe("AppShell top navbar", () => {
     });
   });
 
-  it("exposes Ask Folium as a floating control", () => {
+  it("exposes Ask lesspaper-ngl as a floating control", () => {
     renderShell();
-    expect(screen.getByRole("button", { name: "Ask Folium AI" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Ask lesspaper-ngl AI" })).toBeInTheDocument();
   });
 
-  it("hides the Ask Folium button in the inbox workspace", () => {
+  it("hides the Ask lesspaper-ngl button in the inbox workspace", () => {
     renderShell("/inbox");
-    expect(screen.queryByRole("button", { name: "Ask Folium AI" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Ask lesspaper-ngl AI" })).not.toBeInTheDocument();
   });
 
-  it("hides the Ask Folium button in Settings", () => {
+  it("hides the Ask lesspaper-ngl button in Settings", () => {
     renderShell("/settings");
-    expect(screen.queryByRole("button", { name: "Ask Folium AI" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Ask lesspaper-ngl AI" })).not.toBeInTheDocument();
   });
 
-  it("hides the Ask Folium button on nested Settings routes", () => {
+  it("hides the Ask lesspaper-ngl button on nested Settings routes", () => {
     renderShell("/settings/library");
-    expect(screen.queryByRole("button", { name: "Ask Folium AI" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Ask lesspaper-ngl AI" })).not.toBeInTheDocument();
   });
 
   it("opens a compact Ask dock with in-composer context and send", () => {
     renderShell("/documents");
-    fireEvent.click(screen.getByRole("button", { name: "Ask Folium AI" }));
-    expect(screen.getByRole("dialog", { name: "Ask Folium" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Ask lesspaper-ngl AI" }));
+    expect(screen.getByRole("dialog", { name: "Ask lesspaper-ngl" })).toBeInTheDocument();
     expect(
       screen.queryByText("Single-turn answers with citations from the selected scope."),
     ).not.toBeInTheDocument();

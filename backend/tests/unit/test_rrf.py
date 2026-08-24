@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import uuid
 
-from folium.search.hybrid import reciprocal_rank_fusion
+from lesspaper_ngl.search.hybrid import reciprocal_rank_fusion
 
 
 def test_rrf_merges_ranked_lists() -> None:

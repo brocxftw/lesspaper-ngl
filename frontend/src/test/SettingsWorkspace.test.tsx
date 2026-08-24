@@ -21,7 +21,7 @@ vi.mock("@/lib/api/hooks", () => ({
   usePasswordResetRequests: () => ({ data: [] }),
   useAbout: () => ({
     data: {
-      product: "Folium",
+      product: "lesspaper-ngl",
       version: "0.1.0",
       description: "Local-first document workspace",
       build_revision: null,
@@ -101,7 +101,7 @@ describe("About privacy policy access", () => {
         <AboutPage />
       </MemoryRouter>,
     );
-    expect(screen.getByText(/managed by your Folium administrator/i)).toBeInTheDocument();
+    expect(screen.getByText(/managed by your lesspaper-ngl administrator/i)).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /review ai policy/i })).not.toBeInTheDocument();
   });
 });

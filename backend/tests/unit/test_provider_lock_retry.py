@@ -8,9 +8,9 @@ from unittest.mock import AsyncMock, MagicMock
 import httpx
 import pytest
 
-from folium.ai.base import AIProviderError
-from folium.ai.openai_compatible import OpenAICompatibleAdapter
-from folium.ai.provider_lock import lock_key_for_base_url, reset_provider_locks_for_tests
+from lesspaper_ngl.ai.base import AIProviderError
+from lesspaper_ngl.ai.openai_compatible import OpenAICompatibleAdapter
+from lesspaper_ngl.ai.provider_lock import lock_key_for_base_url, reset_provider_locks_for_tests
 
 
 def _provider(*, is_local: bool = True) -> MagicMock:
@@ -39,7 +39,7 @@ def test_lock_key_uses_host_port() -> None:
 
 @pytest.mark.asyncio
 async def test_local_requests_are_serialized_per_host(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr("folium.ai.openai_compatible.adapter_retry_delay_seconds", lambda _a: 0)
+    monkeypatch.setattr("lesspaper_ngl.ai.openai_compatible.adapter_retry_delay_seconds", lambda _a: 0)
 
     active = 0
     max_active = 0
@@ -81,7 +81,7 @@ async def test_local_requests_are_serialized_per_host(monkeypatch: pytest.Monkey
 
 @pytest.mark.asyncio
 async def test_retries_transient_provider_errors(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr("folium.ai.openai_compatible.adapter_retry_delay_seconds", lambda _a: 0)
+    monkeypatch.setattr("lesspaper_ngl.ai.openai_compatible.adapter_retry_delay_seconds", lambda _a: 0)
     adapter = OpenAICompatibleAdapter(_provider(is_local=False))
     calls = {"n": 0}
 
@@ -108,7 +108,7 @@ async def test_retries_transient_provider_errors(monkeypatch: pytest.MonkeyPatch
 
 @pytest.mark.asyncio
 async def test_does_not_retry_permanent_errors(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr("folium.ai.openai_compatible.adapter_retry_delay_seconds", lambda _a: 0)
+    monkeypatch.setattr("lesspaper_ngl.ai.openai_compatible.adapter_retry_delay_seconds", lambda _a: 0)
     adapter = OpenAICompatibleAdapter(_provider(is_local=False))
     adapter._request_once = AsyncMock(  # type: ignore[method-assign]
         side_effect=AIProviderError("invalid api key", status_code=401)

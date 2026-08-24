@@ -28,7 +28,7 @@ export function ModelsPanel() {
     <SettingsSection
       id="workloads"
       title="AI workloads"
-      description="Choose which model Folium uses for each AI capability."
+      description="Choose which model lesspaper-ngl uses for each AI capability."
     >
       <div className="space-y-3">
         {visible.map((assignment) => (

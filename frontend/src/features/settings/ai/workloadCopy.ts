@@ -4,7 +4,7 @@ import type { LucideIcon } from "lucide-react";
 
 export const WORKLOAD_LABELS: Record<string, string> = {
   indexing: "Filing suggestions",
-  chat: "Ask Folium",
+  chat: "Ask lesspaper-ngl",
   embeddings: "Embeddings",
   embedding: "Embeddings",
 };
@@ -28,7 +28,7 @@ export const WORKLOAD_COPY: Record<
     icon: Layers,
   },
   chat: {
-    title: "Ask Folium",
+    title: "Ask lesspaper-ngl",
     subtitle: "Answers questions using retrieved evidence",
     icon: MessageCircleQuestion,
   },
@@ -95,8 +95,8 @@ export const AI_TAB_LABELS: Record<AiSettingsTab, string> = {
 };
 
 export const AI_TAB_DESCRIPTIONS: Record<AiSettingsTab, string> = {
-  usage: "Monitor usage, performance and cost across Folium AI workloads.",
-  models: "Configure which models Folium uses for each AI workload.",
+  usage: "Monitor usage, performance and cost across lesspaper-ngl AI workloads.",
+  models: "Configure which models lesspaper-ngl uses for each AI workload.",
   controls: "Control privacy, automated AI behaviour and response quality.",
 };
 

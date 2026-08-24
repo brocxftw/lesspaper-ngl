@@ -93,7 +93,7 @@ export function UploadDropzone({
             </div>
             <p className="text-sm font-medium text-text-primary">Drop files or folders</p>
             <p className="text-xs text-text-muted">
-              Folder structure will be recreated in Folium
+              Folder structure will be recreated in lesspaper-ngl
             </p>
           </div>
         </div>

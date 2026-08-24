@@ -7,24 +7,24 @@ RUN npm run build
 
 FROM nginx:1.27-alpine
 
-ARG FOLIUM_VERSION=0.0.0-dev
-ARG FOLIUM_BUILD_REVISION=
-ARG FOLIUM_BUILD_DATE=
-ARG FOLIUM_SOURCE=https://github.com/brocxftw/folium
+ARG LESSPAPER_NGL_VERSION=0.0.0-dev
+ARG LESSPAPER_NGL_BUILD_REVISION=
+ARG LESSPAPER_NGL_BUILD_DATE=
+ARG LESSPAPER_NGL_SOURCE=https://github.com/brocxftw/lesspaper-ngl
 
-LABEL org.opencontainers.image.title="Folium web" \
-      org.opencontainers.image.description="Folium static UI served by nginx" \
-      org.opencontainers.image.source="${FOLIUM_SOURCE}" \
-      org.opencontainers.image.url="${FOLIUM_SOURCE}" \
-      org.opencontainers.image.documentation="${FOLIUM_SOURCE}/blob/main/docs/deployment/install.md" \
+LABEL org.opencontainers.image.title="lesspaper-ngl web" \
+      org.opencontainers.image.description="lesspaper-ngl static UI served by nginx" \
+      org.opencontainers.image.source="${LESSPAPER_NGL_SOURCE}" \
+      org.opencontainers.image.url="${LESSPAPER_NGL_SOURCE}" \
+      org.opencontainers.image.documentation="${LESSPAPER_NGL_SOURCE}/blob/main/docs/deployment/install.md" \
       org.opencontainers.image.licenses="AGPL-3.0-only" \
-      org.opencontainers.image.version="${FOLIUM_VERSION}" \
-      org.opencontainers.image.revision="${FOLIUM_BUILD_REVISION}" \
-      org.opencontainers.image.created="${FOLIUM_BUILD_DATE}"
+      org.opencontainers.image.version="${LESSPAPER_NGL_VERSION}" \
+      org.opencontainers.image.revision="${LESSPAPER_NGL_BUILD_REVISION}" \
+      org.opencontainers.image.created="${LESSPAPER_NGL_BUILD_DATE}"
 
-ENV FOLIUM_VERSION=${FOLIUM_VERSION} \
-    FOLIUM_BUILD_REVISION=${FOLIUM_BUILD_REVISION} \
-    FOLIUM_BUILD_DATE=${FOLIUM_BUILD_DATE}
+ENV LESSPAPER_NGL_VERSION=${LESSPAPER_NGL_VERSION} \
+    LESSPAPER_NGL_BUILD_REVISION=${LESSPAPER_NGL_BUILD_REVISION} \
+    LESSPAPER_NGL_BUILD_DATE=${LESSPAPER_NGL_BUILD_DATE}
 
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html

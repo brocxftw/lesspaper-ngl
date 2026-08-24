@@ -26,15 +26,15 @@ from httpx import AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from folium.ai.base import (
+from lesspaper_ngl.ai.base import (
     AIProviderAdapter,
     ChatMessage,
     ChatResult,
     EmbeddingResult,
     ModelCapabilities,
 )
-from folium.models import AIProvider, AISuggestion, Job, JobStatus, JobType, SuggestionStatus
-from folium.workers.processor import process_metadata_suggestion, process_text_extraction
+from lesspaper_ngl.models import AIProvider, AISuggestion, Job, JobStatus, JobType, SuggestionStatus
+from lesspaper_ngl.workers.processor import process_metadata_suggestion, process_text_extraction
 
 # ---------------------------------------------------------------------------
 # Visual report helpers (visible with pytest -s)
@@ -239,7 +239,7 @@ async def test_metadata_suggestion_creates_folder_and_tag_rows(
 
     adapter = _MockFilingAdapter(wrap_in_fence=True)
     monkeypatch.setattr(
-        "folium.workers.processor.get_adapter",
+        "lesspaper_ngl.workers.processor.get_adapter",
         lambda _provider, api_key=None: adapter,
     )
 
@@ -322,7 +322,7 @@ async def test_accept_folder_and_tags_then_process(
 
     adapter = _MockFilingAdapter()
     monkeypatch.setattr(
-        "folium.workers.processor.get_adapter",
+        "lesspaper_ngl.workers.processor.get_adapter",
         lambda _provider, api_key=None: adapter,
     )
 
@@ -432,7 +432,7 @@ async def test_reject_folder_leaves_document_unfiled(
 ) -> None:
     await _enable_auto_tagging(auth_client, db_session)
     monkeypatch.setattr(
-        "folium.workers.processor.get_adapter",
+        "lesspaper_ngl.workers.processor.get_adapter",
         lambda _provider, api_key=None: _MockFilingAdapter(),
     )
     doc_id = await _upload_and_extract(

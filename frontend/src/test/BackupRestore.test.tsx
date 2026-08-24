@@ -157,7 +157,7 @@ describe("First-run setup", () => {
 
   it("offers new install and restore", () => {
     render(<MemoryRouter><SetupPage /></MemoryRouter>);
-    expect(screen.getByRole("button", { name: "Set up new Folium" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Set up new lesspaper-ngl" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Restore backup" })).toBeInTheDocument();
   });
 

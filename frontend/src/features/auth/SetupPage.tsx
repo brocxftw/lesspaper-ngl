@@ -40,14 +40,14 @@ export function SetupPage() {
   }
 
   if (status.data?.ready) {
-    navigate("/login", { replace: true, state: { notice: "Folium is ready. Sign in to continue." } });
+    navigate("/login", { replace: true, state: { notice: "lesspaper-ngl is ready. Sign in to continue." } });
   }
 
   const onNewInstall = async () => {
     setError(null);
     try {
       await setup.mutateAsync();
-      navigate("/login", { replace: true, state: { notice: "Folium is ready. Sign in with the bootstrap admin account." } });
+      navigate("/login", { replace: true, state: { notice: "lesspaper-ngl is ready. Sign in with the bootstrap admin account." } });
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Could not complete setup");
     }
@@ -59,16 +59,16 @@ export function SetupPage() {
         <div className="mb-6 text-center">
           <div className="mb-2 inline-flex items-center gap-2">
             <Leaf className="h-7 w-7 text-accent" />
-            <span className="text-2xl font-semibold">Folium</span>
+            <span className="text-2xl font-semibold">lesspaper-ngl</span>
           </div>
           <p className="text-sm text-text-secondary">Set up a new library or restore from a backup in /backups.</p>
         </div>
         {error && <p role="alert" className="mb-3 text-sm text-danger">{error}</p>}
-        {restoring && <p className="mb-3 text-sm text-accent">Restore is in progress. This page will continue when Folium is ready.</p>}
+        {restoring && <p className="mb-3 text-sm text-accent">Restore is in progress. This page will continue when lesspaper-ngl is ready.</p>}
         {mode === "choose" && (
           <div className="space-y-3">
             <Button className="w-full" onClick={() => void onNewInstall()} disabled={setup.isPending || !uninitialised}>
-              {setup.isPending ? "Setting up…" : "Set up new Folium"}
+              {setup.isPending ? "Setting up…" : "Set up new lesspaper-ngl"}
             </Button>
             <Button className="w-full" variant="secondary" onClick={() => setMode("restore")} disabled={!uninitialised}>
               Restore backup
@@ -113,7 +113,7 @@ export function SetupPage() {
               >
                 Inspect
               </Button>
-              <Button disabled={!selected} onClick={() => setConfirmRestore(true)}>Restore Folium</Button>
+              <Button disabled={!selected} onClick={() => setConfirmRestore(true)}>Restore lesspaper-ngl</Button>
             </div>
           </div>
         )}
@@ -129,8 +129,8 @@ export function SetupPage() {
 
       <Dialog open={confirmRestore} onOpenChange={setConfirmRestore}>
         <DialogContent>
-          <DialogHeader><DialogTitle>Restore Folium from this backup?</DialogTitle></DialogHeader>
-          <p className="text-sm text-text-secondary">This initialises Folium from the selected backup. Existing empty database state will be replaced.</p>
+          <DialogHeader><DialogTitle>Restore lesspaper-ngl from this backup?</DialogTitle></DialogHeader>
+          <p className="text-sm text-text-secondary">This initialises lesspaper-ngl from the selected backup. Existing empty database state will be replaced.</p>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setConfirmRestore(false)}>Cancel</Button>
             <Button
@@ -141,7 +141,7 @@ export function SetupPage() {
                 setConfirmRestore(false);
               }}
             >
-              Restore Folium
+              Restore lesspaper-ngl
             </Button>
           </DialogFooter>
         </DialogContent>

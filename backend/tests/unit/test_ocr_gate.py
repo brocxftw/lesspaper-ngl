@@ -6,7 +6,7 @@ import asyncio
 
 import pytest
 
-from folium.workers import ocr_gate
+from lesspaper_ngl.workers import ocr_gate
 
 
 @pytest.mark.asyncio

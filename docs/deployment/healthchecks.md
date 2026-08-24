@@ -21,6 +21,6 @@ The worker writes `worker_heartbeat` on a background task (~10s) so long OCR job
 | `GET /health/storage` | No | Writability of documents/consume/export |
 | `GET /api/ai/health` | Yes | Assigned provider probes |
 
-**Confirmed:** an unavailable AI provider does **not** fail `GET /health` or the api Compose healthcheck. Folium remains a document manager when AI is down. Worker unavailability does **not** fail `GET /health`.
+**Confirmed:** an unavailable AI provider does **not** fail `GET /health` or the api Compose healthcheck. lesspaper-ngl remains a document manager when AI is down. Worker unavailability does **not** fail `GET /health`.
 
 Storage `status`: `ok` \| `degraded` (documents OK, consume/export not) \| `unavailable` (documents not writable).

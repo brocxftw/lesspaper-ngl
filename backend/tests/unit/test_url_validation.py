@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from folium.ai.url_validation import validate_provider_base_url
-from folium.core.exceptions import ValidationError
+from lesspaper_ngl.ai.url_validation import validate_provider_base_url
+from lesspaper_ngl.core.exceptions import ValidationError
 
 
 def test_accepts_localhost_http() -> None:

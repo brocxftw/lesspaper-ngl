@@ -23,7 +23,7 @@ Documents workspace switches on `state.q.trim()` (`useDocumentsLibraryState`).
 | `semantic` | Embed **query**; cosine distance on chunk vectors in **active embedding space** | Yes |
 | `hybrid` | Keyword page hits + semantic chunk hits fused with **RRF** (k=60) | Preferred; see fallback |
 
-**Effective mode:** if hybrid/semantic cannot obtain a query embedding, Folium sets `effective_mode=keyword` (**Confirmed**).
+**Effective mode:** if hybrid/semantic cannot obtain a query embedding, lesspaper-ngl sets `effective_mode=keyword` (**Confirmed**).
 
 **Semantic coverage:** `embedded_documents` vs `searchable_documents`; `partial` when some searchable docs lack embeddings.
 

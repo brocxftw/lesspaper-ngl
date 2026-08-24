@@ -10,14 +10,14 @@ from httpx import AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from folium.ai.base import (
+from lesspaper_ngl.ai.base import (
     AIProviderAdapter,
     ChatMessage,
     ChatResult,
     EmbeddingResult,
     ModelCapabilities,
 )
-from folium.models import DocumentChunk
+from lesspaper_ngl.models import DocumentChunk
 
 
 @dataclass
@@ -138,7 +138,7 @@ async def test_ask_returns_answer_with_valid_citations(
     assert chunk is not None
 
     monkeypatch.setattr(
-        "folium.api.documents.get_adapter",
+        "lesspaper_ngl.api.documents.get_adapter",
         lambda provider, api_key=None: _MockLocalChatAdapter(chunk_id=chunk.id),
     )
 
@@ -164,7 +164,7 @@ async def test_ask_insufficient_evidence_path(
 ) -> None:
     await _setup_local_chat_provider(auth_client)
     monkeypatch.setattr(
-        "folium.api.documents.get_adapter",
+        "lesspaper_ngl.api.documents.get_adapter",
         lambda provider, api_key=None: _MockInsufficientAdapter(),
     )
 
@@ -215,7 +215,7 @@ async def test_workspace_ask_search_snapshot_respects_folder(
     assert chunk is not None
 
     monkeypatch.setattr(
-        "folium.api.ask.get_adapter",
+        "lesspaper_ngl.api.ask.get_adapter",
         lambda provider, api_key=None: _MockLocalChatAdapter(chunk_id=chunk.id),
     )
 

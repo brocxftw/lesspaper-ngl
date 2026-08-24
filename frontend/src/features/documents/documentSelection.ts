@@ -40,4 +40,5 @@ export function selectAllIds(orderedIds: string[]): Set<string> {
 
 export type DocumentsLayoutMode = "list" | "grid";
 
-export const DOCUMENTS_LAYOUT_PREF_KEY = "folium.documents.layoutMode";
+export const DOCUMENTS_LAYOUT_PREF_KEY = "lesspaper-ngl.documents.layoutMode";
+export const DOCUMENTS_LAYOUT_PREF_KEY_LEGACY = "folium.documents.layoutMode";

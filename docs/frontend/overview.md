@@ -45,4 +45,4 @@ Documents is the densest workspace (explorer + results + modal viewer + inspecto
 
 ## Design system
 
-See [design-system.md](design-system.md). Primitives follow Radix + Tailwind patterns; there is no published Folium design-token package.
+See [design-system.md](design-system.md). Primitives follow Radix + Tailwind patterns; there is no published lesspaper-ngl design-token package.
