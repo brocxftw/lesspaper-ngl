@@ -125,7 +125,7 @@ export function InlineCitation({ citation, active, onActivate }: InlineCitationP
             "rounded px-1 align-baseline text-[10px] font-semibold leading-none tabular-nums",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
             active
-              ? "bg-accent text-white"
+              ? "bg-accent text-accent-foreground"
               : "bg-accent/15 text-accent hover:bg-accent/25",
           )}
         >
@@ -216,7 +216,7 @@ export function SourcesDrawer({
                     className={cn(
                       "mt-0.5 flex h-5 min-w-5 items-center justify-center rounded text-[11px] font-semibold",
                       activeNumber === n
-                        ? "bg-accent text-white"
+                        ? "bg-accent text-accent-foreground"
                         : "bg-accent/15 text-accent",
                     )}
                   >

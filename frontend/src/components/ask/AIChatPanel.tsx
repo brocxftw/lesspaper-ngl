@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, Leaf, Loader2, Send, Sparkles } from "lucide-react";
+import { ChevronDown, Loader2, Send, Sparkles } from "lucide-react";
+import { BrandMark } from "@/components/brand/BrandMark";
 import { ApiError } from "@/lib/api/client";
 import { useAICapabilities, useAIHealth, useAsk, useFolders } from "@/lib/api/hooks";
 import type {
@@ -426,7 +427,7 @@ export function AIChatPanel({
           {ask.isPending ? (
             <div className="rounded-xl border border-surface-border bg-surface p-3.5">
               <div className="mb-2 flex items-center gap-2 text-xs text-text-muted">
-                <Leaf className="h-3.5 w-3.5 text-accent" />
+                <BrandMark variant="on-light" size={14} />
                 lesspaper-ngl
               </div>
               <p

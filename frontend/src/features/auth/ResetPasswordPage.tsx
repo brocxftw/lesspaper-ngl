@@ -2,8 +2,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { Leaf } from "lucide-react";
 import { useResetPassword, useValidateResetToken } from "@/lib/api/hooks";
+import { BrandLockup } from "@/components/brand/BrandMark";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { ApiError } from "@/lib/api/client";
@@ -58,11 +58,12 @@ export function ResetPasswordPage() {
     <div className="flex min-h-screen items-center justify-center bg-surface-muted p-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <div className="inline-flex items-center gap-2 mb-2">
-            <Leaf className="h-7 w-7 text-accent" />
-            <span className="text-2xl font-semibold text-text-primary tracking-tight">
-              lesspaper-ngl
-            </span>
+          <div className="mb-2">
+            <BrandLockup
+              variant="on-light"
+              markSize={28}
+              wordmarkClassName="text-2xl font-semibold"
+            />
           </div>
           <p className="text-sm text-text-secondary">Choose a new password</p>
         </div>

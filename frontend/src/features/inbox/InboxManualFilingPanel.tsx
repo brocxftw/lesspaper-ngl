@@ -102,8 +102,8 @@ export function InboxManualFilingPanel({
     <div className="mt-5 rounded-[10px] border border-[#DCE3E8] bg-white p-[18px] shadow-[0_1px_2px_rgba(20,33,43,0.04)] md:ml-[66px]">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 items-start gap-2.5">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#DDF7F3]">
-            <Folder className="h-4 w-4 text-[#087F78]" strokeWidth={1.75} />
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent-muted">
+            <Folder className="h-4 w-4 text-accent" strokeWidth={1.75} />
           </div>
           <div className="min-w-0">
             <h4 className="text-[15px] font-bold text-[#14212B]">Manual filing</h4>
@@ -166,15 +166,15 @@ export function InboxManualFilingPanel({
             <p className="text-[13px] font-bold text-[#14212B]">Destination</p>
             <div className="mt-2 rounded-[10px] border border-[#DCE3E8] bg-[#F8FAFB] px-3.5 py-2.5">
               <div className="flex items-center gap-3">
-                <div className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] bg-[#DDF7F3]">
-                  <Folder className="h-4 w-4 text-[#087F78]" strokeWidth={1.75} />
+                <div className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] bg-accent-muted">
+                  <Folder className="h-4 w-4 text-accent" strokeWidth={1.75} />
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-[13px] font-semibold text-[#24333D]">
                     {displayPath}
                   </p>
                   {isNewFolder && (
-                    <span className="mt-1 inline-block rounded-[5px] bg-[#DDF7F3] px-[7px] py-[3px] text-[9px] font-bold uppercase tracking-wide text-[#087F78]">
+                    <span className="mt-1 inline-block rounded-[5px] bg-accent-muted px-[7px] py-[3px] text-[9px] font-bold uppercase tracking-wide text-accent">
                       New folder
                     </span>
                   )}
@@ -182,7 +182,7 @@ export function InboxManualFilingPanel({
                 <InboxFolderControl
                   document={doc}
                   triggerLabel="Choose folder ›"
-                  triggerClassName="shrink-0 rounded-md px-2 py-1.5 text-[11px] font-semibold text-[#087F78] hover:bg-[#DDF7F3]"
+                  triggerClassName="shrink-0 rounded-md px-2 py-1.5 text-[11px] font-semibold text-accent hover:bg-accent-muted"
                 />
               </div>
             </div>
@@ -246,7 +246,7 @@ export function InboxManualFilingPanel({
         </button>
         <Button
           type="button"
-          className="h-10 rounded-lg bg-[#07998E] px-4 font-semibold hover:bg-[#087F78]"
+          className="h-10 rounded-lg bg-accent px-4 font-semibold text-accent-foreground hover:bg-accent-hover"
           disabled={busy}
           onClick={() => void saveAndProcess()}
         >

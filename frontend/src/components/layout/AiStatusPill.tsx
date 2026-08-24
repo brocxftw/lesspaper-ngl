@@ -57,8 +57,8 @@ function StatusDot({
         size === "md" ? "h-2.5 w-2.5" : "h-2 w-2",
         working || checking
           ? "animate-pulse bg-amber-400"
-          : ready
-            ? "bg-[#14B8A6] shadow-[0_0_8px_rgba(20,184,166,0.30)]"
+            : ready
+            ? "bg-emerald-500"
             : "bg-navbar-muted",
       )}
     />

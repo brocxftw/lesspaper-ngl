@@ -11,7 +11,7 @@ import {
 
 const controlClassName =
   "inline-flex h-[41px] items-center gap-2 rounded-[10px] px-4 text-sm font-semibold " +
-  "border border-transparent bg-accent text-white shadow-[0_2px_6px_rgba(2,6,23,0.12)] " +
+  "border border-transparent bg-accent text-accent-foreground shadow-[0_2px_6px_rgba(2,6,23,0.12)] " +
   "transition-colors duration-150 ease-out hover:bg-accent-hover disabled:opacity-60";
 
 export function NavbarUpload() {

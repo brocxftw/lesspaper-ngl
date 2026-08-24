@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { ApiError } from "@/lib/api/client";
 import { cn } from "@/lib/utils";
-import lesspaperNglLogo from "@/assets/brand/lesspaper-ngl_logo.svg";
+import { BrandMark, BrandWordmark } from "@/components/brand/BrandMark";
 import bgLogin from "@/assets/brand/bg_login_2.svg";
 
 const loginSchema = z.object({
@@ -22,8 +22,8 @@ type LoginForm = z.infer<typeof loginSchema>;
 const fieldClassName =
   "h-[52px] rounded-[12px] border-surface-border bg-white " +
   "text-[14px] text-text-primary placeholder:text-text-muted " +
-  "focus-visible:border-[rgba(45,212,191,0.65)] focus-visible:ring-0 " +
-  "focus-visible:shadow-[0_0_0_3px_rgba(45,212,191,0.12)]";
+  "focus-visible:border-accent/70 focus-visible:ring-0 " +
+  "focus-visible:shadow-[0_0_0_3px_var(--color-accent-ring)]";
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -84,16 +84,9 @@ export function LoginPage() {
       >
         <div className="flex flex-col items-center gap-1.5 text-center">
           <div className="flex items-center gap-3">
-            <img
-              src={lesspaperNglLogo}
-              alt=""
-              width={62}
-              height={62}
-              className="h-[62px] w-[62px] shrink-0 object-contain"
-              aria-hidden="true"
-            />
-            <h1 className="text-[56px] leading-none font-bold tracking-[-0.03em] text-text-primary">
-              lesspaper-ngl
+            <BrandMark variant="on-light" size={56} />
+            <h1 className="text-[40px] leading-none font-bold tracking-[-0.03em] sm:text-[52px]">
+              <BrandWordmark variant="on-light" />
             </h1>
           </div>
           <div className="flex items-center justify-center gap-[9px]">
@@ -102,9 +95,6 @@ export function LoginPage() {
                 v{version.replace(/^v/i, "")}
               </span>
             ) : null}
-            <span className="inline-flex h-[32px] items-center rounded-[9px] border border-surface-border bg-surface-muted px-[14px] text-[13px] font-medium text-text-secondary shadow-[0_1px_3px_rgba(15,23,42,0.08)]">
-              Beta
-            </span>
           </div>
         </div>
 
@@ -186,7 +176,7 @@ export function LoginPage() {
             <p className="mt-2 text-right">
               <Link
                 to="/forgot-password"
-                className="text-sm font-medium text-[#2DD4BF] transition-colors hover:text-[#5EEAD4]"
+                className="text-sm font-medium text-accent transition-colors hover:text-accent-hover"
               >
                 Forgot password?
               </Link>
@@ -218,7 +208,7 @@ export function LoginPage() {
             New here?{" "}
             <Link
               to="/register"
-              className="font-medium text-[#2DD4BF] transition-colors hover:text-[#5EEAD4]"
+              className="font-medium text-accent transition-colors hover:text-accent-hover"
             >
               Create an account
             </Link>

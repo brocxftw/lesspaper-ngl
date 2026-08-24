@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Leaf } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { BrandLockup } from "@/components/brand/BrandMark";
 import {
   useBootstrapBackups,
   useBootstrapInspect,
@@ -57,9 +57,12 @@ export function SetupPage() {
     <div className="flex min-h-screen items-center justify-center bg-surface-muted p-4">
       <div className="w-full max-w-lg rounded-lg border border-surface-border bg-surface p-6 shadow-sm">
         <div className="mb-6 text-center">
-          <div className="mb-2 inline-flex items-center gap-2">
-            <Leaf className="h-7 w-7 text-accent" />
-            <span className="text-2xl font-semibold">lesspaper-ngl</span>
+          <div className="mb-2">
+            <BrandLockup
+              variant="on-light"
+              markSize={28}
+              wordmarkClassName="text-2xl font-semibold"
+            />
           </div>
           <p className="text-sm text-text-secondary">Set up a new library or restore from a backup in /backups.</p>
         </div>

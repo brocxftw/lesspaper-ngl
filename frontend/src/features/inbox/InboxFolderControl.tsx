@@ -80,7 +80,7 @@ export function InboxFolderControl({
           type="button"
           className={cn(
             triggerLabel
-              ? "shrink-0 rounded-md px-2.5 py-1.5 text-[11px] font-semibold text-[#087F78] hover:bg-[#DDF7F3]"
+              ? "shrink-0 rounded-md px-2.5 py-1.5 text-[11px] font-semibold text-accent hover:bg-accent-muted"
               : cn(
                   "max-w-[180px] truncate rounded px-1.5 py-0.5 text-left text-xs hover:bg-surface-hover",
                   isNew ? "text-emerald-800 font-medium" : "text-text-primary",

@@ -17,7 +17,7 @@ function StatusIcon({ status }: { status: Job["status"] }) {
     case "running":
       return <Loader2 className="h-3.5 w-3.5 animate-spin text-accent" />;
     case "completed":
-      return <CheckCircle className="h-3.5 w-3.5 text-accent" />;
+      return <CheckCircle className="h-3.5 w-3.5 text-emerald-600" />;
     case "failed":
       return <XCircle className="h-3.5 w-3.5 text-danger" />;
     case "cancelled":

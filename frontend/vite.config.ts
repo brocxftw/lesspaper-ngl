@@ -8,9 +8,13 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@brand": path.resolve(__dirname, "../assets/brand"),
     },
   },
   server: {
+    fs: {
+      allow: [path.resolve(__dirname, "..")],
+    },
     port: 8080,
     proxy: {
       "/api": {

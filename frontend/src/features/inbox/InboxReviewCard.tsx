@@ -167,7 +167,7 @@ export function InboxReviewCard({
           className={cn(
             "inline-flex items-center gap-1 text-xs font-medium",
             reviewReady
-              ? "text-[#087F78] hover:underline"
+              ? "text-accent hover:underline"
               : "cursor-not-allowed text-[#74828D]",
           )}
           disabled={!reviewReady}
@@ -216,7 +216,7 @@ export function InboxReviewCard({
               <Button
                 type="button"
                 variant="outline"
-                className="h-9 rounded-lg border-[#BFE9E2] px-3.5 font-semibold text-[#087F78]"
+                className="h-9 rounded-lg border-accent/40 px-3.5 font-semibold text-accent"
                 disabled={acceptSuggestionsBusy}
                 onClick={onAcceptAllSuggestions}
               >
