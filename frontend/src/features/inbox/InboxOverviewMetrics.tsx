@@ -12,51 +12,42 @@ interface InboxOverviewMetricsProps {
   metrics: OverviewMetrics;
 }
 
+const ICON_TONE = "text-[#64748B]";
+const ICON_CHIP = "bg-[#F1F5F9]";
+
 const CARDS: {
   id: keyof OverviewMetrics;
   label: string;
-  accent: string;
-  iconBg: string;
   icon: typeof FileCheck2;
   format: (m: OverviewMetrics) => string;
 }[] = [
   {
     id: "processed",
     label: "Processed",
-    accent: "#22A06B",
-    iconBg: "#E8F7EF",
     icon: FileCheck2,
     format: (m) => m.processed.toLocaleString(),
   },
   {
     id: "failed",
     label: "Failed",
-    accent: "#E45A5F",
-    iconBg: "#FDEBEC",
     icon: FileWarning,
     format: (m) => m.failed.toLocaleString(),
   },
   {
     id: "processing",
     label: "Processing",
-    accent: "#4A8ED8",
-    iconBg: "#EAF3FE",
     icon: Clock,
     format: (m) => m.processing.toLocaleString(),
   },
   {
     id: "totalIngested",
     label: "Total ingested",
-    accent: "#9568E8",
-    iconBg: "#F3EEFC",
     icon: Sparkles,
     format: (m) => m.totalIngested.toLocaleString(),
   },
   {
     id: "successRate",
     label: "Success rate",
-    accent: "#F19A3E",
-    iconBg: "#FFF2E3",
     icon: Rocket,
     format: (m) => (m.successRate == null ? "—" : `${m.successRate.toFixed(1)}%`),
   },
@@ -86,8 +77,11 @@ export function InboxOverviewMetrics({ metrics }: InboxOverviewMetricsProps) {
                   </p>
                 </div>
                 <div
-                  className={cn("flex h-[42px] w-[42px] items-center justify-center rounded-[10px]")}
-                  style={{ backgroundColor: card.iconBg, color: card.accent }}
+                  className={cn(
+                    "flex h-[42px] w-[42px] items-center justify-center rounded-[10px]",
+                    ICON_CHIP,
+                    ICON_TONE,
+                  )}
                 >
                   <Icon className="h-[22px] w-[22px]" strokeWidth={1.75} />
                 </div>

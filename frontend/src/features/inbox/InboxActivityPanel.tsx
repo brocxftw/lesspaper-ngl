@@ -131,7 +131,7 @@ export function InboxActivityPanel({
               className={cn(
                 "border-b-2 px-2.5 py-1.5 text-xs font-medium transition-colors",
                 tab === t.id
-                  ? "border-[#07998E] text-[#07998E]"
+                  ? "border-accent text-accent"
                   : "border-transparent text-[#5D6B76] hover:text-[#14212B]",
               )}
             >
@@ -161,7 +161,7 @@ export function InboxActivityPanel({
                 variant="outline"
                 className={cn(
                   "h-[30px]",
-                  statusFilter !== "all" && "border-[#13B8AA] text-[#087F78]",
+                  statusFilter !== "all" && "border-accent text-accent",
                 )}
               >
                 <Filter className="h-3.5 w-3.5" strokeWidth={1.75} />
@@ -245,7 +245,7 @@ export function InboxActivityPanel({
                   className={cn(
                     "flex h-[30px] min-w-[30px] items-center justify-center rounded px-2 text-xs font-medium",
                     p === safePage
-                      ? "bg-[#13B8AA] text-white"
+                      ? "bg-accent text-accent-foreground"
                       : "text-[#5D6B76] hover:bg-surface-hover",
                   )}
                 >

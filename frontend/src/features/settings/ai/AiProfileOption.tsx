@@ -31,7 +31,7 @@ export function AiProfileOption({
         )}
         aria-hidden
       >
-        {selected && <span className="h-1.5 w-1.5 rounded-full bg-white" />}
+        {selected && <span className="h-1.5 w-1.5 rounded-full bg-accent-foreground" />}
       </span>
       <span className="min-w-0 flex-1">
         <span className="flex flex-wrap items-center gap-2">

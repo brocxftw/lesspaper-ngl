@@ -13,7 +13,7 @@ export const Checkbox = forwardRef<
       "peer h-4 w-4 shrink-0 rounded border border-surface-border bg-surface",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1",
       "disabled:cursor-not-allowed disabled:opacity-50",
-      "data-[state=checked]:border-accent data-[state=checked]:bg-accent data-[state=checked]:text-white",
+      "data-[state=checked]:border-accent data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground",
       className,
     )}
     {...props}

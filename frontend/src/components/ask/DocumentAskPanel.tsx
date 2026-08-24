@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
   Eraser,
-  Leaf,
   Loader2,
   Plus,
   Send,
@@ -9,6 +8,7 @@ import {
   Square,
   X,
 } from "lucide-react";
+import { BrandMark } from "@/components/brand/BrandMark";
 import { ApiError } from "@/lib/api/client";
 import {
   useAIHealth,
@@ -402,7 +402,7 @@ export function DocumentAskPanel({
         {pendingStatus && (
           <div className="rounded-xl border border-surface-border bg-surface p-3.5">
             <div className="mb-2 flex items-center gap-2 text-xs text-text-muted">
-              <Leaf className="h-3.5 w-3.5 text-accent" />
+              <BrandMark variant="on-light" size={14} />
               lesspaper-ngl
             </div>
             <p className="flex items-center gap-2 text-sm text-text-secondary" aria-live="polite">
@@ -680,7 +680,7 @@ function MessageCard({
             "You"
           ) : (
             <>
-              <Leaf className="h-3.5 w-3.5 text-accent" />
+              <BrandMark variant="on-light" size={14} />
               lesspaper-ngl
             </>
           )}

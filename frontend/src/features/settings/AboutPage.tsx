@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAbout, useSession } from "@/lib/api/hooks";
 import { Button } from "@/components/ui/Button";
-import lesspaperNglLogo from "@/assets/brand/lesspaper-ngl_logo.svg";
+import { BrandMark } from "@/components/brand/BrandMark";
 import {
   SettingsCard,
   SettingsContent,
@@ -35,7 +35,7 @@ export function AboutPage() {
         <SettingsSection title="lesspaper-ngl">
           <SettingsCard>
             <div className="flex flex-wrap items-start gap-4">
-              <img src={lesspaperNglLogo} alt="lesspaper-ngl" width={48} height={48} className="h-12 w-12" />
+              <BrandMark variant="on-light" size={48} alt="lesspaper-ngl" />
               <div className="min-w-0 flex-1">
                 <p className="text-base font-semibold text-text-primary">{data.product}</p>
                 <p className="mt-1 text-sm text-text-secondary">{data.description}</p>

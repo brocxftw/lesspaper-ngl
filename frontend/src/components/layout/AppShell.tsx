@@ -12,7 +12,7 @@ import { AiStatusPill } from "@/components/layout/AiStatusPill";
 import { NavbarSearch } from "@/components/layout/NavbarSearch";
 import { NavbarUpload } from "@/components/layout/NavbarUpload";
 import { AskDock } from "@/components/ask/AskDock";
-import lesspaperNglLogo from "@/assets/brand/lesspaper-ngl_logo.svg";
+import { BrandMark, BrandWordmark } from "@/components/brand/BrandMark";
 import { TooltipProvider } from "@/components/ui/Tooltip";
 import {
   DropdownMenu,
@@ -47,32 +47,17 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <TooltipProvider delayDuration={400}>
       <div className="flex h-screen flex-col overflow-hidden bg-surface-muted">
-        <header className="relative z-50 m-3 flex min-h-[79px] w-[calc(100%-24px)] shrink-0 flex-nowrap items-stretch overflow-x-auto rounded-[14px] border border-[rgba(148,163,184,0.10)] bg-navbar px-8 text-navbar-text shadow-[0_10px_30px_rgba(2,6,23,0.24),0_2px_8px_rgba(2,6,23,0.20)]">
-          <div className="flex items-center">
-            <img
-              src={lesspaperNglLogo}
-              alt=""
-              width={40}
-              height={40}
-              className="mr-3 h-10 w-10 shrink-0 object-contain"
-              aria-hidden="true"
+        <header className="relative z-50 m-3 flex min-h-[72px] w-[calc(100%-24px)] shrink-0 flex-nowrap items-stretch overflow-x-auto rounded-[14px] border border-[rgba(148,163,184,0.10)] bg-navbar pl-4 pr-5 text-navbar-text shadow-[0_8px_20px_rgba(2,6,23,0.18)] sm:pl-[19px] sm:pr-6 lg:pl-[26px] lg:pr-8">
+          <div className="flex items-center gap-[7px]">
+            <BrandMark variant="on-dark" size={36} />
+            <BrandWordmark
+              variant="on-dark"
+              className="text-[22px] leading-none font-bold max-sm:sr-only lg:text-[26px]"
             />
-            <div className="flex min-w-0 flex-col gap-1">
-              <span className="shrink-0 text-[30px] leading-none font-bold tracking-[-0.02em] text-[#F8FAFC]">
-                lesspaper-ngl
-              </span>
-              <span className="self-start rounded px-1.5 py-px text-[10px] font-medium leading-4 text-[#CBD5E1] border border-[rgba(148,163,184,0.05)] bg-[rgba(148,163,184,0.12)] shadow-[0_1px_3px_rgba(0,0,0,0.16),inset_0_1px_0_rgba(255,255,255,0.03)]">
-                Beta
-              </span>
-            </div>
-          </div>
-
-          <div className="ml-5 flex min-w-0 flex-1 items-center justify-start">
-            <NavbarSearch />
           </div>
 
           <nav
-            className="ml-12 flex items-stretch gap-[38px]"
+            className="ml-6 flex items-stretch gap-6 lg:ml-10 lg:gap-9"
             aria-label="Primary"
           >
             {NAV_ITEMS.map(({ to, label, badge }) => {
@@ -88,9 +73,9 @@ export function AppShell({ children }: AppShellProps) {
                   to={to}
                   className={({ isActive }) =>
                     cn(
-                      "relative flex h-full items-center px-1 text-sm font-semibold text-[#E2E8F0] transition-colors duration-150 ease-out hover:text-white",
+                      "relative flex h-full items-center px-1 text-sm font-semibold text-navbar-muted transition-colors duration-150 ease-out hover:text-navbar-text",
                       isActive &&
-                        "text-white after:absolute after:bottom-0 after:left-1/2 after:h-[3px] after:w-16 after:-translate-x-1/2 after:rounded-t-[3px] after:bg-[#2DD4BF] after:shadow-[0_-1px_6px_rgba(45,212,191,0.20)] after:content-['']",
+                        "text-navbar-text after:absolute after:right-1 after:bottom-0 after:left-1 after:h-[2.5px] after:rounded-full after:bg-navbar-accent after:content-['']",
                     )
                   }
                 >
@@ -107,7 +92,8 @@ export function AppShell({ children }: AppShellProps) {
             })}
           </nav>
 
-          <div className="ml-auto flex items-center gap-[22px] pl-6">
+          <div className="ml-4 flex min-w-0 flex-1 items-center justify-end gap-3 pl-2 sm:gap-4 lg:gap-5">
+            <NavbarSearch />
             <NavbarUpload />
 
             <div className="flex max-md:hidden">
@@ -115,7 +101,7 @@ export function AppShell({ children }: AppShellProps) {
             </div>
 
             <span
-              className="block h-[38px] w-px shrink-0 bg-[rgba(148,163,184,0.18)] max-md:hidden"
+              className="hidden h-[38px] w-px shrink-0 bg-[rgba(148,163,184,0.18)] md:block"
               aria-hidden="true"
             />
 
@@ -126,7 +112,7 @@ export function AppShell({ children }: AppShellProps) {
                   className="flex items-center gap-2.5 rounded-lg px-1 text-left transition-colors duration-150 ease-out hover:bg-[rgba(148,163,184,0.08)]"
                   aria-label="Account menu"
                 >
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[rgba(20,184,166,0.45)] bg-[#172033] text-sm font-bold text-[#F8FAFC]">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-navbar-accent/40 bg-[#172033] text-sm font-bold text-navbar-text lg:h-12 lg:w-12">
                     {session?.user?.has_avatar ? (
                       <img
                         src={api.avatarUrl(session.user.id)}
@@ -140,10 +126,10 @@ export function AppShell({ children }: AppShellProps) {
                     )}
                   </div>
                   <div className="min-w-0 max-lg:hidden">
-                    <p className="truncate text-sm font-semibold text-[#F8FAFC]">
+                    <p className="truncate text-sm font-semibold text-navbar-text">
                       {session?.user.display_name ?? "User"}
                     </p>
-                    <p className="truncate text-[13px] font-normal text-[#94A3B8]">
+                    <p className="truncate text-[13px] font-normal text-navbar-muted">
                       {session?.user.is_admin ? "Admin" : "User"}
                     </p>
                   </div>

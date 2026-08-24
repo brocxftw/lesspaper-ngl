@@ -470,7 +470,7 @@ export function InboxWorkView({
                     <>
                       A filing model is assigned, but AI filing is turned off in{" "}
                       <Link
-                        className="font-medium text-[#087F78] hover:underline"
+                        className="font-medium text-accent hover:underline"
                         to="/settings/artificial-intelligence?tab=controls"
                       >
                         AI → Controls
@@ -482,7 +482,7 @@ export function InboxWorkView({
                     <>
                       Assign a filing model in{" "}
                       <Link
-                        className="font-medium text-[#087F78] hover:underline"
+                        className="font-medium text-accent hover:underline"
                         to="/settings/artificial-intelligence?tab=models"
                       >
                         AI → Models
@@ -537,7 +537,7 @@ export function InboxWorkView({
                     className={cn(
                       "h-[34px] rounded-lg border px-3 text-xs transition-colors",
                       statusTab === tab.id
-                        ? "border-[#13B8AA] bg-[#F0FBF9] font-semibold text-[#087F78]"
+                        ? "border-accent bg-accent-muted font-semibold text-accent"
                         : "border-[#DCE3E8] bg-white text-[#42515D] hover:bg-[#F8FAFB]",
                     )}
                   >
@@ -593,7 +593,7 @@ export function InboxWorkView({
               </Button>
 
               <Button
-                className="h-[38px] rounded-lg bg-[#07998E] px-4 font-semibold hover:bg-[#087F78]"
+                className="h-[38px] rounded-lg bg-accent px-4 font-semibold text-accent-foreground hover:bg-accent-hover"
                 disabled={processCount === 0 || processDocs.isPending}
                 onClick={() => void handleProcess()}
               >

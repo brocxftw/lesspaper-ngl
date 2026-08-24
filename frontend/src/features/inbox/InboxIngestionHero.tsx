@@ -51,13 +51,13 @@ export function InboxIngestionHero({ uploader, onBrowse }: InboxIngestionHeroPro
             }
           }}
           className={cn(
-            "flex min-h-[200px] cursor-pointer flex-col items-center justify-center rounded-[10px] border border-dashed border-[#13B8AA] bg-white px-6 py-8 text-center shadow-[0_1px_3px_rgba(20,33,43,0.05)]",
-            "transition-colors hover:border-[#07998E] hover:bg-[#F0FBF9]",
-            "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#07998E]",
+            "flex min-h-[200px] cursor-pointer flex-col items-center justify-center rounded-[10px] border border-dashed border-accent bg-white px-6 py-8 text-center shadow-[0_1px_3px_rgba(20,33,43,0.05)]",
+            "transition-colors hover:border-accent-hover hover:bg-accent-muted",
+            "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
           )}
         >
-          <div className="flex h-[58px] w-[58px] items-center justify-center rounded-full bg-[#DDF7F3]">
-            <CloudUpload className="h-7 w-7 text-[#07998E]" strokeWidth={1.75} />
+          <div className="flex h-[58px] w-[58px] items-center justify-center rounded-full bg-accent-muted">
+            <CloudUpload className="h-7 w-7 text-accent" strokeWidth={1.75} />
           </div>
           <h2 className="mt-3.5 text-[17px] font-bold leading-tight text-[#14212B]">
             Drag & drop documents here
@@ -68,7 +68,7 @@ export function InboxIngestionHero({ uploader, onBrowse }: InboxIngestionHeroPro
           </p>
           <Button
             type="button"
-            className="mt-4 h-8 rounded-md bg-[#07998E] px-[18px] hover:bg-[#087F78]"
+            className="mt-4 h-8 rounded-md bg-accent px-[18px] text-accent-foreground hover:bg-accent-hover"
             disabled={uploader.busy}
             onClick={(e) => {
               e.stopPropagation();
@@ -80,7 +80,7 @@ export function InboxIngestionHero({ uploader, onBrowse }: InboxIngestionHeroPro
           <Tooltip>
             <TooltipTrigger asChild>
               <p
-                className="mt-5 inline-flex items-center gap-1.5 text-[10px] font-medium text-[#087F78] hover:text-[#07998E]"
+                className="mt-5 inline-flex items-center gap-1.5 text-[10px] font-medium text-accent hover:text-accent-hover"
                 onClick={(e) => e.stopPropagation()}
                 onKeyDown={(e) => e.stopPropagation()}
               >

@@ -2,7 +2,7 @@ import { fireEvent, render, screen, within, waitFor } from "@testing-library/rea
 import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { describe, expect, it, vi, afterEach } from "vitest";
 import { AppShell } from "@/components/layout/AppShell";
-import lesspaperNglLogo from "@/assets/brand/lesspaper-ngl_logo.svg";
+import paperLogo from "@brand/paper_logo.svg";
 import type { SearchHit } from "@/lib/api/types";
 
 const { searchHits } = vi.hoisted(() => ({ searchHits: [] as SearchHit[] }));
@@ -133,19 +133,17 @@ describe("AppShell top navbar", () => {
     expect(navigation.querySelector("svg")).toBeNull();
   });
 
-  it("shows the supplied brand mark, lesspaper-ngl, and a Beta label under the name", () => {
+  it("shows the supplied dark-background brand mark and lesspaper-ngl without a Beta label", () => {
     renderShell();
     const header = screen.getByRole("banner");
-    const mark = header.querySelector(`img[src="${lesspaperNglLogo}"]`);
+    const mark = header.querySelector(`img[src="${paperLogo}"]`);
     expect(mark).toBeInTheDocument();
-    expect(mark).toHaveAttribute("width", "40");
-    expect(mark).toHaveAttribute("height", "40");
     expect(screen.getByText("lesspaper-ngl")).toBeInTheDocument();
-    expect(screen.getByText("Beta")).toBeInTheDocument();
+    expect(within(header).queryByText("Beta")).not.toBeInTheDocument();
     expect(screen.queryByLabelText(/app version/i)).not.toBeInTheDocument();
   });
 
-  it("places Settings in the primary nav rather than as an icon control", () => {
+  it("places Settings as a primary nav item rather than a gear icon", () => {
     renderShell();
     const navigation = screen.getByRole("navigation", { name: "Primary" });
     expect(within(navigation).getByRole("link", { name: "Settings" })).toHaveAttribute(

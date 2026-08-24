@@ -154,7 +154,7 @@ export function NavbarSearch() {
         aria-label="Search documents, tags, folders"
         aria-expanded={showPanel}
         aria-controls="navbar-search-results"
-        className="h-[47px] w-full rounded-[10px] border border-[rgba(148,163,184,0.22)] bg-[rgba(30,41,59,0.72)] py-0 pr-16 pl-12 text-sm font-normal text-[#F8FAFC] shadow-[inset_0_1px_1px_rgba(255,255,255,0.025),0_2px_8px_rgba(2,6,23,0.10)] transition-[border-color,box-shadow] duration-150 ease-out placeholder:text-[#94A3B8] outline-none focus-visible:border-[rgba(45,212,191,0.65)] focus-visible:shadow-[0_0_0_3px_rgba(20,184,166,0.10)] focus-visible:outline-none"
+        className="h-[47px] w-full rounded-[10px] border border-[rgba(148,163,184,0.22)] bg-[rgba(30,41,59,0.72)] py-0 pr-16 pl-12 text-sm font-normal text-navbar-text shadow-[inset_0_1px_1px_rgba(255,255,255,0.025)] transition-[border-color,box-shadow] duration-150 ease-out placeholder:text-navbar-muted outline-none focus-visible:border-navbar-accent/70 focus-visible:shadow-[0_0_0_3px_var(--color-accent-ring)] focus-visible:outline-none"
       />
       {draft.trim().length === 0 ? (
         <kbd

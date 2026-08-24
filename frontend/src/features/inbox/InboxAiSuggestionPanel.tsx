@@ -56,10 +56,10 @@ export function InboxAiSuggestionPanel({
     (doc.tags?.length ?? 0) === 0;
 
   return (
-    <div className="mt-5 rounded-[10px] border border-[#BFE9E2] bg-gradient-to-br from-[#F7FCFB] to-[#F0FBF9] p-[18px] md:ml-[66px]">
+    <div className="mt-5 rounded-[10px] border border-accent/30 bg-gradient-to-br from-accent-muted/40 to-accent-muted p-[18px] md:ml-[66px]">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 flex-wrap items-start gap-2">
-          <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-[#087F78]" strokeWidth={1.75} />
+          <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-accent" strokeWidth={1.75} />
           <div className="min-w-0">
             <h4 className="text-[15px] font-bold text-[#14212B]">AI Suggestions</h4>
             <p className="mt-0.5 text-xs text-[#5D6B76]">
@@ -72,7 +72,7 @@ export function InboxAiSuggestionPanel({
             Confidence
           </p>
           <p
-            className="mt-0.5 text-[15px] font-bold tabular-nums text-[#087F78]"
+            className="mt-0.5 text-[15px] font-bold tabular-nums text-accent"
             title={
               confidence === null && suggestions.length > 0
                 ? "The model did not return confidence scores for these suggestions"
@@ -85,8 +85,8 @@ export function InboxAiSuggestionPanel({
       </div>
 
       {isGenerating ? (
-        <div className="mt-4 flex items-center gap-2 rounded-lg border border-[#BFE9E2] bg-white/80 px-3 py-2.5 text-sm text-[#24333D]">
-          <Loader2 className="h-4 w-4 shrink-0 animate-spin text-[#087F78]" />
+        <div className="mt-4 flex items-center gap-2 rounded-lg border border-accent/30 bg-white/80 px-3 py-2.5 text-sm text-[#24333D]">
+          <Loader2 className="h-4 w-4 shrink-0 animate-spin text-accent" />
           Generating AI suggestions…
         </div>
       ) : noSuggestions ? (
@@ -109,14 +109,14 @@ export function InboxAiSuggestionPanel({
               <p className="text-[13px] font-bold text-[#14212B]">Destination</p>
               <div className="mt-3.5 rounded-[10px] border border-[#DCE3E8] bg-white px-3.5 py-2.5">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] bg-[#DDF7F3]">
-                    <Folder className="h-4 w-4 text-[#087F78]" strokeWidth={1.75} />
+                  <div className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] bg-accent-muted">
+                    <Folder className="h-4 w-4 text-accent" strokeWidth={1.75} />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-[13px] font-semibold text-[#24333D]">{displayPath}</p>
                     <div className="mt-1.5 flex flex-wrap items-center gap-2">
                       {(isNewFolder || suggestedCreate) && (
-                        <span className="rounded-[5px] bg-[#DDF7F3] px-[7px] py-[3px] text-[9px] font-bold uppercase tracking-wide text-[#087F78]">
+                        <span className="rounded-[5px] bg-accent-muted px-[7px] py-[3px] text-[9px] font-bold uppercase tracking-wide text-accent">
                           New folder
                         </span>
                       )}
@@ -149,7 +149,7 @@ export function InboxAiSuggestionPanel({
           </div>
 
           {otherSuggestions.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-2 border-t border-[#BFE9E2] pt-4">
+            <div className="mt-4 flex flex-wrap gap-2 border-t border-accent/30 pt-4">
               {otherSuggestions.map((s) => (
                 <SuggestionChip key={s.id} suggestion={s} compact />
               ))}

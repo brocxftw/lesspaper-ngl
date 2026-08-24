@@ -19,7 +19,7 @@ export function InboxProgressBar({ percent, className }: InboxProgressBarProps) 
     >
       <div
         className={cn(
-          "h-full rounded-full bg-[#13B8AA]",
+          "h-full rounded-full bg-accent",
           determinate ? "transition-[width] duration-300" : "w-1/3 animate-pulse",
         )}
         style={width != null ? { width: `${width}%` } : undefined}

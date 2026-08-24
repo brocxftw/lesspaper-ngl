@@ -73,7 +73,7 @@ function SuggestionActions({
         type="button"
         size="icon"
         variant="ghost"
-        className="h-5 w-5 text-[#087F78] hover:bg-[#E8EEF1]"
+        className="h-5 w-5 text-accent hover:bg-accent-muted"
         disabled={busy}
         aria-label={`Accept ${field}`}
         onClick={() => onAccept(suggestionId)}

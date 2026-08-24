@@ -28,7 +28,7 @@ function StatusItem({
       {error ? (
         <X className="h-3.5 w-3.5 shrink-0 text-danger mt-0.5" />
       ) : done ? (
-        <Check className="h-3.5 w-3.5 shrink-0 text-accent mt-0.5" />
+        <Check className="h-3.5 w-3.5 shrink-0 text-emerald-600 mt-0.5" />
       ) : (
         <Circle className="h-3.5 w-3.5 shrink-0 text-text-muted mt-0.5" />
       )}
