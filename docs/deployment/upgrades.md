@@ -23,7 +23,7 @@ Re-run `install-lesspaper-ngl.sh`. When it detects an existing install, choose *
 
 ```bash
 curl -fsSL -o install-lesspaper-ngl.sh \
-  https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/install-lesspaper-ngl.sh
+  https://github.com/brocxftw/lesspaper-ngl/releases/download/v0.1.24-beta.8/install-lesspaper-ngl.sh
 less install-lesspaper-ngl.sh
 bash install-lesspaper-ngl.sh
 ```

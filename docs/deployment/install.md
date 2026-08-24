@@ -17,26 +17,10 @@ End users must **not** run `docker login ghcr.io`.
 
 ## Install
 
-Stable (newest non-prerelease):
+There is currently no stable GitHub Release, so `releases/latest` 404s. Use a prerelease tag until a non-prerelease `vX.Y.Z` exists:
 
 ```bash
-mkdir lesspaper-ngl
-cd lesspaper-ngl
-
-curl -fsSL -o docker-compose.yml \
-  https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/docker-compose.yml
-curl -fsSL -o env.example \
-  https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/env.example
-
-cp env.example .env
-```
-
-### Pre-release / beta
-
-`releases/latest` never points at a prerelease. Download assets from a specific prerelease tag instead:
-
-```bash
-TAG=v0.1.24-beta.5   # example — pick a tag from GitHub Releases
+TAG=v0.1.24-beta.8   # pick a tag from GitHub Releases
 
 mkdir lesspaper-ngl
 cd lesspaper-ngl

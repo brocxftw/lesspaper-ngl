@@ -8,19 +8,14 @@ Review the installer script, then run it. It is a single file (no tarball):
 
 ```bash
 curl -fsSL -o install-lesspaper-ngl.sh \
-  https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/install-lesspaper-ngl.sh
+  https://github.com/brocxftw/lesspaper-ngl/releases/download/v0.1.24-beta.8/install-lesspaper-ngl.sh
 less install-lesspaper-ngl.sh
 bash install-lesspaper-ngl.sh
 ```
 
 Releases also publish `install-folium.sh` as an identical transition shim (same contents as `install-lesspaper-ngl.sh`).
 
-`releases/latest` is the newest **stable** release. Do not treat `| bash` as the only option. Pin a release by downloading that tag’s asset:
-
-```bash
-curl -fsSL -o install-lesspaper-ngl.sh \
-  https://github.com/brocxftw/lesspaper-ngl/releases/download/v0.1.16/install-lesspaper-ngl.sh
-```
+GitHub `releases/latest` only tracks a **stable** Release. There is no stable release yet, so `/releases/latest/download/...` 404s. Pin a prerelease tag (newest today: `v0.1.24-beta.8`) from [Releases](https://github.com/brocxftw/lesspaper-ngl/releases).
 
 ### Pre-release / beta
 

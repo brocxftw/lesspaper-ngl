@@ -538,25 +538,14 @@ Requirements:
 
 ```bash
 curl -fsSL -o install-lesspaper-ngl.sh \
-  https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/install-lesspaper-ngl.sh
+  https://github.com/brocxftw/lesspaper-ngl/releases/download/v0.1.24-beta.8/install-lesspaper-ngl.sh
 
 less install-lesspaper-ngl.sh
 
 bash install-lesspaper-ngl.sh
 ```
 
-`releases/latest` is the newest **stable** GitHub Release. Prereleases (`vX.Y.Z-beta.N`) do not replace it.
-
-Because lesspaper-ngl is currently in beta, download a prerelease asset instead — or run the command above and pick a **Beta** tag in the version picker:
-
-```bash
-# Replace the tag with one from https://github.com/brocxftw/lesspaper-ngl/releases
-curl -fsSL -o install-lesspaper-ngl.sh \
-  https://github.com/brocxftw/lesspaper-ngl/releases/download/vX.Y.Z-beta.N/install-lesspaper-ngl.sh
-
-less install-lesspaper-ngl.sh
-bash install-lesspaper-ngl.sh
-```
+GitHub `releases/latest` only tracks a **stable** (non-prerelease) Release. Every current release is a prerelease, so that URL 404s. Use the newest `vX.Y.Z-beta.N` asset from [Releases](https://github.com/brocxftw/lesspaper-ngl/releases) until a stable `vX.Y.Z` exists.
 
 Open the UI in your browser (`http://<host>:9398` by default). The bootstrap admin password is shown **once** on the success screen.
 
