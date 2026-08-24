@@ -9,7 +9,6 @@ On the Docker host / CT:
 ```bash
 lesspaper-ngl update                 # newest beta prerelease (default)
 lesspaper-ngl update beta            # same
-lesspaper-ngl update latest          # newest stable
 lesspaper-ngl update v0.1.24-beta.5  # exact pin
 ```
 
@@ -23,7 +22,7 @@ Re-run `install-lesspaper-ngl.sh`. When it detects an existing install, choose *
 
 ```bash
 curl -fsSL -o install-lesspaper-ngl.sh \
-  https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/install-lesspaper-ngl.sh
+  https://github.com/brocxftw/lesspaper-ngl/releases/download/beta/install-lesspaper-ngl.sh
 less install-lesspaper-ngl.sh
 bash install-lesspaper-ngl.sh
 ```
@@ -31,19 +30,16 @@ bash install-lesspaper-ngl.sh
 Non-interactive updates (secrets and bind settings are preserved):
 
 ```bash
-# Newest stable
-bash install-lesspaper-ngl.sh --noninteractive --update --version latest --json
-
 # Newest prerelease
 bash install-lesspaper-ngl.sh --noninteractive --update --version beta --json
 
-# Exact pin (stable or beta)
+# Exact pin
 bash install-lesspaper-ngl.sh --noninteractive --update --version v0.1.24-beta.5 --json
 ```
 
 `--version` overrides the currently installed version recorded in `install-state.json` / `.env`.
 
-To run the installer script from a specific prerelease asset (instead of `releases/latest`), download that tag’s `install-lesspaper-ngl.sh` from [Releases](https://github.com/brocxftw/lesspaper-ngl/releases).
+To run a specific prerelease installer instead of the moving `beta` pointer, download that tag’s `install-lesspaper-ngl.sh` from [Releases](https://github.com/brocxftw/lesspaper-ngl/releases). GitHub’s `/releases/latest/download/` is unpublished until a stable `vX.Y.Z` exists.
 
 ## Update to a newer release (manual Compose)
 

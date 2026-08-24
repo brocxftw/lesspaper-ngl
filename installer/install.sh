@@ -82,8 +82,8 @@ Non-interactive environment variables (also see docs/deployment/installer.md):
   Legacy FOLIUM_* equivalents are accepted for one cycle.
 
 Examples:
-  # Fresh install of latest stable
-  bash install-lesspaper-ngl.sh --noninteractive --version latest
+  # Fresh install of newest beta
+  bash install-lesspaper-ngl.sh --noninteractive --version beta
 
   # Update existing install to newest beta (secrets/bind preserved)
   bash install-lesspaper-ngl.sh --noninteractive --update --version beta --json
@@ -364,14 +364,16 @@ Use Back to return to the previous screen. Ctrl+C exits." \
 wizard_version() {
   local latest tags choice=""
   latest="$(github_latest_tag || true)"
-  if [[ -z "${latest}" ]]; then
-    LESSPAPER_NGL_VERSION_TAG="$(ui_input "Could not list GitHub Releases. Enter a version tag (for example v0.1.23 or v0.1.24-beta.1):" "${LESSPAPER_NGL_VERSION_TAG:-v0.1.23}")" || return "${UI_BACK}"
+  tags="$(github_release_tags || true)"
+  if [[ -z "${tags}" && -z "${latest}" ]]; then
+    LESSPAPER_NGL_VERSION_TAG="$(ui_input "Could not list GitHub Releases. Enter a version tag (for example v0.1.24-beta.1):" "${LESSPAPER_NGL_VERSION_TAG:-v0.1.24-beta.1}")" || return "${UI_BACK}"
   else
-    tags="$(github_release_tags || printf '%s\n' "${latest}")"
     local -a ordered=()
     local -a menu_items=()
     local tag
     if [[ -n "${latest}" ]] && grep -qxF "${latest}" <<<"${tags}"; then
+      ordered+=("${latest}")
+    elif [[ -n "${latest}" && -z "${tags}" ]]; then
       ordered+=("${latest}")
     fi
     while IFS= read -r tag; do

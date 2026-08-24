@@ -125,6 +125,16 @@ LESSPAPER_NGL_VERSION_TAG="v0.1.19-beta.1"
 assert_ok "resolve from version_tag" config_resolve_version_tag
 assert_eq "resolve from tag version" "${LESSPAPER_NGL_VERSION}" "0.1.19-beta.1"
 
+# shellcheck disable=SC2317
+github_latest_tag() { return 1; }
+LESSPAPER_NGL_VERSION=""
+LESSPAPER_NGL_VERSION_TAG=""
+assert_ok "resolve empty falls back to prerelease" config_resolve_version_tag
+assert_eq "resolve empty version" "${LESSPAPER_NGL_VERSION}" "0.1.24-beta.2"
+assert_eq "resolve empty tag" "${LESSPAPER_NGL_VERSION_TAG}" "v0.1.24-beta.2"
+# shellcheck disable=SC2317
+github_latest_tag() { printf 'v0.1.23\n'; }
+
 # Explicit request wins over values hydrated from install-state / .env (issue #65).
 LESSPAPER_NGL_VERSION="0.1.24-beta.2"
 LESSPAPER_NGL_VERSION_TAG="v0.1.24-beta.2"
@@ -169,20 +179,15 @@ assert_eq "update normalize pin plain" "$(ctl_update_normalize_target "0.1.24-be
 assert_eq "update normalize pin v" "$(ctl_update_normalize_target "v0.1.24-beta.5")" "v0.1.24-beta.5"
 assert_fail "update normalize junk" ctl_update_normalize_target "not-a-version"
 
-# shellcheck disable=SC2317
-ctl_update_latest_prerelease_tag() { printf 'v0.1.24-beta.5\n'; }
 assert_eq "update url latest" \
   "$(ctl_update_installer_url "latest")" \
   "https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/install-lesspaper-ngl.sh"
 assert_eq "update url beta" \
   "$(ctl_update_installer_url "beta")" \
-  "https://github.com/brocxftw/lesspaper-ngl/releases/download/v0.1.24-beta.5/install-lesspaper-ngl.sh"
+  "https://github.com/brocxftw/lesspaper-ngl/releases/download/beta/install-lesspaper-ngl.sh"
 assert_eq "update url pin" \
   "$(ctl_update_installer_url "v0.1.20")" \
   "https://github.com/brocxftw/lesspaper-ngl/releases/download/v0.1.20/install-lesspaper-ngl.sh"
-unset -f ctl_update_latest_prerelease_tag
-# shellcheck source=../lib/ctl_update.sh
-source "${ROOT}/lib/ctl_update.sh"
 
 # Restore real helpers for later tests that may call GitHub (none currently).
 unset -f github_latest_tag github_latest_prerelease_tag
@@ -190,11 +195,16 @@ unset -f github_latest_tag github_latest_prerelease_tag
 source "${ROOT}/lib/config.sh"
 
 filtered_tags="$(printf '%s\n' '[
+  {"tag_name":"beta","draft":false,"prerelease":true},
+  {"tag_name":"latest","draft":false,"prerelease":false},
   {"tag_name":"v0.1.24-beta.1","draft":false,"prerelease":true},
   {"tag_name":"v0.1.23","draft":false,"prerelease":false},
   {"tag_name":"v0.1.22","draft":true,"prerelease":false}
 ]' | github_filter_release_tags)"
 assert_eq "filter keeps beta and stable" "$(printf '%s' "${filtered_tags}" | tr '\n' ' ')" "v0.1.24-beta.1 v0.1.23"
+assert_ok "channel pointer beta" github_is_channel_pointer_tag "beta"
+assert_ok "channel pointer latest" github_is_channel_pointer_tag "latest"
+assert_fail "channel pointer version" github_is_channel_pointer_tag "v0.1.24-beta.1"
 
 # load_existing_defaults preserves secrets / bind from an existing .env
 KEEP_TMP="$(mktemp -d)"

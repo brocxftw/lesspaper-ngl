@@ -1,6 +1,6 @@
 # Public lesspaper-ngl Compose — pull pre-built images. No repository source required.
 #
-# Preferred: curl the standalone GitHub Release asset install-lesspaper-ngl.sh. Manual:
+# Preferred: curl /releases/download/beta/install-lesspaper-ngl.sh (moving prerelease). Manual:
 #   copy this file and env.example from a GitHub Release, then:
 #   cp env.example .env
 #   # set secrets and POSTGRES_PASSWORD
