@@ -7,7 +7,7 @@ Accepted
 Document blobs may live on a NAS.
 
 ## Decision
-Folium **never** mounts NFS. The Docker **host** mounts NFS (or local dirs) and bind-mounts into containers. PostgreSQL data stays on a **local** named volume.
+lesspaper-ngl **never** mounts NFS. The Docker **host** mounts NFS (or local dirs) and bind-mounts into containers. PostgreSQL data stays on a **local** named volume.
 
 ## Rationale
 Compose volumes and `StorageService` health probes assume POSIX paths. NFS stale-handle behaviour is handled as storage unavailable, not as an in-app mount retry.

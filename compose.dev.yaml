@@ -17,27 +17,27 @@ services:
       context: .
       dockerfile: docker/Dockerfile.backend
       args:
-        FOLIUM_VERSION: ${FOLIUM_VERSION:-0.0.0-dev}
-        FOLIUM_BUILD_REVISION: ${FOLIUM_BUILD_REVISION:-}
-        FOLIUM_BUILD_DATE: ${FOLIUM_BUILD_DATE:-}
-    image: ghcr.io/brocxftw/folium-backend:${FOLIUM_VERSION:-dev}
+        LESSPAPER_NGL_VERSION: ${LESSPAPER_NGL_VERSION:-${FOLIUM_VERSION:-0.0.0-dev}}
+        LESSPAPER_NGL_BUILD_REVISION: ${LESSPAPER_NGL_BUILD_REVISION:-${FOLIUM_BUILD_REVISION:-}}
+        LESSPAPER_NGL_BUILD_DATE: ${LESSPAPER_NGL_BUILD_DATE:-${FOLIUM_BUILD_DATE:-}}
+    image: ghcr.io/brocxftw/lesspaper-ngl-backend:${LESSPAPER_NGL_VERSION:-${FOLIUM_VERSION:-dev}}
 
   worker:
     build:
       context: .
       dockerfile: docker/Dockerfile.backend
       args:
-        FOLIUM_VERSION: ${FOLIUM_VERSION:-0.0.0-dev}
-        FOLIUM_BUILD_REVISION: ${FOLIUM_BUILD_REVISION:-}
-        FOLIUM_BUILD_DATE: ${FOLIUM_BUILD_DATE:-}
-    image: ghcr.io/brocxftw/folium-backend:${FOLIUM_VERSION:-dev}
+        LESSPAPER_NGL_VERSION: ${LESSPAPER_NGL_VERSION:-${FOLIUM_VERSION:-0.0.0-dev}}
+        LESSPAPER_NGL_BUILD_REVISION: ${LESSPAPER_NGL_BUILD_REVISION:-${FOLIUM_BUILD_REVISION:-}}
+        LESSPAPER_NGL_BUILD_DATE: ${LESSPAPER_NGL_BUILD_DATE:-${FOLIUM_BUILD_DATE:-}}
+    image: ghcr.io/brocxftw/lesspaper-ngl-backend:${LESSPAPER_NGL_VERSION:-${FOLIUM_VERSION:-dev}}
 
   web:
     build:
       context: .
       dockerfile: docker/Dockerfile.frontend
       args:
-        FOLIUM_VERSION: ${FOLIUM_VERSION:-0.0.0-dev}
-        FOLIUM_BUILD_REVISION: ${FOLIUM_BUILD_REVISION:-}
-        FOLIUM_BUILD_DATE: ${FOLIUM_BUILD_DATE:-}
-    image: ghcr.io/brocxftw/folium-web:${FOLIUM_VERSION:-dev}
+        LESSPAPER_NGL_VERSION: ${LESSPAPER_NGL_VERSION:-${FOLIUM_VERSION:-0.0.0-dev}}
+        LESSPAPER_NGL_BUILD_REVISION: ${LESSPAPER_NGL_BUILD_REVISION:-${FOLIUM_BUILD_REVISION:-}}
+        LESSPAPER_NGL_BUILD_DATE: ${LESSPAPER_NGL_BUILD_DATE:-${FOLIUM_BUILD_DATE:-}}
+    image: ghcr.io/brocxftw/lesspaper-ngl-web:${LESSPAPER_NGL_VERSION:-${FOLIUM_VERSION:-dev}}

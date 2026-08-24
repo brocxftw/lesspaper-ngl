@@ -5,7 +5,7 @@ from __future__ import annotations
 import uuid
 from types import SimpleNamespace
 
-from folium.ai.rag import RetrievedChunk, hybrid_retrieve
+from lesspaper_ngl.ai.rag import RetrievedChunk, hybrid_retrieve
 
 
 def _item(score: float, source: str = "semantic") -> RetrievedChunk:

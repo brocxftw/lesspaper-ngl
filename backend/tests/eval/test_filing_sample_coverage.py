@@ -7,8 +7,8 @@ from pathlib import Path
 
 import pytest
 
-from folium.ai.filing_context import PageText, build_filing_sample
-from folium.services.chunking import estimate_tokens
+from lesspaper_ngl.ai.filing_context import PageText, build_filing_sample
+from lesspaper_ngl.services.chunking import estimate_tokens
 
 FIXTURES = Path(__file__).parent / "fixtures" / "golden_documents.json"
 

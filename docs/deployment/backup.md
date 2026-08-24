@@ -1,10 +1,10 @@
 # Backup and restore
 
-Folium can create versioned `.folium` backup bundles and restore them from Settings or during first-run setup. Backup and restore do **not** require an AI or embedding provider.
+lesspaper-ngl can create versioned `.folium` backup bundles (extension and `folium_version` manifest field are intentional persistence) and restore them from Settings or during first-run setup. Backup and restore do **not** require an AI or embedding provider.
 
 ## What a backup contains
 
-A Folium backup is the canonical recoverable state of an installation:
+A lesspaper-ngl backup is the canonical recoverable state of an installation:
 
 - PostgreSQL dump (`pg_dump` custom format), excluding `application_logs` and `sessions`
 - Original document blobs referenced by that dump
@@ -21,15 +21,15 @@ Intentionally excluded (rebuilt after restore where possible):
 
 Embeddings and search indexes stay in the database dump so the Library is usable immediately. If you later change embedding providers, existing vectors are **not** treated as coverage for the new model.
 
-The bundle never includes `.env` secrets, database passwords, or API keys in `manifest.json`. After restore, keep using the same `FOLIUM_ENCRYPTION_KEY` if you need those stored provider credentials to decrypt.
+The bundle never includes `.env` secrets, database passwords, or API keys in `manifest.json`. After restore, keep using the same `LESSPAPER_NGL_ENCRYPTION_KEY` if you need those stored provider credentials to decrypt.
 
 ## `/backups` mount
 
-Folium only sees `/backups`. The host (or Docker) mounts local disk, NFS, or CIFS there. Folium does **not** mount network filesystems itself.
+lesspaper-ngl only sees `/backups`. The host (or Docker) mounts local disk, NFS, or CIFS there. lesspaper-ngl does **not** mount network filesystems itself.
 
 ```text
 # docker-compose.yml (api + worker)
-${FOLIUM_BACKUPS_HOST:-./data/backups}:/backups
+${LESSPAPER_NGL_BACKUPS_HOST:-./data/backups}:/backups
 ```
 
 Examples:
@@ -59,7 +59,7 @@ Retention runs only after a successful backup that passed required verification.
 
 A brand-new empty database no longer creates the bootstrap admin until you choose:
 
-- **Set up new Folium**, or
+- **Set up new lesspaper-ngl**, or
 - **Restore backup** from `.folium` files already in `/backups`
 
 Browser upload is not available in V1. Copy the bundle onto the backup mount first.
@@ -77,14 +77,14 @@ After a successful restore, sign in with accounts from the backup (not the insta
 
 ## Restore safety
 
-Restore replaces PostgreSQL canonical state. Folium writes a best-effort safety dump under `/backups/.pre-restore-*` for authenticated restores (needs free disk). Originals are content-addressed and additive. If restore fails after the destructive database step, Folium attempts rollback from that dump when present. This is **not** a guarantee; keep off-host copies of `.folium` files.
+Restore replaces PostgreSQL canonical state. lesspaper-ngl writes a best-effort safety dump under `/backups/.pre-restore-*` for authenticated restores (needs free disk). Originals are content-addressed and additive. If restore fails after the destructive database step, lesspaper-ngl attempts rollback from that dump when present. This is **not** a guarantee; keep off-host copies of `.folium` files.
 
 During restore the worker idles. The Library becomes available after canonical restore; thumbnail rebuild continues in the background.
 
 ## V1 limitations
 
 - Full backups only (no incremental / cloud / S3)
-- No Folium-managed NFS/CIFS mounting
+- No lesspaper-ngl-managed NFS/CIFS mounting
 - No browser upload of backup files
 - No backup-bundle encryption UI
-- Host upgrades use `folium update` / the installer; backups remain in-app (not part of the CLI update path)
+- Host upgrades use `lesspaper-ngl update` (or the `folium` shim) / the installer; backups remain in-app (not part of the CLI update path)

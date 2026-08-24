@@ -1,17 +1,17 @@
 # Whiptail UI helpers. Core install logic must not live only in these wrappers.
 # shellcheck shell=bash
 
-FOLIUM_UI="${FOLIUM_UI:-whiptail}"
-FOLIUM_UI_TITLE="${FOLIUM_UI_TITLE:-Folium Installer}"
-FOLIUM_UI_HEIGHT="${FOLIUM_UI_HEIGHT:-20}"
-FOLIUM_UI_WIDTH="${FOLIUM_UI_WIDTH:-72}"
-FOLIUM_UI_ACTIVE=0
-FOLIUM_UI_NOCANCEL=0
-FOLIUM_UI_OK_LABEL="OK"
-FOLIUM_UI_CANCEL_LABEL="Back"
-FOLIUM_GAUGE_FD=""
-FOLIUM_GAUGE_PID=""
-FOLIUM_INTERRUPTED=0
+LESSPAPER_NGL_UI="${LESSPAPER_NGL_UI:-whiptail}"
+LESSPAPER_NGL_UI_TITLE="${LESSPAPER_NGL_UI_TITLE:-lesspaper-ngl Installer}"
+LESSPAPER_NGL_UI_HEIGHT="${LESSPAPER_NGL_UI_HEIGHT:-20}"
+LESSPAPER_NGL_UI_WIDTH="${LESSPAPER_NGL_UI_WIDTH:-72}"
+LESSPAPER_NGL_UI_ACTIVE=0
+LESSPAPER_NGL_UI_NOCANCEL=0
+LESSPAPER_NGL_UI_OK_LABEL="OK"
+LESSPAPER_NGL_UI_CANCEL_LABEL="Back"
+LESSPAPER_NGL_GAUGE_FD=""
+LESSPAPER_NGL_GAUGE_PID=""
+LESSPAPER_NGL_INTERRUPTED=0
 
 # Wizard: 0 = next/ok, 2 = previous screen, 3 = cancel installer. Ctrl+C exits too.
 UI_OK=0
@@ -23,17 +23,17 @@ ui_available() {
 }
 
 ui_require() {
-  if [[ "${FOLIUM_UI}" == "none" ]]; then
+  if [[ "${LESSPAPER_NGL_UI}" == "none" ]]; then
     return 0
   fi
   if ! ui_available; then
-    echo "whiptail is required for the Folium installer TUI." >&2
+    echo "whiptail is required for the lesspaper-ngl installer TUI." >&2
     return 1
   fi
 }
 
 ui_is_tui() {
-  [[ "${FOLIUM_UI}" != "none" ]] && [[ -t 0 ]] && [[ -e /dev/tty ]]
+  [[ "${LESSPAPER_NGL_UI}" != "none" ]] && [[ -t 0 ]] && [[ -e /dev/tty ]]
 }
 
 ui_paint_bg() {
@@ -53,8 +53,8 @@ ui_paint_bg() {
 
 ui_session_start() {
   ui_is_tui || return 0
-  FOLIUM_UI_ACTIVE=1
-  FOLIUM_INTERRUPTED=0
+  LESSPAPER_NGL_UI_ACTIVE=1
+  LESSPAPER_NGL_INTERRUPTED=0
   # Root screen stays blue; the dialog card itself is grey.
   export NEWT_COLORS="${NEWT_COLORS:-
 root=white,blue
@@ -81,9 +81,9 @@ fullscale=,cyan
 
 ui_kill_whiptail_children() {
   local pid
-  if [[ -n "${FOLIUM_GAUGE_PID:-}" ]]; then
-    kill -TERM "${FOLIUM_GAUGE_PID}" 2>/dev/null || true
-    kill -KILL "${FOLIUM_GAUGE_PID}" 2>/dev/null || true
+  if [[ -n "${LESSPAPER_NGL_GAUGE_PID:-}" ]]; then
+    kill -TERM "${LESSPAPER_NGL_GAUGE_PID}" 2>/dev/null || true
+    kill -KILL "${LESSPAPER_NGL_GAUGE_PID}" 2>/dev/null || true
   fi
   for pid in $(pgrep -P "$$" -x whiptail 2>/dev/null || true); do
     kill -TERM "${pid}" 2>/dev/null || true
@@ -92,30 +92,30 @@ ui_kill_whiptail_children() {
 }
 
 ui_check_interrupted() {
-  if [[ "${FOLIUM_INTERRUPTED}" == "1" ]]; then
+  if [[ "${LESSPAPER_NGL_INTERRUPTED}" == "1" ]]; then
     return 130
   fi
   return 0
 }
 
 ui_session_end() {
-  [[ "${FOLIUM_UI_ACTIVE}" == "1" || -n "${FOLIUM_GAUGE_PID:-}" || -n "${FOLIUM_GAUGE_FD:-}" ]] || return 0
+  [[ "${LESSPAPER_NGL_UI_ACTIVE}" == "1" || -n "${LESSPAPER_NGL_GAUGE_PID:-}" || -n "${LESSPAPER_NGL_GAUGE_FD:-}" ]] || return 0
   ui_kill_whiptail_children
-  if [[ -n "${FOLIUM_GAUGE_FD}" ]]; then
-    exec {FOLIUM_GAUGE_FD}>&- 2>/dev/null || true
-    FOLIUM_GAUGE_FD=""
+  if [[ -n "${LESSPAPER_NGL_GAUGE_FD}" ]]; then
+    exec {LESSPAPER_NGL_GAUGE_FD}>&- 2>/dev/null || true
+    LESSPAPER_NGL_GAUGE_FD=""
   fi
-  if [[ -n "${FOLIUM_GAUGE_PID}" ]]; then
+  if [[ -n "${LESSPAPER_NGL_GAUGE_PID}" ]]; then
     local _
     for _ in 1 2 3 4 5 6 7 8 9 10; do
-      kill -0 "${FOLIUM_GAUGE_PID}" 2>/dev/null || break
+      kill -0 "${LESSPAPER_NGL_GAUGE_PID}" 2>/dev/null || break
       sleep 0.05
     done
-    kill -KILL "${FOLIUM_GAUGE_PID}" 2>/dev/null || true
-    wait "${FOLIUM_GAUGE_PID}" 2>/dev/null || true
-    FOLIUM_GAUGE_PID=""
+    kill -KILL "${LESSPAPER_NGL_GAUGE_PID}" 2>/dev/null || true
+    wait "${LESSPAPER_NGL_GAUGE_PID}" 2>/dev/null || true
+    LESSPAPER_NGL_GAUGE_PID=""
   fi
-  FOLIUM_UI_ACTIVE=0
+  LESSPAPER_NGL_UI_ACTIVE=0
   ui_is_tui || return 0
   {
     if command -v tput >/dev/null 2>&1; then
@@ -134,20 +134,20 @@ _ui_whiptail() {
   local rc=0 wp=""
   ui_check_interrupted || return 130
   ui_paint_bg
-  if [[ "${FOLIUM_UI_NOCANCEL}" == "1" ]]; then
-    extra+=(--nocancel --ok-button "${FOLIUM_UI_OK_LABEL}")
+  if [[ "${LESSPAPER_NGL_UI_NOCANCEL}" == "1" ]]; then
+    extra+=(--nocancel --ok-button "${LESSPAPER_NGL_UI_OK_LABEL}")
   else
-    extra+=(--ok-button "${FOLIUM_UI_OK_LABEL}" --cancel-button "${FOLIUM_UI_CANCEL_LABEL}")
+    extra+=(--ok-button "${LESSPAPER_NGL_UI_OK_LABEL}" --cancel-button "${LESSPAPER_NGL_UI_CANCEL_LABEL}")
   fi
   set +e
   # Run whiptail in the background so Ctrl+C reaches this shell (trap/on_interrupt).
-  whiptail --backtitle "Folium" --title "${FOLIUM_UI_TITLE}" "${extra[@]}" "$@" &
+  whiptail --backtitle "lesspaper-ngl" --title "${LESSPAPER_NGL_UI_TITLE}" "${extra[@]}" "$@" &
   wp=$!
   wait "${wp}"
   rc=$?
   set -e
   ui_paint_bg
-  if [[ "${FOLIUM_INTERRUPTED}" == "1" ]]; then
+  if [[ "${LESSPAPER_NGL_INTERRUPTED}" == "1" ]]; then
     return 130
   fi
   return "${rc}"
@@ -158,7 +158,7 @@ _ui_run() {
   local allow_back="${1:-1}"
   shift
   local rc=0
-  if [[ "${FOLIUM_UI}" == "none" ]]; then
+  if [[ "${LESSPAPER_NGL_UI}" == "none" ]]; then
     return 0
   fi
   while true; do
@@ -167,7 +167,7 @@ _ui_run() {
     "$@"
     rc=$?
     set -e
-    if [[ "${FOLIUM_INTERRUPTED}" == "1" || "${rc}" -eq 130 ]]; then
+    if [[ "${LESSPAPER_NGL_INTERRUPTED}" == "1" || "${rc}" -eq 130 ]]; then
       return 130
     fi
     case "${rc}" in
@@ -176,7 +176,7 @@ _ui_run() {
         if [[ "${allow_back}" == "1" ]]; then
           return "${UI_BACK}"
         fi
-        # --nocancel: ESC re-shows; Ctrl+C is handled via FOLIUM_INTERRUPTED.
+        # --nocancel: ESC re-shows; Ctrl+C is handled via LESSPAPER_NGL_INTERRUPTED.
         ;;
       255)
         if [[ "${allow_back}" == "1" ]]; then
@@ -194,16 +194,16 @@ _ui_run() {
 ui_msgbox() {
   local text="$1"
   log_info "ui_msgbox"
-  if [[ "${FOLIUM_UI}" == "none" ]]; then
+  if [[ "${LESSPAPER_NGL_UI}" == "none" ]]; then
     printf '%s\n' "${text}"
     return 0
   fi
-  local saved="${FOLIUM_UI_NOCANCEL}"
-  FOLIUM_UI_NOCANCEL=1
-  FOLIUM_UI_OK_LABEL="OK"
-  _ui_run 0 _ui_whiptail --msgbox "${text}" "${FOLIUM_UI_HEIGHT}" "${FOLIUM_UI_WIDTH}"
+  local saved="${LESSPAPER_NGL_UI_NOCANCEL}"
+  LESSPAPER_NGL_UI_NOCANCEL=1
+  LESSPAPER_NGL_UI_OK_LABEL="OK"
+  _ui_run 0 _ui_whiptail --msgbox "${text}" "${LESSPAPER_NGL_UI_HEIGHT}" "${LESSPAPER_NGL_UI_WIDTH}"
   local rc=$?
-  FOLIUM_UI_NOCANCEL="${saved}"
+  LESSPAPER_NGL_UI_NOCANCEL="${saved}"
   [[ "${rc}" -eq 130 ]] && return 130
   return 0
 }
@@ -211,21 +211,21 @@ ui_msgbox() {
 ui_yesno() {
   local text="$1"
   log_info "ui_yesno"
-  if [[ "${FOLIUM_UI}" == "none" ]]; then
-    [[ "${FOLIUM_UI_YESNO:-yes}" == "yes" ]]
+  if [[ "${LESSPAPER_NGL_UI}" == "none" ]]; then
+    [[ "${LESSPAPER_NGL_UI_YESNO:-yes}" == "yes" ]]
     return $?
   fi
-  local saved="${FOLIUM_UI_NOCANCEL}"
-  FOLIUM_UI_NOCANCEL=1
-  FOLIUM_UI_OK_LABEL="Yes"
+  local saved="${LESSPAPER_NGL_UI_NOCANCEL}"
+  LESSPAPER_NGL_UI_NOCANCEL=1
+  LESSPAPER_NGL_UI_OK_LABEL="Yes"
   set +e
-  _ui_whiptail --yes-button "Yes" --no-button "No" --yesno "${text}" "${FOLIUM_UI_HEIGHT}" "${FOLIUM_UI_WIDTH}"
+  _ui_whiptail --yes-button "Yes" --no-button "No" --yesno "${text}" "${LESSPAPER_NGL_UI_HEIGHT}" "${LESSPAPER_NGL_UI_WIDTH}"
   local rc=$?
   set -e
-  FOLIUM_UI_NOCANCEL="${saved}"
-  FOLIUM_UI_OK_LABEL="OK"
+  LESSPAPER_NGL_UI_NOCANCEL="${saved}"
+  LESSPAPER_NGL_UI_OK_LABEL="OK"
   ui_paint_bg
-  if [[ "${FOLIUM_INTERRUPTED}" == "1" || "${rc}" -eq 130 ]]; then
+  if [[ "${LESSPAPER_NGL_INTERRUPTED}" == "1" || "${rc}" -eq 130 ]]; then
     return 130
   fi
   [[ "${rc}" -eq 0 ]]
@@ -236,25 +236,25 @@ ui_menu() {
   local text="$1"
   shift
   log_info "ui_menu"
-  if [[ "${FOLIUM_UI}" == "none" ]]; then
-    if [[ "${FOLIUM_UI_CANCEL:-0}" == "1" ]]; then
+  if [[ "${LESSPAPER_NGL_UI}" == "none" ]]; then
+    if [[ "${LESSPAPER_NGL_UI_CANCEL:-0}" == "1" ]]; then
       return "${UI_BACK}"
     fi
-    printf '%s' "${FOLIUM_UI_MENU:-$1}"
+    printf '%s' "${LESSPAPER_NGL_UI_MENU:-$1}"
     return "${UI_OK}"
   fi
   local result="" rc=0 allow_back=1
-  if [[ "${FOLIUM_UI_NOCANCEL}" == "1" ]]; then
+  if [[ "${LESSPAPER_NGL_UI_NOCANCEL}" == "1" ]]; then
     allow_back=0
   fi
   while true; do
     ui_check_interrupted || return 130
     set +e
-    result="$(_ui_whiptail --menu "${text}" "${FOLIUM_UI_HEIGHT}" "${FOLIUM_UI_WIDTH}" 8 "$@" 3>&1 1>&2 2>&3)"
+    result="$(_ui_whiptail --menu "${text}" "${LESSPAPER_NGL_UI_HEIGHT}" "${LESSPAPER_NGL_UI_WIDTH}" 8 "$@" 3>&1 1>&2 2>&3)"
     rc=$?
     set -e
     ui_paint_bg
-    if [[ "${FOLIUM_INTERRUPTED}" == "1" || "${rc}" -eq 130 ]]; then
+    if [[ "${LESSPAPER_NGL_INTERRUPTED}" == "1" || "${rc}" -eq 130 ]]; then
       return 130
     fi
     case "${rc}" in
@@ -279,25 +279,25 @@ ui_input() {
   local default="${2:-}"
   local result="" rc=0
   log_info "ui_input"
-  if [[ "${FOLIUM_UI}" == "none" ]]; then
-    if [[ "${FOLIUM_UI_CANCEL:-0}" == "1" ]]; then
+  if [[ "${LESSPAPER_NGL_UI}" == "none" ]]; then
+    if [[ "${LESSPAPER_NGL_UI_CANCEL:-0}" == "1" ]]; then
       return "${UI_BACK}"
     fi
-    printf '%s' "${FOLIUM_UI_INPUT:-${default}}"
+    printf '%s' "${LESSPAPER_NGL_UI_INPUT:-${default}}"
     return "${UI_OK}"
   fi
   local allow_back=1
-  if [[ "${FOLIUM_UI_NOCANCEL}" == "1" ]]; then
+  if [[ "${LESSPAPER_NGL_UI_NOCANCEL}" == "1" ]]; then
     allow_back=0
   fi
   while true; do
     ui_check_interrupted || return 130
     set +e
-    result="$(_ui_whiptail --inputbox "${text}" "${FOLIUM_UI_HEIGHT}" "${FOLIUM_UI_WIDTH}" "${default}" 3>&1 1>&2 2>&3)"
+    result="$(_ui_whiptail --inputbox "${text}" "${LESSPAPER_NGL_UI_HEIGHT}" "${LESSPAPER_NGL_UI_WIDTH}" "${default}" 3>&1 1>&2 2>&3)"
     rc=$?
     set -e
     ui_paint_bg
-    if [[ "${FOLIUM_INTERRUPTED}" == "1" || "${rc}" -eq 130 ]]; then
+    if [[ "${LESSPAPER_NGL_INTERRUPTED}" == "1" || "${rc}" -eq 130 ]]; then
       return 130
     fi
     case "${rc}" in
@@ -321,18 +321,18 @@ ui_password() {
   local text="$1"
   local result="" rc=0
   log_info "ui_password"
-  if [[ "${FOLIUM_UI}" == "none" ]]; then
-    printf '%s' "${FOLIUM_UI_PASSWORD:-}"
+  if [[ "${LESSPAPER_NGL_UI}" == "none" ]]; then
+    printf '%s' "${LESSPAPER_NGL_UI_PASSWORD:-}"
     return "${UI_OK}"
   fi
   while true; do
     ui_check_interrupted || return 130
     set +e
-    result="$(_ui_whiptail --passwordbox "${text}" 10 "${FOLIUM_UI_WIDTH}" 3>&1 1>&2 2>&3)"
+    result="$(_ui_whiptail --passwordbox "${text}" 10 "${LESSPAPER_NGL_UI_WIDTH}" 3>&1 1>&2 2>&3)"
     rc=$?
     set -e
     ui_paint_bg
-    if [[ "${FOLIUM_INTERRUPTED}" == "1" || "${rc}" -eq 130 ]]; then
+    if [[ "${LESSPAPER_NGL_INTERRUPTED}" == "1" || "${rc}" -eq 130 ]]; then
       return 130
     fi
     case "${rc}" in
@@ -355,7 +355,7 @@ ui_radiolist() {
 
 ui_textbox_file() {
   local file="$1"
-  if [[ "${FOLIUM_UI}" == "none" ]]; then
+  if [[ "${LESSPAPER_NGL_UI}" == "none" ]]; then
     cat "${file}"
     return "${UI_OK}"
   fi
@@ -365,7 +365,7 @@ ui_textbox_file() {
   rc=$?
   set -e
   ui_paint_bg
-  if [[ "${FOLIUM_INTERRUPTED}" == "1" || "${rc}" -eq 130 ]]; then
+  if [[ "${LESSPAPER_NGL_INTERRUPTED}" == "1" || "${rc}" -eq 130 ]]; then
     return 130
   fi
   case "${rc}" in
@@ -379,7 +379,7 @@ ui_textbox_file() {
 ui_confirm_summary_file() {
   local file="$1"
   local text="" go=""
-  if [[ "${FOLIUM_UI}" == "none" ]]; then
+  if [[ "${LESSPAPER_NGL_UI}" == "none" ]]; then
     cat "${file}"
     return "${UI_OK}"
   fi
@@ -399,34 +399,34 @@ Choose an action:" \
 
 ui_infobox() {
   local text="$1"
-  if [[ "${FOLIUM_UI}" == "none" ]]; then
+  if [[ "${LESSPAPER_NGL_UI}" == "none" ]]; then
     printf '%s\n' "${text}"
     return 0
   fi
-  local saved="${FOLIUM_UI_NOCANCEL}"
-  FOLIUM_UI_NOCANCEL=1
+  local saved="${LESSPAPER_NGL_UI_NOCANCEL}"
+  LESSPAPER_NGL_UI_NOCANCEL=1
   set +e
-  _ui_whiptail --infobox "${text}" 8 "${FOLIUM_UI_WIDTH}"
+  _ui_whiptail --infobox "${text}" 8 "${LESSPAPER_NGL_UI_WIDTH}"
   set -e
-  FOLIUM_UI_NOCANCEL="${saved}"
+  LESSPAPER_NGL_UI_NOCANCEL="${saved}"
 }
 
 ui_gauge_start() {
-  local text="${1:-Installing Folium...}"
+  local text="${1:-Installing lesspaper-ngl...}"
   ui_gauge_stop || true
-  if [[ "${FOLIUM_UI}" == "none" ]] || ! ui_is_tui; then
+  if [[ "${LESSPAPER_NGL_UI}" == "none" ]] || ! ui_is_tui; then
     printf '%s\n' "${text}"
     return 0
   fi
   local fifo
-  fifo="$(mktemp -u /tmp/folium-gauge-XXXXXX)"
+  fifo="$(mktemp -u /tmp/lesspaper-ngl-gauge-XXXXXX)"
   mkfifo "${fifo}"
   ui_paint_bg
   # Do not use _ui_whiptail here: button flags break --gauge.
-  whiptail --backtitle "Folium" --title "${FOLIUM_UI_TITLE}" \
-    --gauge "${text}" 8 "${FOLIUM_UI_WIDTH}" 0 <"${fifo}" &
-  FOLIUM_GAUGE_PID=$!
-  exec {FOLIUM_GAUGE_FD}>"${fifo}"
+  whiptail --backtitle "lesspaper-ngl" --title "${LESSPAPER_NGL_UI_TITLE}" \
+    --gauge "${text}" 8 "${LESSPAPER_NGL_UI_WIDTH}" 0 <"${fifo}" &
+  LESSPAPER_NGL_GAUGE_PID=$!
+  exec {LESSPAPER_NGL_GAUGE_FD}>"${fifo}"
   rm -f "${fifo}"
   ui_gauge_update 0 "${text}"
 }
@@ -434,42 +434,42 @@ ui_gauge_start() {
 ui_gauge_update() {
   local pct="$1"
   local msg="${2:-}"
-  if [[ -z "${FOLIUM_GAUGE_FD}" ]]; then
-    [[ "${FOLIUM_UI}" == "none" ]] && printf '%s%% %s\n' "${pct}" "${msg}"
+  if [[ -z "${LESSPAPER_NGL_GAUGE_FD}" ]]; then
+    [[ "${LESSPAPER_NGL_UI}" == "none" ]] && printf '%s%% %s\n' "${pct}" "${msg}"
     return 0
   fi
-  printf '%s\nXXX\n%s\nXXX\n' "${pct}" "${msg}" >&"${FOLIUM_GAUGE_FD}" || true
+  printf '%s\nXXX\n%s\nXXX\n' "${pct}" "${msg}" >&"${LESSPAPER_NGL_GAUGE_FD}" || true
 }
 
 ui_gauge_stop() {
-  if [[ -n "${FOLIUM_GAUGE_FD}" ]]; then
-    exec {FOLIUM_GAUGE_FD}>&- 2>/dev/null || true
-    FOLIUM_GAUGE_FD=""
+  if [[ -n "${LESSPAPER_NGL_GAUGE_FD}" ]]; then
+    exec {LESSPAPER_NGL_GAUGE_FD}>&- 2>/dev/null || true
+    LESSPAPER_NGL_GAUGE_FD=""
   fi
-  if [[ -n "${FOLIUM_GAUGE_PID}" ]]; then
+  if [[ -n "${LESSPAPER_NGL_GAUGE_PID}" ]]; then
     local _
     # Prefer a clean exit; never block forever on Ctrl+C paths.
     for _ in 1 2 3 4 5 6 7 8 9 10; do
-      kill -0 "${FOLIUM_GAUGE_PID}" 2>/dev/null || break
+      kill -0 "${LESSPAPER_NGL_GAUGE_PID}" 2>/dev/null || break
       sleep 0.05
     done
-    if kill -0 "${FOLIUM_GAUGE_PID}" 2>/dev/null; then
-      kill -TERM "${FOLIUM_GAUGE_PID}" 2>/dev/null || true
+    if kill -0 "${LESSPAPER_NGL_GAUGE_PID}" 2>/dev/null; then
+      kill -TERM "${LESSPAPER_NGL_GAUGE_PID}" 2>/dev/null || true
       sleep 0.05
-      kill -KILL "${FOLIUM_GAUGE_PID}" 2>/dev/null || true
+      kill -KILL "${LESSPAPER_NGL_GAUGE_PID}" 2>/dev/null || true
     fi
-    wait "${FOLIUM_GAUGE_PID}" 2>/dev/null || true
-    FOLIUM_GAUGE_PID=""
+    wait "${LESSPAPER_NGL_GAUGE_PID}" 2>/dev/null || true
+    LESSPAPER_NGL_GAUGE_PID=""
   fi
   ui_paint_bg
 }
 
 ui_gauge_pair() {
-  if [[ "${FOLIUM_UI}" == "none" ]]; then
+  if [[ "${LESSPAPER_NGL_UI}" == "none" ]]; then
     cat >/dev/null
     return 0
   fi
-  FOLIUM_UI_NOCANCEL=1
-  _ui_whiptail --gauge "Working..." 8 "${FOLIUM_UI_WIDTH}" 0
-  FOLIUM_UI_NOCANCEL=0
+  LESSPAPER_NGL_UI_NOCANCEL=1
+  _ui_whiptail --gauge "Working..." 8 "${LESSPAPER_NGL_UI_WIDTH}" 0
+  LESSPAPER_NGL_UI_NOCANCEL=0
 }

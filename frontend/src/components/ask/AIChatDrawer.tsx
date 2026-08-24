@@ -34,7 +34,7 @@ export function AIChatDrawer({
         <SheetHeader className="sr-only">
           <SheetTitle className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-text-muted" />
-            Ask Folium
+            Ask lesspaper-ngl
           </SheetTitle>
           <SheetDescription>
             Single-turn answers with citations from the selected scope.

@@ -1,4 +1,4 @@
-# Install Folium (images)
+# Install lesspaper-ngl (images)
 
 **Primary path:** the [interactive installer](installer.md). This page is the manual Compose alternative.
 
@@ -8,10 +8,10 @@ Requirements: Docker and Docker Compose on **linux/amd64**. ARM is unsupported.
 
 Anonymous `docker compose up` needs public packages:
 
-- `ghcr.io/brocxftw/folium-backend`
-- `ghcr.io/brocxftw/folium-web`
+- `ghcr.io/brocxftw/lesspaper-ngl-backend`
+- `ghcr.io/brocxftw/lesspaper-ngl-web`
 
-**One-time maintainer step after the first successful publish:** GitHub → Packages → each package → Package settings → Change package visibility → **Public**. Link the package to the `brocxftw/folium` repository if GitHub has not already done so from OCI `org.opencontainers.image.source`.
+**One-time maintainer step after the first successful publish:** GitHub → Packages → each package → Package settings → Change package visibility → **Public**. Link the package to the `brocxftw/lesspaper-ngl` repository if GitHub has not already done so from OCI `org.opencontainers.image.source`.
 
 End users must **not** run `docker login ghcr.io`.
 
@@ -20,13 +20,13 @@ End users must **not** run `docker login ghcr.io`.
 Stable (newest non-prerelease):
 
 ```bash
-mkdir folium
-cd folium
+mkdir lesspaper-ngl
+cd lesspaper-ngl
 
 curl -fsSL -o docker-compose.yml \
-  https://github.com/brocxftw/folium/releases/latest/download/docker-compose.yml
+  https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/docker-compose.yml
 curl -fsSL -o env.example \
-  https://github.com/brocxftw/folium/releases/latest/download/env.example
+  https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/env.example
 
 cp env.example .env
 ```
@@ -38,26 +38,26 @@ cp env.example .env
 ```bash
 TAG=v0.1.24-beta.5   # example — pick a tag from GitHub Releases
 
-mkdir folium
-cd folium
+mkdir lesspaper-ngl
+cd lesspaper-ngl
 
 curl -fsSL -o docker-compose.yml \
-  "https://github.com/brocxftw/folium/releases/download/${TAG}/docker-compose.yml"
+  "https://github.com/brocxftw/lesspaper-ngl/releases/download/${TAG}/docker-compose.yml"
 curl -fsSL -o env.example \
-  "https://github.com/brocxftw/folium/releases/download/${TAG}/env.example"
+  "https://github.com/brocxftw/lesspaper-ngl/releases/download/${TAG}/env.example"
 
 cp env.example .env
 ```
 
-Ensure `.env` sets `FOLIUM_VERSION` to the tag without the leading `v` (for example `0.1.24-beta.5`). Prefer that pin over the moving GHCR `beta` tag.
+Ensure `.env` sets `LESSPAPER_NGL_VERSION` (legacy `FOLIUM_VERSION` still accepted) to the tag without the leading `v` (for example `0.1.24-beta.5`). Prefer that pin over the moving GHCR `beta` tag.
 
 For the installer-based beta path, see [installer.md](installer.md#pre-release--beta).
 
 Edit `.env`:
 
-1. `FOLIUM_SECRET_KEY` and `FOLIUM_ENCRYPTION_KEY` — `openssl rand -hex 32` for each
+1. `LESSPAPER_NGL_SECRET_KEY` and `LESSPAPER_NGL_ENCRYPTION_KEY` — `openssl rand -hex 32` for each
 2. `POSTGRES_PASSWORD` — required; use hex (`openssl rand -hex 24`). Do not use `@ : / # ?` in the password
-3. `FOLIUM_ADMIN_PASSWORD` — first-boot admin only
+3. `LESSPAPER_NGL_ADMIN_PASSWORD` — first-boot admin only
 4. `FRONTEND_ORIGIN` — comma-separated browser URLs (default `http://localhost:9398`)
 5. Host bind paths if you do not want `./data/...`
 
@@ -79,19 +79,23 @@ Bootstrap admin is created **only** when the users table is empty.
 
 Open registration defaults to **off**. Add further users with admin invites.
 
+## Persistence names
+
+By design these keep their historical Folium identifiers: Postgres role/database `folium`, volume `folium_pgdata`, cookies `folium_session` / `folium_csrf`, backup extension `.folium`.
+
 ## What Docker pulls
 
 | Service | Image |
 |---------|--------|
-| `api`, `worker` | `ghcr.io/brocxftw/folium-backend:<version>` |
-| `web` | `ghcr.io/brocxftw/folium-web:<version>` |
+| `api`, `worker` | `ghcr.io/brocxftw/lesspaper-ngl-backend:<version>` |
+| `web` | `ghcr.io/brocxftw/lesspaper-ngl-web:<version>` |
 | `db` | `pgvector/pgvector:pg17` (upstream) |
 
-Release Compose files default `FOLIUM_VERSION` to that release (for example `0.1.16`), so you do not accidentally pull a newer `latest` than the files you downloaded.
+Release Compose files default `LESSPAPER_NGL_VERSION` to that release (for example `0.1.16`), so you do not accidentally pull a newer `latest` than the files you downloaded.
 
 ## First OCR run
 
-PaddleOCR models download into the `FOLIUM_PADDLE_CACHE_HOST` bind on first OCR. Keep that directory on local disk.
+PaddleOCR models download into the `LESSPAPER_NGL_PADDLE_CACHE_HOST` bind on first OCR. Keep that directory on local disk.
 
 ## Extra host GID (optional)
 

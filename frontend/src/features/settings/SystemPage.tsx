@@ -97,7 +97,7 @@ export function SystemPage() {
     <SettingsContent>
       <SettingsPageHeader
         title="System"
-        description="View Folium's health, runtime and storage status."
+        description="View lesspaper-ngl's health, runtime and storage status."
         actions={
           <div className="text-right">
             <Button variant="outline" onClick={() => void copyDiagnostics()} disabled={diagnostics.isPending}>
@@ -111,7 +111,7 @@ export function SystemPage() {
       <SettingsSection id="application" title="Application health">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            ["Folium version", data.version],
+            ["lesspaper-ngl version", data.version],
             ["Database", data.database_status],
             ["Storage", data.storage_status],
             ["Worker", data.worker_status],
@@ -122,7 +122,7 @@ export function SystemPage() {
               <p className="text-xs text-text-muted">{label}</p>
               <div className="mt-1 flex items-center justify-between gap-2">
                 <p className="font-semibold text-text-primary">{value}</p>
-                {label !== "Folium version" && label !== "Jobs" && label !== "Documents" && (
+                {label !== "lesspaper-ngl version" && label !== "Jobs" && label !== "Documents" && (
                   <SettingsStatusBadge tone={serviceTone(String(value))}>{String(value)}</SettingsStatusBadge>
                 )}
               </div>
@@ -154,7 +154,7 @@ export function SystemPage() {
             />
             <dl className="space-y-3 text-sm">
               <div>
-                <dt className="text-xs text-text-muted">Folium-owned files</dt>
+                <dt className="text-xs text-text-muted">lesspaper-ngl-owned files</dt>
                 <dd className="font-medium">{storage?.folium_bytes == null ? "Unavailable" : formatBytes(storage.folium_bytes)}</dd>
               </div>
               <div>

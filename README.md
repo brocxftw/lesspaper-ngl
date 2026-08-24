@@ -1,29 +1,30 @@
-# Folium
+# lesspaper-ngl
 
-> **Self-hosted document management for homelabs, NAS-backed servers, and private Docker deployments.**
+> **Self-hosted document management for people who want less paper, ngl.**
 
+Folium has been renamed to lesspaper-ngl.
 
-Folium gives you a searchable, organised home for your documents with local OCR, structured filing, full-text search, and human-controlled ingestion. Add embeddings and an LLM if you want semantic search, filing suggestions, and **Ask Folium** — or run the entire document-management workflow without AI.
+lesspaper-ngl gives you a searchable, organised home for your documents with local OCR, structured filing, full-text search, and human-controlled ingestion — for homelabs, NAS-backed servers, and private Docker deployments. Add embeddings and an LLM if you want semantic search, filing suggestions, and **Ask lesspaper-ngl** — or run the entire document-management workflow without AI.
 
 
 <p align="center">
-  <img src="assets/login.png" alt="Folium Login" width="1000">
+  <img src="assets/login.png" alt="lesspaper-ngl Login" width="1000">
 </p>
 
-**Document management first. RAG and AI second.**
+**Document management first. RAG and AI second.** Search retrieves evidence; Ask generates answers from that evidence.
 
-[![Release](https://img.shields.io/github/v/release/brocxftw/folium?include_prereleases\&label=release)](https://github.com/brocxftw/folium/releases)
-[![License](https://img.shields.io/github/license/brocxftw/folium)](LICENSE)
-[![Container](https://img.shields.io/badge/container-GHCR-2496ED?logo=docker\&logoColor=white)](https://github.com/brocxftw/folium/pkgs/container/folium)
+[![Release](https://img.shields.io/github/v/release/brocxftw/lesspaper-ngl?include_prereleases\&label=release)](https://github.com/brocxftw/lesspaper-ngl/releases)
+[![License](https://img.shields.io/github/license/brocxftw/lesspaper-ngl)](LICENSE)
+[![Container](https://img.shields.io/badge/container-GHCR-2496ED?logo=docker\&logoColor=white)](https://github.com/brocxftw/lesspaper-ngl/pkgs/container/lesspaper-ngl-backend)
 ![Platform](https://img.shields.io/badge/platform-linux%2Famd64-lightgrey)
 
 ---
 
-## Why Folium?
+## Why lesspaper-ngl?
 
 Most document-management systems solve storage and organisation. AI document tools often solve a different problem entirely — and require handing your documents to a model before they become useful.
 
-Folium is built around a simpler idea:
+lesspaper-ngl is built around a simpler idea:
 
 * Store and organise documents
 * Extract text and OCR scans locally
@@ -35,21 +36,21 @@ Folium is built around a simpler idea:
 
 AI capabilities sit **on top** of that foundation, with support for both local providers and OpenAI-compatible APIs (cloud or self-hosted).
 
-When configured, Folium can additionally:
+When configured, lesspaper-ngl can additionally:
 
 * Suggest titles, folders, tags, document types, and correspondents
 * Generate chunk embeddings
 * Add semantic and hybrid retrieval
-* Answer questions over your documents with **Ask Folium**
+* Answer questions over your documents with **Ask lesspaper-ngl**
 * Return citations back to the supporting evidence
 
-No AI provider? Folium remains a document-management system.
+No AI provider? lesspaper-ngl remains a document-management system.
 
 ---
 
 ## At a glance
 
-| Features            | Folium                                        |
+| Features            | lesspaper-ngl                                        |
 | ------------------- | --------------------------------------------- |
 | **Deployment**      | Self-hosted Docker Compose                    |
 | **Storage**         | Local disk, bind mounts, host-mounted NAS/NFS |
@@ -67,13 +68,13 @@ No AI provider? Folium remains a document-management system.
 
 ---
 
-# What Folium does
+# What lesspaper-ngl does
 
 ## 📥 Ingest and review
 
-Documents can enter Folium through drag and drop or folder/individual files selection.
+Documents can enter lesspaper-ngl through drag and drop or folder/individual files selection.
 
-Folium then prepares them before they enter the final library:
+lesspaper-ngl then prepares them before they enter the final library:
 
 ```text
 Upload / Consume
@@ -98,7 +99,7 @@ Optional embeddings
 ```
 
 <p align="center">
-  <img src="assets/ingestion_2.png" alt="Folium Login" width="1000">
+  <img src="assets/ingestion_2.png" alt="lesspaper-ngl Login" width="1000">
 </p>
 
 The **Process** action is intentional.
@@ -111,7 +112,7 @@ Uploads that already have an explicit library destination can bypass the Inbox w
 
 ## 🗂️ Organise your library
 
-Folium treats organisation as first-class document metadata.
+lesspaper-ngl treats organisation as first-class document metadata.
 
 You can manage:
 
@@ -127,7 +128,7 @@ You can manage:
 
 
 <p align="center">
-  <img src="assets/library.png" alt="Folium Library" width="1000">
+  <img src="assets/library.png" alt="lesspaper-ngl Library" width="1000">
 </p>
 
 
@@ -135,13 +136,13 @@ Logical folders do **not** physically move the stored original.
 
 Original files live in content-addressed storage keyed by SHA-256, while folders and filing information remain database metadata.
 
-That keeps storage predictable and lets Folium reorganise documents without constantly moving files around your filesystem.
+That keeps storage predictable and lets lesspaper-ngl reorganise documents without constantly moving files around your filesystem.
 
 ---
 
 ## 🔎 Find documents quickly
 
-Folium separates **finding evidence** from **asking AI about evidence**.
+lesspaper-ngl separates **finding evidence** from **asking AI about evidence**.
 
 ### Quick Search
 
@@ -160,7 +161,7 @@ Cmd + K
 to open Quick Search from anywhere in the application.
 
 <p align="center">
-  <img src="assets/search.png" alt="Folium Search" width="1000">
+  <img src="assets/search.png" alt="lesspaper-ngl Search" width="1000">
 </p>
 
 
@@ -168,26 +169,26 @@ to open Quick Search from anywhere in the application.
 
 Works without AI.
 
-Folium uses PostgreSQL full-text search across document and page content so OCRed and extracted text remains searchable even with no embedding provider configured.
+lesspaper-ngl uses PostgreSQL full-text search across document and page content so OCRed and extracted text remains searchable even with no embedding provider configured.
 
 ### Semantic search
 
-When embeddings are configured, Folium can retrieve document chunks by meaning rather than exact wording.
+When embeddings are configured, lesspaper-ngl can retrieve document chunks by meaning rather than exact wording.
 
 ### Hybrid search
 
 
-Folium combines keyword and semantic retrieval using reciprocal rank fusion.
+lesspaper-ngl combines keyword and semantic retrieval using reciprocal rank fusion.
 
 If semantic retrieval is unavailable, search can fall back to keyword retrieval rather than making the library unusable.
 
-> **Search retrieves evidence. Ask Folium generates an answer from evidence.**
+> **Search retrieves evidence. Ask lesspaper-ngl generates an answer from evidence.**
 
 They are deliberately separate operations.
 
 ---
 
-## ✨ Ask Folium
+## ✨ Ask lesspaper-ngl
 
 Ask questions against:
 
@@ -198,10 +199,10 @@ Ask questions against:
 * The current document
 * A frozen set of search results
 
-Folium retrieves relevant document chunks first, then sends that evidence to the configured chat model.
+lesspaper-ngl retrieves relevant document chunks first, then sends that evidence to the configured chat model.
 
 <p align="center">
-  <img src="assets/document_preview.png" alt="Document Preview" width="1000">
+  <img src="assets/document-preview.png" alt="Document Preview" width="1000">
 </p>
 
 Answers are tied back to retrieved evidence using validated citations.
@@ -222,15 +223,15 @@ Chat model
 Answer + citations
 ```
 
-If the available evidence cannot support an answer, Folium can return an **insufficient evidence** result rather than pretending the library contains an answer.
+If the available evidence cannot support an answer, lesspaper-ngl can return an **insufficient evidence** result rather than pretending the library contains an answer.
 
-Ask Folium currently focuses on a bounded, single-turn evidence workflow rather than behaving like a general-purpose chatbot.
+Ask lesspaper-ngl currently focuses on a bounded, single-turn evidence workflow rather than behaving like a general-purpose chatbot.
 
 ---
 
 ## 🤖 AI — optional by design
 
-Folium separates AI responsibilities rather than assuming one model must do everything.
+lesspaper-ngl separates AI responsibilities rather than assuming one model must do everything.
 
 <p align="center">
   <img src="assets/ai_features.png" alt="Document Preview" width="1000">
@@ -240,14 +241,14 @@ Providers can be assigned independently for:
 
 * **Filing** — metadata and organisation suggestions
 * **Embeddings** — semantic retrieval
-* **Chat** — Ask Folium
+* **Chat** — Ask lesspaper-ngl
 * **Vision** — where configured
 
 Providers may be local or remote depending on your deployment and privacy policy.
 
 ### Without AI
 
-Folium still supports:
+lesspaper-ngl still supports:
 
 * Upload and consume
 * Text extraction
@@ -268,16 +269,16 @@ You can add:
 * Embeddings
 * Semantic search
 * Hybrid search
-* Ask Folium
+* Ask lesspaper-ngl
 * AI-assisted document understanding
 
-Folium also distinguishes between provider claims such as **no training** or **zero retention** and privacy controls actually enforced by the application.
+lesspaper-ngl also distinguishes between provider claims such as **no training** or **zero retention** and privacy controls actually enforced by the application.
 
 ---
 
 ## 🔐 Privacy controls
 
-Folium supports application-level privacy policies for AI workloads.
+lesspaper-ngl supports application-level privacy policies for AI workloads.
 
 Deployment policies can control whether document content may be sent to remote providers, including separate controls for embeddings, Q&A, and vision workloads.
 
@@ -289,7 +290,7 @@ Typical modes include:
 
 Remote-provider confirmation and blocking policies can be applied separately.
 
-Self-hosting alone does not automatically make every configured AI provider private — Folium makes that boundary explicit.
+Self-hosting alone does not automatically make every configured AI provider private — lesspaper-ngl makes that boundary explicit.
 
 ---
 
@@ -297,13 +298,13 @@ Self-hosting alone does not automatically make every configured AI provider priv
 
 Documents can be shared directly from the viewer and document menus.
 
-On browsers supporting the Web Share API, Folium hands the **original file** to the operating system's native share sheet — useful for sending a document through applications such as mail or messaging clients.
+On browsers supporting the Web Share API, lesspaper-ngl hands the **original file** to the operating system's native share sheet — useful for sending a document through applications such as mail or messaging clients.
 
 <p align="center">
   <img src="assets/share.png" alt="Share" width="1000">
 </p>
 
-Where native file sharing is unavailable, Folium falls back to downloading the original.
+Where native file sharing is unavailable, lesspaper-ngl falls back to downloading the original.
 
 No third-party messaging integration or vendor API is required.
 
@@ -311,7 +312,7 @@ No third-party messaging integration or vendor API is required.
 
 ## 🧾 OCR built in
 
-Folium uses local **PaddleOCR PP-OCRv6** for scanned PDFs and images.
+lesspaper-ngl uses local **PaddleOCR PP-OCRv6** for scanned PDFs and images.
 
 Supported ingestion includes:
 
@@ -330,7 +331,7 @@ The OCR execution path is isolated so large OCR workloads do not permanently ret
 
 ## 🗄️ Storage that stays understandable
 
-Folium uses three main filesystem concepts:
+lesspaper-ngl uses three main filesystem concepts:
 
 ```text
 /documents    persistent document storage
@@ -348,7 +349,7 @@ This means the logical library hierarchy is independent of the physical blob loc
 
 ### NAS / NFS
 
-Mount your NAS or NFS share on the Docker host, then bind-mount that host directory into Folium.
+Mount your NAS or NFS share on the Docker host, then bind-mount that host directory into lesspaper-ngl.
 
 Keep PostgreSQL on local Docker volume storage.
 
@@ -365,12 +366,12 @@ The recommended deployment path uses the published GHCR images and the interacti
 Download the installer, review it, then run it:
 
 ```bash
-curl -fsSL -o install-folium.sh \
-  https://github.com/brocxftw/folium/releases/latest/download/install-folium.sh
+curl -fsSL -o install-lesspaper-ngl.sh \
+  https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/install-lesspaper-ngl.sh
 
-less install-folium.sh
+less install-lesspaper-ngl.sh
 
-bash install-folium.sh
+bash install-lesspaper-ngl.sh
 ```
 
 `releases/latest` is the newest **stable** release. The installer can still list beta tags in the version picker after it starts.
@@ -378,32 +379,38 @@ bash install-folium.sh
 The installer can:
 
 * Check deployment prerequisites
-* Configure Folium
+* Configure lesspaper-ngl
 * Set up storage
 * Configure network exposure
 * Select a published release
 * Offer stable or beta releases where available
 * Pull versioned GHCR images
 * Create the Compose deployment
-* Wait for Folium to become healthy
+* Wait for lesspaper-ngl to become healthy
 * Detect an existing installation and offer an update path
 
 The default installation lives under:
 
 ```text
-/opt/folium
+/opt/lesspaper-ngl
 ```
 
-and includes the `folium` management command:
+Fresh installs use `/opt/lesspaper-ngl`. Existing deployments under `/opt/folium` are still discovered and remain supported through the update path.
+
+The installer also publishes `install-folium.sh` as an identical transition shim (same contents as `install-lesspaper-ngl.sh`).
+
+Host management CLI (primary command `lesspaper-ngl`; `folium` remains a shim for one transition cycle):
 
 ```bash
-folium status
-folium start
-folium stop
-folium logs
-folium doctor
-folium update                 # newest beta (default)
+lesspaper-ngl status
+lesspaper-ngl start
+lesspaper-ngl stop
+lesspaper-ngl logs
+lesspaper-ngl doctor
+lesspaper-ngl update                 # newest beta (default)
 ```
+
+Published images: `ghcr.io/brocxftw/lesspaper-ngl-backend` and `ghcr.io/brocxftw/lesspaper-ngl-web`.
 
 Installer documentation:
 
@@ -413,7 +420,7 @@ Installer documentation:
 
 ## Pre-release / beta
 
-Folium publishes GitHub **prereleases** (`vX.Y.Z-beta.N`). They do **not** replace `releases/latest` or the moving GHCR `latest` tag.
+lesspaper-ngl publishes GitHub **prereleases** (`vX.Y.Z-beta.N`). They do **not** replace `releases/latest` or the moving GHCR `latest` tag.
 
 ### Interactive
 
@@ -421,12 +428,12 @@ Folium publishes GitHub **prereleases** (`vX.Y.Z-beta.N`). They do **not** repla
 
 ```bash
 # Replace the tag with a prerelease from
-# https://github.com/brocxftw/folium/releases
-curl -fsSL -o install-folium.sh \
-  https://github.com/brocxftw/folium/releases/download/v0.1.24-beta.5/install-folium.sh
+# https://github.com/brocxftw/lesspaper-ngl/releases
+curl -fsSL -o install-lesspaper-ngl.sh \
+  https://github.com/brocxftw/lesspaper-ngl/releases/download/v0.1.24-beta.5/install-lesspaper-ngl.sh
 
-less install-folium.sh
-bash install-folium.sh
+less install-lesspaper-ngl.sh
+bash install-lesspaper-ngl.sh
 ```
 
 2. In the version picker, choose the matching `vX.Y.Z-beta.N` (labelled **Beta**), or another listed beta.
@@ -436,27 +443,27 @@ bash install-folium.sh
 From the host/CT shell (after the management CLI is installed):
 
 ```bash
-folium update                 # newest beta prerelease (default)
-folium update latest          # newest stable
-folium update v0.1.24-beta.5  # exact pin
+lesspaper-ngl update                 # newest beta prerelease (default)
+lesspaper-ngl update latest          # newest stable
+lesspaper-ngl update v0.1.24-beta.5  # exact pin
 ```
 
 Or run the installer directly:
 
 ```bash
 # Fresh install of the newest prerelease
-bash install-folium.sh --noninteractive --version beta --json
+bash install-lesspaper-ngl.sh --noninteractive --version beta --json
 
 # Or pin an exact prerelease
-bash install-folium.sh --noninteractive --version v0.1.24-beta.5 --json
+bash install-lesspaper-ngl.sh --noninteractive --version v0.1.24-beta.5 --json
 
 # Update an existing install to the newest beta (secrets/bind kept)
-bash install-folium.sh --noninteractive --update --version beta --json
+bash install-lesspaper-ngl.sh --noninteractive --update --version beta --json
 ```
 
-`--version` (and `FOLIUM_VERSION` / `FOLIUM_VERSION_TAG` in the process environment) overrides the version already recorded in `install-state.json` / `.env`.
+`--version` (and `LESSPAPER_NGL_VERSION` / `LESSPAPER_NGL_VERSION_TAG` in the process environment; legacy `FOLIUM_*` equivalents still accepted) overrides the version already recorded in `install-state.json` / `.env`.
 
-If `folium update` still says it is unavailable, re-run the installer once to refresh `/usr/local/bin/folium`.
+If `lesspaper-ngl update` still says it is unavailable, re-run the installer once to refresh `/usr/local/bin/lesspaper-ngl` (and the `folium` shim).
 
 ### Manual Compose
 
@@ -466,12 +473,12 @@ Download Compose assets from the same prerelease tag (not `releases/latest`):
 TAG=v0.1.24-beta.5   # example — use a real prerelease tag
 
 curl -fsSL -o docker-compose.yml \
-  "https://github.com/brocxftw/folium/releases/download/${TAG}/docker-compose.yml"
+  "https://github.com/brocxftw/lesspaper-ngl/releases/download/${TAG}/docker-compose.yml"
 curl -fsSL -o env.example \
-  "https://github.com/brocxftw/folium/releases/download/${TAG}/env.example"
+  "https://github.com/brocxftw/lesspaper-ngl/releases/download/${TAG}/env.example"
 ```
 
-Set `FOLIUM_VERSION` to the tag **without** the leading `v` (for example `0.1.24-beta.5`). Prefer that pin over the moving GHCR `beta` image tag.
+Set `LESSPAPER_NGL_VERSION` to the tag **without** the leading `v` (for example `0.1.24-beta.5`). Prefer that pin over the moving GHCR `beta` image tag.
 
 ---
 
@@ -494,27 +501,27 @@ Prefer to manage Compose yourself?
 Download the **stable** release assets:
 
 ```bash
-mkdir folium
-cd folium
+mkdir lesspaper-ngl
+cd lesspaper-ngl
 
 curl -fsSL -o docker-compose.yml \
-  https://github.com/brocxftw/folium/releases/latest/download/docker-compose.yml
+  https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/docker-compose.yml
 
 curl -fsSL -o env.example \
-  https://github.com/brocxftw/folium/releases/latest/download/env.example
+  https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/env.example
 
 cp env.example .env
 ```
 
 For a prerelease, download the same filenames from that tag’s release assets instead (see [Pre-release / beta](#pre-release--beta)).
 
-Configure at minimum:
+Configure at minimum (canonical `LESSPAPER_NGL_*`; legacy `FOLIUM_*` still accepted during upgrades):
 
 ```text
-FOLIUM_SECRET_KEY
-FOLIUM_ENCRYPTION_KEY
+LESSPAPER_NGL_SECRET_KEY
+LESSPAPER_NGL_ENCRYPTION_KEY
 POSTGRES_PASSWORD
-FOLIUM_ADMIN_PASSWORD
+LESSPAPER_NGL_ADMIN_PASSWORD
 ```
 
 Create storage:
@@ -533,7 +540,7 @@ sudo chown -R 1000:1000 \
   data/paddleocr
 ```
 
-Then start Folium:
+Then start lesspaper-ngl:
 
 ```bash
 docker compose up -d
@@ -561,6 +568,8 @@ http://localhost:9398/mcp
 
 The backend API port is not published directly unless you explicitly configure it.
 
+Persistence names kept on purpose (do not rename mid-flight): Postgres role/database `folium`, Docker volume `folium_pgdata`, backup extension `.folium` / manifest `folium_version`, cookies `folium_session` / `folium_csrf`.
+
 Full manual installation guide:
 
 [`docs/deployment/install.md`](docs/deployment/install.md)
@@ -571,40 +580,40 @@ Full manual installation guide:
 
 ## Host CLI (primary)
 
-On the Docker host / CT where Folium is installed:
+On the Docker host / CT where lesspaper-ngl is installed:
 
 ```bash
-folium update                 # newest beta prerelease (default)
-folium update latest          # newest stable
-folium update v0.1.24-beta.5  # exact pin
+lesspaper-ngl update                 # newest beta prerelease (default)
+lesspaper-ngl update latest          # newest stable
+lesspaper-ngl update v0.1.24-beta.5  # exact pin
 ```
 
-`folium update` downloads a fresh release installer and runs the noninteractive update path (secrets, bind, ports, and storage paths are preserved).
+`lesspaper-ngl update` downloads a fresh release installer and runs the noninteractive update path (secrets, bind, ports, and storage paths are preserved). The `folium` CLI shim continues to work for one transition cycle.
 
-If the CLI still reports that update is unavailable, refresh it once with the installer (below), then use `folium update` afterward.
+If the CLI still reports that update is unavailable, refresh it once with the installer (below), then use `lesspaper-ngl update` afterward.
 
 ## Installer deployment
 
 Re-run the installer:
 
 ```bash
-curl -fsSL -o install-folium.sh \
-  https://github.com/brocxftw/folium/releases/latest/download/install-folium.sh
+curl -fsSL -o install-lesspaper-ngl.sh \
+  https://github.com/brocxftw/lesspaper-ngl/releases/latest/download/install-lesspaper-ngl.sh
 
-less install-folium.sh
+less install-lesspaper-ngl.sh
 
-bash install-folium.sh
+bash install-lesspaper-ngl.sh
 ```
 
-When Folium detects the existing installation, choose **Update**, then pick the target release (stable or beta).
+When lesspaper-ngl detects the existing installation, choose **Update**, then pick the target release (stable or beta).
 
 Your secrets and document storage remain in place while the selected release images are pulled and the stack is recreated.
 
 Non-interactive update to newest stable or beta:
 
 ```bash
-bash install-folium.sh --noninteractive --update --version latest --json
-bash install-folium.sh --noninteractive --update --version beta --json
+bash install-lesspaper-ngl.sh --noninteractive --update --version latest --json
+bash install-lesspaper-ngl.sh --noninteractive --update --version beta --json
 ```
 
 ## Manual Compose deployment
@@ -640,23 +649,23 @@ Upgrade and rollback notes:
 
 # Backup and restore
 
-Folium can create full `.folium` backup bundles containing the state required to restore an installation.
+lesspaper-ngl can create full `.folium` backup bundles containing the state required to restore an installation. The `.folium` extension and `folium_version` manifest field are intentional persistence (not rebranded).
 
 The current backup implementation focuses on full local backups rather than incremental or cloud-native backup strategies.
 
-Fresh installations can use the restore workflow to recover an existing Folium deployment.
+Fresh installations can use the restore workflow to recover an existing lesspaper-ngl deployment.
 
 See:
 
 [`docs/deployment/backup.md`](docs/deployment/backup.md)
 
-For important deployments, Folium's built-in backup should still be part of a wider host/NAS backup strategy rather than your only copy of the data.
+For important deployments, lesspaper-ngl's built-in backup should still be part of a wider host/NAS backup strategy rather than your only copy of the data.
 
 ---
 
 # MCP integration
 
-Folium exposes a read-only MCP endpoint at:
+lesspaper-ngl exposes a read-only MCP endpoint at:
 
 ```text
 /mcp
@@ -677,13 +686,13 @@ The MCP surface can be used by compatible external tools and agents to:
 
 The MCP integration is intentionally read-only.
 
-Ask Folium itself is not exposed as an MCP tool.
+Ask lesspaper-ngl itself is not exposed as an MCP tool.
 
 ---
 
 # Administration
 
-Folium includes administration surfaces for:
+lesspaper-ngl includes administration surfaces for:
 
 * User profiles
 * AI providers and workload assignments
@@ -708,7 +717,7 @@ Multi-user deployments include:
 
 # Architecture
 
-Folium is a Docker Compose application built around a deliberately conventional architecture:
+lesspaper-ngl is a Docker Compose application built around a deliberately conventional architecture:
 
 ```text
                      ┌──────────────┐
@@ -768,7 +777,7 @@ The Jobs workspace exposes background work and cancellation controls, while appl
 
 # Development
 
-Folium consists of:
+lesspaper-ngl consists of:
 
 ```text
 backend/     FastAPI, workers, domain services, Alembic, tests
@@ -817,15 +826,15 @@ A useful rule for the project is:
 CODE → docs/ → README.md
 ```
 
-The README should explain Folium.
+The README should explain lesspaper-ngl.
 
-The documentation should explain how Folium works.
+The documentation should explain how lesspaper-ngl works.
 
 ---
 
 # Release channels
 
-Folium is currently a **pre-1.0 project** and is evolving quickly.
+lesspaper-ngl is currently a **pre-1.0 project** and is evolving quickly.
 
 Published GitHub releases are the deployment boundary. Operators should run versioned GHCR images rather than building the current `main` branch for production use.
 
@@ -834,7 +843,7 @@ Published GitHub releases are the deployment boundary. Operators should run vers
 | Stable | `releases/latest`, tags `vX.Y.Z` | `X.Y.Z`, `X.Y`, `latest` | `--version latest` or a stable pin |
 | Beta / prerelease | Prerelease tags `vX.Y.Z-beta.N` | `X.Y.Z-beta.N`, moving `beta` | `--version beta` or a beta pin |
 
-Prereleases do not move `latest`. Prefer pinning `vX.Y.Z-beta.N` / `FOLIUM_VERSION=X.Y.Z-beta.N` over the moving `beta` image tag.
+Prereleases do not move `latest`. Prefer pinning `vX.Y.Z-beta.N` / `LESSPAPER_NGL_VERSION=X.Y.Z-beta.N` over the moving `beta` image tag.
 
 Install and update steps: [Pre-release / beta](#pre-release--beta).
 
@@ -846,7 +855,7 @@ See:
 
 # Current limitations
 
-Folium is actively developed. Important limitations currently include:
+lesspaper-ngl is actively developed. Important limitations currently include:
 
 * Published images currently target **linux/amd64**
 * ARM deployments are not yet a supported release target
@@ -867,7 +876,7 @@ For release-readiness details:
 
 # Licence
 
-Folium is licensed under the [GNU Affero General Public License v3.0](LICENSE).
+lesspaper-ngl is licensed under the [GNU Affero General Public License v3.0](LICENSE).
 
 The project uses PyMuPDF for PDF text extraction and rendering, and the project licence reflects the resulting copyleft requirements.
 
@@ -881,7 +890,7 @@ This is not legal advice.
 
 # Acknowledgements
 
-Folium is built with:
+lesspaper-ngl is built with:
 
 * FastAPI
 * PostgreSQL
@@ -892,5 +901,5 @@ Folium is built with:
 * nginx
 * Docker
 
-Its operational shape is inspired by mature self-hosted document-management projects such as Paperless-ngx, while Folium remains an independent implementation rather than a fork.
+Its operational shape is inspired by mature self-hosted document-management projects such as Paperless-ngx, while lesspaper-ngl remains an independent implementation rather than a Paperless-ngx fork.
 

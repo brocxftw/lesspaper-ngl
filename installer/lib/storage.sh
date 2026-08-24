@@ -78,17 +78,17 @@ storage_writable_by_app_user() {
   if docker_info_ok; then
     local -a docker_args=(
       run --rm
-      --user "${FOLIUM_APP_UID}:${FOLIUM_APP_GID}"
+      --user "${LESSPAPER_NGL_APP_UID}:${LESSPAPER_NGL_APP_GID}"
     )
-    if [[ -n "${FOLIUM_EXTRA_GID:-}" ]]; then
-      docker_args+=(--group-add "${FOLIUM_EXTRA_GID}")
+    if [[ -n "${LESSPAPER_NGL_EXTRA_GID:-}" ]]; then
+      docker_args+=(--group-add "${LESSPAPER_NGL_EXTRA_GID}")
     fi
     docker_bin "${docker_args[@]}" \
       -v "${path}:/mnt" alpine:3.20 sh -c 'touch /mnt/.folium-write-test && rm -f /mnt/.folium-write-test' \
       >/dev/null 2>&1
     return $?
   fi
-  if [[ "$(storage_uid_of "${path}")" == "${FOLIUM_APP_UID}" ]]; then
+  if [[ "$(storage_uid_of "${path}")" == "${LESSPAPER_NGL_APP_UID}" ]]; then
     touch "${marker}" 2>/dev/null && rm -f "${marker}"
     return $?
   fi
@@ -102,7 +102,7 @@ storage_prepare_dir() {
     run_root mkdir -p "${path}"
   fi
   if [[ "${do_chown}" == "1" ]]; then
-    run_root chown "${FOLIUM_APP_UID}:${FOLIUM_APP_GID}" "${path}"
+    run_root chown "${LESSPAPER_NGL_APP_UID}:${LESSPAPER_NGL_APP_GID}" "${path}"
   fi
   storage_writable_by_app_user "${path}"
 }
@@ -110,7 +110,7 @@ storage_prepare_dir() {
 storage_confirm_risky_install_path() {
   local path="$1"
   local choice=""
-  export FOLIUM_UI_NOCANCEL=1
+  export LESSPAPER_NGL_UI_NOCANCEL=1
   choice="$(ui_menu "${path} is under /root or /tmp.
 
 Installing here is at your own risk (permissions, backups, and upgrades are your responsibility).
@@ -118,7 +118,7 @@ Installing here is at your own risk (permissions, backups, and upgrades are your
 Continue with this install directory?" \
     yes "Continue at my own risk" \
     abort "Choose another directory")"
-  export FOLIUM_UI_NOCANCEL=0
+  export LESSPAPER_NGL_UI_NOCANCEL=0
   [[ "${choice}" == "yes" ]]
 }
 
@@ -130,8 +130,8 @@ storage_validate_install_path() {
   if ! storage_is_risky_install_path "${path}"; then
     return 0
   fi
-  if [[ "${FOLIUM_NONINTERACTIVE}" == "1" ]]; then
-    [[ "${FOLIUM_ACCEPT_RISKY_PATH:-0}" == "1" ]]
+  if [[ "${LESSPAPER_NGL_NONINTERACTIVE}" == "1" ]]; then
+    [[ "${LESSPAPER_NGL_ACCEPT_RISKY_PATH:-0}" == "1" ]]
     return
   fi
   storage_confirm_risky_install_path "${path}"

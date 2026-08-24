@@ -11,7 +11,7 @@ cd backend
 - **Unit:** `tests/unit/` — chunking, privacy gate, jobs requeue, RAG helpers, OCR mocks, etc.
 - **Integration:** `tests/integration/` — HTTP + Postgres (`folium_test` in CI). Requires pgvector Postgres (CI service on 5433).
 - **Eval:** `tests/eval/` — filing sample coverage / histograms; not a full quality eval harness.
-- Marker `live_ai`: optional real OpenAI-compatible endpoint (`FOLIUM_LIVE_AI=1`).
+- Marker `live_ai`: optional real OpenAI-compatible endpoint (`LESSPAPER_NGL_LIVE_AI=1`).
 
 CI installs `.[dev]` **without** `ocr`; Paddle is mocked.
 

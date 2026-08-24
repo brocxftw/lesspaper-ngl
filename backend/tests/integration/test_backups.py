@@ -9,14 +9,14 @@ from httpx import AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from folium.backup.dump import pg_tools_available
-from folium.backup.restore import execute_restore
-from folium.core.config import get_settings
-from folium.db.session import dispose_engine, get_session_factory
-from folium.models import Document, InstanceState, Job, JobStatus, JobType, User
-from folium.services import instance_state as instance_state_service
-from folium.services.jobs import complete_job
-from folium.workers.processor import process_job
+from lesspaper_ngl.backup.dump import pg_tools_available
+from lesspaper_ngl.backup.restore import execute_restore
+from lesspaper_ngl.core.config import get_settings
+from lesspaper_ngl.db.session import dispose_engine, get_session_factory
+from lesspaper_ngl.models import Document, InstanceState, Job, JobStatus, JobType, User
+from lesspaper_ngl.services import instance_state as instance_state_service
+from lesspaper_ngl.services.jobs import complete_job
+from lesspaper_ngl.workers.processor import process_job
 
 pytestmark = pytest.mark.asyncio
 

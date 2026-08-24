@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 import { LoginPage } from "@/features/auth/LoginPage";
-import foliumLogo from "@/assets/brand/folium_logo.svg";
+import lesspaperNglLogo from "@/assets/brand/lesspaper-ngl_logo.svg";
 import bgLogin from "@/assets/brand/bg_login_2.svg";
 
 vi.mock("@/lib/api/hooks", () => ({
@@ -23,7 +23,7 @@ describe("Login page", () => {
   it("renders the redesigned brand, copy, and sign-in path", () => {
     renderLogin();
 
-    expect(screen.getByRole("heading", { name: "Folium" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "lesspaper-ngl" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Welcome back" })).toBeInTheDocument();
     expect(screen.getByText("Sign in to access your documents")).toBeInTheDocument();
     expect(screen.getByText("v0.1.23")).toBeInTheDocument();
@@ -45,16 +45,16 @@ describe("Login page", () => {
   it("uses the supplied logo and background assets", () => {
     const { container } = renderLogin();
     const images = Array.from(container.querySelectorAll("img"));
-    const logo = images.find((img) => img.getAttribute("src") === foliumLogo);
+    const logo = images.find((img) => img.getAttribute("src") === lesspaperNglLogo);
     expect(logo).toBeInTheDocument();
     expect(logo).toHaveAttribute("height", "62");
     expect(
-      logo!.compareDocumentPosition(screen.getByRole("heading", { name: "Folium" })) &
+      logo!.compareDocumentPosition(screen.getByRole("heading", { name: "lesspaper-ngl" })) &
         Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
     const background = images.find((img) => img.getAttribute("src") === bgLogin);
     expect(background).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Folium" }).closest(".bg-white")).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "lesspaper-ngl" }).closest(".bg-white")).toBeTruthy();
     expect(screen.getByRole("button", { name: "Sign in" })).toHaveClass("shadow-none");
   });
 });

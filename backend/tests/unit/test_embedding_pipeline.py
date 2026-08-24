@@ -7,17 +7,17 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from folium.ai.base import AIProviderError, EmbeddingResult
-from folium.ai.retry import (
+from lesspaper_ngl.ai.base import AIProviderError, EmbeddingResult
+from lesspaper_ngl.ai.retry import (
     is_non_retryable_ai_error,
     is_oversized_input_error,
     is_transient_ai_error,
 )
-from folium.services.embedding_capabilities import (
+from lesspaper_ngl.services.embedding_capabilities import (
     DEFAULT_BATCH_SIZE,
     resolve_embedding_capabilities,
 )
-from folium.services.embedding_pipeline import iter_batches
+from lesspaper_ngl.services.embedding_pipeline import iter_batches
 
 
 def test_iter_batches_boundaries() -> None:
@@ -75,7 +75,7 @@ def test_retry_classification() -> None:
 
 @pytest.mark.asyncio
 async def test_call_embed_retries_transient_then_succeeds() -> None:
-    from folium.services.embedding_pipeline import _call_embed_with_retries
+    from lesspaper_ngl.services.embedding_pipeline import _call_embed_with_retries
 
     adapter = MagicMock()
     adapter.embed = AsyncMock(
@@ -93,7 +93,7 @@ async def test_call_embed_retries_transient_then_succeeds() -> None:
 
 @pytest.mark.asyncio
 async def test_call_embed_does_not_retry_oversized() -> None:
-    from folium.services.embedding_pipeline import _call_embed_with_retries
+    from lesspaper_ngl.services.embedding_pipeline import _call_embed_with_retries
 
     adapter = MagicMock()
     adapter.embed = AsyncMock(
@@ -107,9 +107,9 @@ async def test_call_embed_does_not_retry_oversized() -> None:
 @pytest.mark.asyncio
 async def test_embed_batch_stores_requested_model_not_provider_echo() -> None:
     """OpenRouter-style providers may echo an unprefixed model name (#53)."""
-    from folium.models import ChunkEmbeddingStatus
-    from folium.services.embedding_capabilities import resolve_embedding_capabilities
-    from folium.services.embedding_pipeline import _embed_batch_with_isolation
+    from lesspaper_ngl.models import ChunkEmbeddingStatus
+    from lesspaper_ngl.services.embedding_capabilities import resolve_embedding_capabilities
+    from lesspaper_ngl.services.embedding_pipeline import _embed_batch_with_isolation
 
     requested = "openai/text-embedding-3-small"
     echoed = "text-embedding-3-small"

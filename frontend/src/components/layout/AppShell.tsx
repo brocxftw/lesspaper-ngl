@@ -11,8 +11,8 @@ import {
 import { AiStatusPill } from "@/components/layout/AiStatusPill";
 import { NavbarSearch } from "@/components/layout/NavbarSearch";
 import { NavbarUpload } from "@/components/layout/NavbarUpload";
-import { AskFoliumDock } from "@/components/ask/AskFoliumDock";
-import foliumLogo from "@/assets/brand/folium_logo.svg";
+import { AskDock } from "@/components/ask/AskDock";
+import lesspaperNglLogo from "@/assets/brand/lesspaper-ngl_logo.svg";
 import { TooltipProvider } from "@/components/ui/Tooltip";
 import {
   DropdownMenu,
@@ -50,7 +50,7 @@ export function AppShell({ children }: AppShellProps) {
         <header className="relative z-50 m-3 flex min-h-[79px] w-[calc(100%-24px)] shrink-0 flex-nowrap items-stretch overflow-x-auto rounded-[14px] border border-[rgba(148,163,184,0.10)] bg-navbar px-8 text-navbar-text shadow-[0_10px_30px_rgba(2,6,23,0.24),0_2px_8px_rgba(2,6,23,0.20)]">
           <div className="flex items-center">
             <img
-              src={foliumLogo}
+              src={lesspaperNglLogo}
               alt=""
               width={40}
               height={40}
@@ -59,7 +59,7 @@ export function AppShell({ children }: AppShellProps) {
             />
             <div className="flex min-w-0 flex-col gap-1">
               <span className="shrink-0 text-[30px] leading-none font-bold tracking-[-0.02em] text-[#F8FAFC]">
-                Folium
+                lesspaper-ngl
               </span>
               <span className="self-start rounded px-1.5 py-px text-[10px] font-medium leading-4 text-[#CBD5E1] border border-[rgba(148,163,184,0.05)] bg-[rgba(148,163,184,0.12)] shadow-[0_1px_3px_rgba(0,0,0,0.16),inset_0_1px_0_rgba(255,255,255,0.03)]">
                 Beta
@@ -162,7 +162,7 @@ export function AppShell({ children }: AppShellProps) {
         <main className="flex min-h-0 flex-1 flex-col overflow-hidden bg-surface">
           {children}
         </main>
-        <AskFoliumDock />
+        <AskDock />
       </div>
     </TooltipProvider>
   );

@@ -6,9 +6,9 @@ import json
 
 import pytest
 
-from folium.ai.base import AIProviderError
-from folium.ai.retry import is_transient_ai_error
-from folium.workers.processor import (
+from lesspaper_ngl.ai.base import AIProviderError
+from lesspaper_ngl.ai.retry import is_transient_ai_error
+from lesspaper_ngl.workers.processor import (
     _FOLDER_PATH_RE,
     _coerce_confidence,
     _field_confidence,

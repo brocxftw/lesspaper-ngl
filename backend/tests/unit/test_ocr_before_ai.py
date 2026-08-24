@@ -6,8 +6,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from folium.ocr.extractor import ExtractedPage, pages_need_ocr
-from folium.workers.processor import (
+from lesspaper_ngl.ocr.extractor import ExtractedPage, pages_need_ocr
+from lesspaper_ngl.workers.processor import (
     _has_usable_extracted_text,
     _pdf_needs_ocr_before_ai,
 )

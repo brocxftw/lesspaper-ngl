@@ -6,12 +6,12 @@ import pytest
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import select
 
-from folium.auth.passwords import verify_password
-from folium.cli import _reset_admin_password
-from folium.db.session import get_session_factory
-from folium.main import app
-from folium.models import User
-from folium.services import users as user_service
+from lesspaper_ngl.auth.passwords import verify_password
+from lesspaper_ngl.cli import _reset_admin_password
+from lesspaper_ngl.db.session import get_session_factory
+from lesspaper_ngl.main import app
+from lesspaper_ngl.models import User
+from lesspaper_ngl.services import users as user_service
 
 
 @pytest.mark.asyncio

@@ -171,7 +171,7 @@ export function ProfileSettings() {
         </p>
       )}
 
-      <SettingsSection index={1} title="Account" description="Your identity in Folium.">
+      <SettingsSection index={1} title="Account" description="Your identity in lesspaper-ngl.">
         <SettingsCard>
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="flex items-center gap-4">
@@ -196,7 +196,7 @@ export function ProfileSettings() {
                     {user?.is_admin ? "Administrator" : "User"}
                   </SettingsStatusBadge>
                   <span className="text-xs text-text-muted">
-                    {user?.is_admin ? "Full access to Folium administration." : "Standard account access."}
+                    {user?.is_admin ? "Full access to lesspaper-ngl administration." : "Standard account access."}
                   </span>
                 </div>
                 {usage && (
@@ -356,7 +356,7 @@ export function ProfileSettings() {
                 to: "/settings/profile/users#invitations",
                 icon: Mail,
                 title: "Invitations",
-                description: "Invite people to Folium",
+                description: "Invite people to lesspaper-ngl",
               },
               {
                 to: "/settings/profile/users#password-resets",

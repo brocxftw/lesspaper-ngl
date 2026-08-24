@@ -116,7 +116,7 @@ export function ControlsPanel() {
 
   return (
     <div id="ai-policy" className="scroll-mt-4 space-y-6">
-      <SettingsSection title="Privacy" description="Decide when Folium may use remote AI.">
+      <SettingsSection title="Privacy" description="Decide when lesspaper-ngl may use remote AI.">
         <SettingsCard>
           <div className="space-y-4">
             <div className="max-w-sm">
@@ -144,7 +144,7 @@ export function ControlsPanel() {
                 Remote AI
               </p>
               <AiToggleRow
-                label="Ask Folium"
+                label="Ask lesspaper-ngl"
                 checked={remote.allow_remote_qa}
                 disabled={remoteLocked}
                 onCheckedChange={(checked) =>
@@ -207,7 +207,7 @@ export function ControlsPanel() {
 
       <SettingsSection
         title="Response profile"
-        description="Controls Ask Folium retrieval depth and output limits, not which model is used."
+        description="Controls Ask lesspaper-ngl retrieval depth and output limits, not which model is used."
       >
         <SettingsCard>
           <div className="space-y-2">

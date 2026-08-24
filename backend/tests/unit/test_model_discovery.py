@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from folium.ai.model_discovery import classify_discovered_models, classify_model_kind
+from lesspaper_ngl.ai.model_discovery import classify_discovered_models, classify_model_kind
 
 
 def test_classify_openrouter_architecture_embeddings() -> None:

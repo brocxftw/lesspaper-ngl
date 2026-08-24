@@ -46,7 +46,7 @@ export function ForgotPasswordPage() {
           <div className="inline-flex items-center gap-2 mb-2">
             <Leaf className="h-7 w-7 text-accent" />
             <span className="text-2xl font-semibold text-text-primary tracking-tight">
-              Folium
+              lesspaper-ngl
             </span>
           </div>
           <p className="text-sm text-text-secondary">Request a password reset</p>
@@ -58,7 +58,7 @@ export function ForgotPasswordPage() {
         >
           <p className="text-xs text-text-muted">
             An administrator must approve your request, then they will share a one-time reset
-            link with you. Folium does not send email yet.
+            link with you. lesspaper-ngl does not send email yet.
           </p>
           <div>
             <label htmlFor="username" className="text-xs font-medium text-text-secondary">

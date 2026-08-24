@@ -32,6 +32,7 @@ import { DocumentGrid } from "./DocumentGrid";
 import { DocumentViewerModal } from "./DocumentViewerModal";
 import {
   DOCUMENTS_LAYOUT_PREF_KEY,
+  DOCUMENTS_LAYOUT_PREF_KEY_LEGACY,
   type DocumentsLayoutMode,
 } from "./documentSelection";
 import {
@@ -69,6 +70,7 @@ export function DocumentsPage() {
   const [layoutModeRaw, setLayoutMode] = usePersistedState<DocumentsLayoutMode>(
     DOCUMENTS_LAYOUT_PREF_KEY,
     "list",
+    DOCUMENTS_LAYOUT_PREF_KEY_LEGACY,
   );
   const layoutMode: DocumentsLayoutMode =
     layoutModeRaw === "grid" ? "grid" : "list";

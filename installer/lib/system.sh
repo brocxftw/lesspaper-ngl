@@ -51,7 +51,7 @@ system_connectivity() {
 system_collect_report() {
   local mem disk
   mem="$(system_mem_kb)"
-  disk="$(system_disk_kb "${FOLIUM_INSTALL_DIR:-/opt}")"
+  disk="$(system_disk_kb "${LESSPAPER_NGL_INSTALL_DIR:-/opt}")"
   printf 'os=%s\n' "$(system_os_pretty)"
   printf 'arch=%s\n' "$(uname -m)"
   printf 'mem_kb=%s\n' "${mem}"
@@ -93,7 +93,7 @@ system_check() {
 
   if ! system_has_sudo; then
     log_error "sudo/root is required"
-    SYSTEM_CHECK_ERROR="Installing Folium and managing Docker requires root or sudo."
+    SYSTEM_CHECK_ERROR="Installing lesspaper-ngl and managing Docker requires root or sudo."
     return 1
   fi
 
@@ -104,7 +104,7 @@ system_check() {
     SYSTEM_CHECK_WARNINGS="${SYSTEM_CHECK_WARNINGS:-}Less than 2 GiB RAM detected. Folium may be slow or fail under OCR load. "
   fi
 
-  disk="$(system_disk_kb "${FOLIUM_INSTALL_DIR:-/opt}")"
+  disk="$(system_disk_kb "${LESSPAPER_NGL_INSTALL_DIR:-/opt}")"
   if [[ -n "${disk}" && "${disk}" -lt 8388608 ]]; then
     log_warn "low disk: ${disk} kB"
     warnings=$((warnings + 1))

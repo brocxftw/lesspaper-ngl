@@ -1,5 +1,7 @@
 # Folium UI/UX Audit
 
+> **Note:** Folium has been renamed to lesspaper-ngl. This 2026-08-10 audit retains historical Folium UI phrasing and is marked stale in `docs/README.md`.
+
 **Document type:** Current-product reverse engineering (not a redesign)  
 **Audience:** Product design (Google Stitch), UX architecture, frontend planning  
 **Vocabulary:** Terms follow [`ubiquitous-language.md`](../../ubiquitous-language.md)  

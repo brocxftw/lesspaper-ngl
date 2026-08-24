@@ -10,9 +10,9 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from folium.core.config import get_settings
-from folium.db.session import Base
-from folium import models  # noqa: F401 — register models
+from lesspaper_ngl.core.config import get_settings
+from lesspaper_ngl.db.session import Base
+from lesspaper_ngl import models  # noqa: F401 — register models
 
 config = context.config
 if config.config_file_name is not None:

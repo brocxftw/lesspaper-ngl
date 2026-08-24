@@ -1,4 +1,4 @@
-"""Shared pytest fixtures for Folium backend tests."""
+"""Shared pytest fixtures for lesspaper-ngl backend tests."""
 
 from __future__ import annotations
 
@@ -15,18 +15,18 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 
 # ---------------------------------------------------------------------------
-# Environment — must be set before any folium imports
+# Environment — must be set before any lesspaper_ngl imports
 # ---------------------------------------------------------------------------
 
 _TEST_ROOT = Path(__file__).resolve().parent
 _FIXTURES_DIR = _TEST_ROOT / "fixtures"
 
 # Force test configuration (do not inherit developer shell/.env values).
-os.environ["FOLIUM_ENV"] = "test"
-os.environ["FOLIUM_SECRET_KEY"] = "test-secret-key-for-pytest-only"
-os.environ["FOLIUM_ENCRYPTION_KEY"] = "test-encryption-key-for-pytest"
-os.environ["FOLIUM_ADMIN_USERNAME"] = "admin"
-os.environ["FOLIUM_ADMIN_PASSWORD"] = "testpass"
+os.environ["LESSPAPER_NGL_ENV"] = "test"
+os.environ["LESSPAPER_NGL_SECRET_KEY"] = "test-secret-key-for-pytest-only"
+os.environ["LESSPAPER_NGL_ENCRYPTION_KEY"] = "test-encryption-key-for-pytest"
+os.environ["LESSPAPER_NGL_ADMIN_USERNAME"] = "admin"
+os.environ["LESSPAPER_NGL_ADMIN_PASSWORD"] = "testpass"
 os.environ["FRONTEND_ORIGIN"] = "http://test"
 os.environ["DATABASE_URL"] = "postgresql+asyncpg://folium:folium@localhost:5433/folium_test"
 os.environ["DATABASE_URL_SYNC"] = "postgresql+psycopg://folium:folium@localhost:5433/folium_test"
@@ -35,12 +35,12 @@ os.environ["OCR_ENABLED"] = "false"
 os.environ["OCR_IN_PROCESS"] = "true"
 os.environ["JOB_CONCURRENCY"] = "1"
 
-from folium.bootstrap import bootstrap  # noqa: E402
-from folium.core.config import get_settings  # noqa: E402
-from folium.db.session import Base, dispose_engine, get_session_factory  # noqa: E402
-from folium.main import app  # noqa: E402
-from folium.models import Job, JobType  # noqa: E402
-from folium.workers.processor import process_indexing, process_text_extraction  # noqa: E402
+from lesspaper_ngl.bootstrap import bootstrap  # noqa: E402
+from lesspaper_ngl.core.config import get_settings  # noqa: E402
+from lesspaper_ngl.db.session import Base, dispose_engine, get_session_factory  # noqa: E402
+from lesspaper_ngl.main import app  # noqa: E402
+from lesspaper_ngl.models import Job, JobType  # noqa: E402
+from lesspaper_ngl.workers.processor import process_indexing, process_text_extraction  # noqa: E402
 
 get_settings.cache_clear()
 
@@ -107,11 +107,11 @@ async def _truncate_and_bootstrap() -> None:
             await session.execute(text(f"TRUNCATE TABLE {tables} RESTART IDENTITY CASCADE"))
             await bootstrap(session)
             # Tests exercise a ready instance; first-run setup is covered separately.
-            from folium.auth import service as auth_service
-            from folium.bootstrap import ensure_ai_settings
-            from folium.models import InstanceState
-            from folium.services import folders as folder_service
-            from folium.services import instance_state as instance_state_service
+            from lesspaper_ngl.auth import service as auth_service
+            from lesspaper_ngl.bootstrap import ensure_ai_settings
+            from lesspaper_ngl.models import InstanceState
+            from lesspaper_ngl.services import folders as folder_service
+            from lesspaper_ngl.services import instance_state as instance_state_service
 
             admin = await auth_service.ensure_admin_user(session)
             await folder_service.ensure_system_folders(session, admin.id)
@@ -142,7 +142,7 @@ async def _run_extraction_pipeline(session: AsyncSession, document_id: uuid.UUID
     """
     from sqlalchemy import select
 
-    from folium.services.jobs import enqueue_job
+    from lesspaper_ngl.services.jobs import enqueue_job
 
     extract_job = (
         await session.execute(

@@ -8,8 +8,8 @@ import pytest
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from folium.models import AIProvider, Job, JobType
-from folium.workers.processor import process_embedding
+from lesspaper_ngl.models import AIProvider, Job, JobType
+from lesspaper_ngl.workers.processor import process_embedding
 
 
 async def _configure_remote_providers(
@@ -100,7 +100,7 @@ async def test_local_only_blocks_remote_embeddings(
     ).scalar_one_or_none()
 
     if job is None:
-        from folium.services.jobs import enqueue_job
+        from lesspaper_ngl.services.jobs import enqueue_job
 
         job = await enqueue_job(
             db_session,

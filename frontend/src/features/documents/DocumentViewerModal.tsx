@@ -6,7 +6,7 @@ import { DocumentViewer } from "@/components/viewer/DocumentViewer";
 import { DocumentInspector } from "@/components/inspector/DocumentInspector";
 import { Breadcrumbs } from "@/components/documents/Breadcrumbs";
 import { DocumentAskPanel } from "@/components/ask/DocumentAskPanel";
-import { AskFoliumFab } from "@/components/ask/AskFoliumFab";
+import { AskFab } from "@/components/ask/AskFab";
 import { Button } from "@/components/ui/Button";
 import {
   Dialog,
@@ -156,7 +156,7 @@ export function DocumentViewerModal({
                 className="h-full"
               />
               {!askOpen && doc && canAskDocument(doc) && (
-                <AskFoliumFab
+                <AskFab
                   onClick={() => setAskOpen(true)}
                   className="absolute right-4 bottom-4 z-10"
                 />

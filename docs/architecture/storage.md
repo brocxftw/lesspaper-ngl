@@ -27,7 +27,7 @@ Thumbnails are served at `GET /api/documents/{id}/thumbnail`. Originals at `GET 
 | `/consume` | Drop zone; worker ingests then deletes source file |
 | `/export` | Mount exists; layout + health probe only. **No document export writer** in application code |
 
-PaddleOCR models: image sets `PADDLE_PDX_CACHE_HOME=/app/.paddleocr`, Compose bind `FOLIUM_PADDLE_CACHE_HOST` (default `./data/paddleocr`).
+PaddleOCR models: image sets `PADDLE_PDX_CACHE_HOME=/app/.paddleocr`, Compose bind `LESSPAPER_NGL_PADDLE_CACHE_HOST` (default `./data/paddleocr`).
 
 ---
 
@@ -36,7 +36,7 @@ PaddleOCR models: image sets `PADDLE_PDX_CACHE_HOME=/app/.paddleocr`, Compose bi
 | Data | Backing | Survives container recreate? |
 |------|---------|------------------------------|
 | PostgreSQL | Named volume `folium_pgdata` | Yes (volume remains) |
-| Documents / consume / export | Bind mounts (`FOLIUM_*_HOST` or `./data/*`) | Yes (host paths) |
+| Documents / consume / export | Bind mounts (`LESSPAPER_NGL_*_HOST` / legacy `FOLIUM_*_HOST`, or `./data/*`) | Yes (host paths) |
 | Paddle cache | Bind mount | Yes |
 | Application image/code | Image layers | Replaced on rebuild |
 
@@ -48,11 +48,11 @@ PaddleOCR models: image sets `PADDLE_PDX_CACHE_HOME=/app/.paddleocr`, Compose bi
 
 ## NFS model
 
-**Confirmed:** Folium never calls `mount`. The operator mounts NFS (or local disks) on the **Docker host**, then bind-mounts into containers.
+**Confirmed:** lesspaper-ngl never calls `mount`. The operator mounts NFS (or local disks) on the **Docker host**, then bind-mounts into containers.
 
 If NFS is stale: `GET /health/storage` reports `degraded` or `unavailable`. Writes that need documents storage raise `StorageUnavailableError`. PostgreSQL metadata is unchanged.
 
-`FOLIUM_DOCUMENTS_HOST_SOURCE` is **display metadata** for Settings → System; it is not inferred from the mount.
+`LESSPAPER_NGL_DOCUMENTS_HOST_SOURCE` is **display metadata** for Settings → System; it is not inferred from the mount.
 
 ---
 
@@ -70,4 +70,4 @@ SHA-256 of file bytes. Unique per owner among non-duplicate policy. Consume uses
 
 ## Compose site notes
 
-Public Compose does not set `group_add`. Operators who need a host GID for `0770` CIFS/NFS binds add it in `docker-compose.override.yml`. That GID is **deployment-specific**, not a Folium protocol.
+Public Compose does not set `group_add`. Operators who need a host GID for `0770` CIFS/NFS binds add it in `docker-compose.override.yml`. That GID is **deployment-specific**, not a lesspaper-ngl protocol.

@@ -51,4 +51,4 @@ Typical API request = one `AsyncSession`. Worker: new `session_scope` per claim/
 
 ## Persistence
 
-Compose volume `folium_pgdata` → `/var/lib/postgresql/data`. Host port 5433 for local tools. Default credentials in Compose are **hard-coded** (`folium`/`folium`); `DATABASE_URL` in `.env` is overridden by Compose `environment:` for `api`/`worker`.
+Compose volume `folium_pgdata` → `/var/lib/postgresql/data`. Host port 5433 for local tools. Default credentials in Compose are **hard-coded** (`lesspaper_ngl`/`lesspaper_ngl`); `DATABASE_URL` in `.env` is overridden by Compose `environment:` for `api`/`worker`.

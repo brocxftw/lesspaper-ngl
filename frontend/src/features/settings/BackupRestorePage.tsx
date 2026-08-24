@@ -270,7 +270,7 @@ export function BackupRestorePage() {
           </div>
           {repoUnavailable && (
             <p role="alert" className="mt-3 text-sm text-danger">
-              Backup repository is unavailable. Folium remains usable; backups will not run until `/backups` is writable.
+              Backup repository is unavailable. lesspaper-ngl remains usable; backups will not run until `/backups` is writable.
             </p>
           )}
         </SettingsCard>
@@ -330,7 +330,7 @@ export function BackupRestorePage() {
           </DialogHeader>
           <p className="text-sm text-text-secondary">
             {confirm?.type === "restore"
-              ? "This replaces the current Folium library with the selected backup. This cannot be undone from the UI."
+              ? "This replaces the current lesspaper-ngl library with the selected backup. This cannot be undone from the UI."
               : "The backup file will be removed from the repository."}
           </p>
           <DialogFooter>
@@ -344,7 +344,7 @@ export function BackupRestorePage() {
                 setConfirm(null);
               }}
             >
-              {confirm?.type === "restore" ? "Restore Folium" : "Delete backup"}
+              {confirm?.type === "restore" ? "Restore lesspaper-ngl" : "Delete backup"}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -71,7 +71,7 @@ function roleRecommendation(role: AIWorkloadRole): string {
     return "Prefer models marked Embedding. Chat models usually cannot produce vectors.";
   }
   if (role === "chat") {
-    return "Prefer models marked Chat. Embedding models are ranked lower for Ask Folium.";
+    return "Prefer models marked Chat. Embedding models are ranked lower for Ask lesspaper-ngl.";
   }
   return "Prefer models marked Chat for filing suggestions. Embedding models are ranked lower.";
 }

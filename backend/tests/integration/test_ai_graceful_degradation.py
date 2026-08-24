@@ -10,7 +10,7 @@ from httpx import AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from folium.ai.base import (
+from lesspaper_ngl.ai.base import (
     AIProviderAdapter,
     AIProviderError,
     ChatMessage,
@@ -18,8 +18,8 @@ from folium.ai.base import (
     EmbeddingResult,
     ModelCapabilities,
 )
-from folium.models import AIProvider, Document, Job, JobStatus, JobType, ProcessingStatus
-from folium.workers.processor import process_metadata_suggestion, process_text_extraction
+from lesspaper_ngl.models import AIProvider, Document, Job, JobStatus, JobType, ProcessingStatus
+from lesspaper_ngl.workers.processor import process_metadata_suggestion, process_text_extraction
 
 
 @dataclass
@@ -128,7 +128,7 @@ async def test_ai_health_reflects_probe_independence(
     auth_client: AsyncClient,
     db_session: AsyncSession,
 ) -> None:
-    from folium.models import AIProvider
+    from lesspaper_ngl.models import AIProvider
 
     provider = await auth_client.post(
         "/api/ai/providers",
@@ -190,7 +190,7 @@ async def test_metadata_suggestion_soft_skips_on_ai_error(
 ) -> None:
     await _enable_auto_tagging(auth_client, db_session)
     monkeypatch.setattr(
-        "folium.workers.processor.get_adapter",
+        "lesspaper_ngl.workers.processor.get_adapter",
         lambda _provider, api_key=None: _FailingAdapter(),
     )
 

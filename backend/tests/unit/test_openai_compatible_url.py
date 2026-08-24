@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from folium.ai.openai_compatible import _normalize_base_url
+from lesspaper_ngl.ai.openai_compatible import _normalize_base_url
 
 
 @pytest.mark.parametrize(

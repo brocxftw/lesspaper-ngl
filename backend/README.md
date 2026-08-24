@@ -1,4 +1,4 @@
-# Folium Backend
+# lesspaper-ngl Backend
 
-Python package for the Folium document management system.
+Python package `lesspaper_ngl` for the lesspaper-ngl document management system.
 See the repository root README for documentation.

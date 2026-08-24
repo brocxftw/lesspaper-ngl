@@ -75,14 +75,14 @@ export function EvidenceSearchResults({
               onClick={onAskAboutResults}
               className="ml-auto text-xs font-medium text-accent hover:underline"
             >
-              Ask Folium about these results
+              Ask lesspaper-ngl about these results
             </button>
           ) : (
             <Link
               to={askHref!}
               className="ml-auto text-xs font-medium text-accent hover:underline"
             >
-              Ask Folium about these results
+              Ask lesspaper-ngl about these results
             </Link>
           )
         )}

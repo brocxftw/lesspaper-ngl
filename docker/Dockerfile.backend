@@ -1,19 +1,19 @@
 FROM python:3.13-slim-bookworm
 
-ARG FOLIUM_VERSION=0.0.0-dev
-ARG FOLIUM_BUILD_REVISION=
-ARG FOLIUM_BUILD_DATE=
-ARG FOLIUM_SOURCE=https://github.com/brocxftw/folium
+ARG LESSPAPER_NGL_VERSION=0.0.0-dev
+ARG LESSPAPER_NGL_BUILD_REVISION=
+ARG LESSPAPER_NGL_BUILD_DATE=
+ARG LESSPAPER_NGL_SOURCE=https://github.com/brocxftw/lesspaper-ngl
 
-LABEL org.opencontainers.image.title="Folium backend" \
-      org.opencontainers.image.description="Folium API, worker, OCR, indexing, and database migrations" \
-      org.opencontainers.image.source="${FOLIUM_SOURCE}" \
-      org.opencontainers.image.url="${FOLIUM_SOURCE}" \
-      org.opencontainers.image.documentation="${FOLIUM_SOURCE}/blob/main/docs/deployment/install.md" \
+LABEL org.opencontainers.image.title="lesspaper-ngl backend" \
+      org.opencontainers.image.description="lesspaper-ngl API, worker, OCR, indexing, and database migrations" \
+      org.opencontainers.image.source="${LESSPAPER_NGL_SOURCE}" \
+      org.opencontainers.image.url="${LESSPAPER_NGL_SOURCE}" \
+      org.opencontainers.image.documentation="${LESSPAPER_NGL_SOURCE}/blob/main/docs/deployment/install.md" \
       org.opencontainers.image.licenses="AGPL-3.0-only" \
-      org.opencontainers.image.version="${FOLIUM_VERSION}" \
-      org.opencontainers.image.revision="${FOLIUM_BUILD_REVISION}" \
-      org.opencontainers.image.created="${FOLIUM_BUILD_DATE}"
+      org.opencontainers.image.version="${LESSPAPER_NGL_VERSION}" \
+      org.opencontainers.image.revision="${LESSPAPER_NGL_BUILD_REVISION}" \
+      org.opencontainers.image.created="${LESSPAPER_NGL_BUILD_DATE}"
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -23,14 +23,14 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK=True \
     PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT=0 \
     FLAGS_use_mkldnn=0 \
-    FOLIUM_VERSION=${FOLIUM_VERSION} \
-    FOLIUM_BUILD_REVISION=${FOLIUM_BUILD_REVISION} \
-    FOLIUM_BUILD_DATE=${FOLIUM_BUILD_DATE} \
-    FOLIUM_REPOSITORY_URL=${FOLIUM_SOURCE} \
-    FOLIUM_ISSUES_URL=${FOLIUM_SOURCE}/issues \
-    FOLIUM_DOCS_URL=${FOLIUM_SOURCE}/blob/main/docs/README.md \
-    FOLIUM_RELEASES_URL=${FOLIUM_SOURCE}/releases \
-    FOLIUM_LICENSE_URL=${FOLIUM_SOURCE}/blob/main/LICENSE
+    LESSPAPER_NGL_VERSION=${LESSPAPER_NGL_VERSION} \
+    LESSPAPER_NGL_BUILD_REVISION=${LESSPAPER_NGL_BUILD_REVISION} \
+    LESSPAPER_NGL_BUILD_DATE=${LESSPAPER_NGL_BUILD_DATE} \
+    LESSPAPER_NGL_REPOSITORY_URL=${LESSPAPER_NGL_SOURCE} \
+    LESSPAPER_NGL_ISSUES_URL=${LESSPAPER_NGL_SOURCE}/issues \
+    LESSPAPER_NGL_DOCS_URL=${LESSPAPER_NGL_SOURCE}/blob/main/docs/README.md \
+    LESSPAPER_NGL_RELEASES_URL=${LESSPAPER_NGL_SOURCE}/releases \
+    LESSPAPER_NGL_LICENSE_URL=${LESSPAPER_NGL_SOURCE}/blob/main/LICENSE
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
@@ -50,9 +50,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get install -y --no-install-recommends postgresql-client-17 \
     && rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -g 1000 folium && useradd -u 1000 -g folium -m -s /bin/bash folium \
+RUN groupadd -g 1000 lesspaper && useradd -u 1000 -g lesspaper -m -s /bin/bash lesspaper \
     && mkdir -p /documents /consume /export /backups /app /app/.paddleocr \
-    && chown -R folium:folium /documents /consume /export /backups /app
+    && chown -R lesspaper:lesspaper /documents /consume /export /backups /app
 
 COPY --from=ghcr.io/astral-sh/uv:0.8.22 /uv /usr/local/bin/uv
 
@@ -68,15 +68,15 @@ RUN uv pip install --system --no-cache \
         paddlepaddle==3.3.0 \
         -i https://www.paddlepaddle.org.cn/packages/stable/cpu/ \
     && uv pip install --system --no-cache -e ".[ocr]" \
-    && chown -R folium:folium /app
+    && chown -R lesspaper:lesspaper /app
 
 COPY docker/backend-entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh \
-    && chown folium:folium /app/entrypoint.sh
+    && chown lesspaper:lesspaper /app/entrypoint.sh
 
-USER folium
+USER lesspaper
 
 EXPOSE 8000
 
 ENTRYPOINT ["/bin/bash", "/app/entrypoint.sh"]
-CMD ["folium-api"]
+CMD ["lesspaper-ngl-api"]

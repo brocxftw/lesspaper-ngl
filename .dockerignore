@@ -1,4 +1,4 @@
-# Folium Docker ignore
+# lesspaper-ngl Docker ignore
 .git
 .github
 **/__pycache__

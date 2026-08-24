@@ -5,11 +5,19 @@ import { cn, formatDate } from "@/lib/utils";
 import type { Document } from "@/lib/api/types";
 import { RetrievalReadinessBadge } from "./RetrievalReadinessBadge";
 
-const RECENTS_COLLAPSED_KEY = "folium.documents.recentsCollapsed";
+const RECENTS_COLLAPSED_KEY = "lesspaper-ngl.documents.recentsCollapsed";
+const RECENTS_COLLAPSED_KEY_LEGACY = "folium.documents.recentsCollapsed";
 
 function readCollapsed(): boolean {
   try {
-    return localStorage.getItem(RECENTS_COLLAPSED_KEY) === "1";
+    let raw = localStorage.getItem(RECENTS_COLLAPSED_KEY);
+    if (raw == null) {
+      raw = localStorage.getItem(RECENTS_COLLAPSED_KEY_LEGACY);
+      if (raw != null) {
+        localStorage.setItem(RECENTS_COLLAPSED_KEY, raw);
+      }
+    }
+    return raw === "1";
   } catch {
     return false;
   }

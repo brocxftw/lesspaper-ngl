@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import pytest
 
-from folium.core.exceptions import ValidationError
-from folium.core.files import detect_mime, normalize_filename
-from folium.storage.service import StorageService
+from lesspaper_ngl.core.exceptions import ValidationError
+from lesspaper_ngl.core.files import detect_mime, normalize_filename
+from lesspaper_ngl.storage.service import StorageService
 
 
 def test_detect_mime_pdf() -> None:
@@ -28,8 +28,8 @@ def test_normalize_filename_strips_path_and_unsafe_chars() -> None:
 def test_split_relative_path() -> None:
     import pytest
 
-    from folium.core.exceptions import ValidationError
-    from folium.core.files import split_relative_path
+    from lesspaper_ngl.core.exceptions import ValidationError
+    from lesspaper_ngl.core.files import split_relative_path
 
     segs, name = split_relative_path("Finance/2024/invoice.pdf")
     assert segs == ["Finance", "2024"]

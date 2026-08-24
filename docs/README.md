@@ -1,4 +1,6 @@
-# Folium documentation
+# lesspaper-ngl documentation
+
+Folium has been renamed to lesspaper-ngl.
 
 Engineering docs derived from the **active codebase**. The root [README](../README.md) is the public front door; it must not outrun this tree.
 
@@ -12,7 +14,7 @@ CODE  →  docs/  →  README.md
 
 | Document | Description |
 |----------|-------------|
-| [Overview](architecture/overview.md) | What Folium is, boundaries, main flows (~10 min) |
+| [Overview](architecture/overview.md) | What lesspaper-ngl is, boundaries, main flows (~10 min) |
 | [Runtime](architecture/runtime-architecture.md) | Compose processes, ports, images vs source-build |
 | [Data model](architecture/data-model.md) | Entities, ownership, derived vs canonical |
 | [Document lifecycle](architecture/document-lifecycle.md) | Upload → Inbox → Process → index/embed → trash |
@@ -77,4 +79,4 @@ CODE  →  docs/  →  README.md
 | Document | Description |
 |----------|-------------|
 | [Repository inventory](audit/repository-inventory.md) | Evidence-backed codebase inventory |
-| [UI/UX audit](ui-ux/FOLIUM_UI_UX_AUDIT.md) | 2026-08-10 UI reverse-engineering; **stale** on Ask conversations |
+| [UI/UX audit](ui-ux/LESSPAPER_NGL_UI_UX_AUDIT.md) | 2026-08-10 UI reverse-engineering; **stale** on Ask conversations |

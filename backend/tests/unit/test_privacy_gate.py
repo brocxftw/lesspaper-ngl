@@ -6,9 +6,9 @@ import uuid
 
 import pytest
 
-from folium.ai.privacy import PrivacyGate
-from folium.core.exceptions import PrivacyViolationError
-from folium.models import AIProvider, AISettings, PrivacyMode, ProviderKind
+from lesspaper_ngl.ai.privacy import PrivacyGate
+from lesspaper_ngl.core.exceptions import PrivacyViolationError
+from lesspaper_ngl.models import AIProvider, AISettings, PrivacyMode, ProviderKind
 
 
 def _provider(*, is_local: bool) -> AIProvider:

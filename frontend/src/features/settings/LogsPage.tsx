@@ -55,7 +55,7 @@ export function LogsPage() {
     <SettingsContent width="wide" className="space-y-5">
       <SettingsPageHeader
         title="Logs"
-        description="Review what Folium has been doing and what went wrong."
+        description="Review what lesspaper-ngl has been doing and what went wrong."
         actions={
           <div className="flex flex-wrap gap-2">
             <Button variant="outline" onClick={() => void refetch()}>Refresh</Button>
@@ -64,7 +64,7 @@ export function LogsPage() {
               variant="ghost"
               className="text-danger hover:text-danger"
               onClick={() => {
-                if (window.confirm("Clear all persisted Folium application logs? This cannot be undone.")) clear.mutate();
+                if (window.confirm("Clear all persisted lesspaper-ngl application logs? This cannot be undone.")) clear.mutate();
               }}
               disabled={clear.isPending}
             >

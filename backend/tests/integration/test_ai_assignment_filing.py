@@ -9,8 +9,8 @@ from httpx import AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from folium.models import AIProvider, Job, JobStatus, JobType
-from folium.workers.processor import process_text_extraction
+from lesspaper_ngl.models import AIProvider, Job, JobStatus, JobType
+from lesspaper_ngl.workers.processor import process_text_extraction
 
 
 async def _assign_local_indexing(auth_client: AsyncClient, db_session: AsyncSession) -> str:

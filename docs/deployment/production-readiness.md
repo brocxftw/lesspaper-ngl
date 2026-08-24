@@ -19,7 +19,7 @@ docker compose up -d
 Ready with caveats
 ```
 
-**Justification:** Operators can install with the interactive installer, or from GitHub Release Compose + `env.example`, and pull `ghcr.io/brocxftw/folium-backend` / `folium-web` without cloning or building Folium. API and worker share one backend image. Secrets are not shipped as usable production passwords. Postgres is not published on the host. Registration defaults off in the example. AI-down does not fail `/health`. Remaining caveats: **linux/amd64 only**, GHCR packages must be set **public** after first publish, first OCR downloads models, no browser e2e suite, Alembic is forward-only, and anonymous GHCR pull is unverified until the first tagged publish on `main`.
+**Justification:** Operators can install with the interactive installer, or from GitHub Release Compose + `env.example`, and pull `ghcr.io/brocxftw/lesspaper-ngl-backend` / `lesspaper-ngl-web` without cloning or building lesspaper-ngl. API and worker share one backend image. Secrets are not shipped as usable production passwords. Postgres is not published on the host. Registration defaults off in the example. AI-down does not fail `/health`. Remaining caveats: **linux/amd64 only**, GHCR packages must be set **public** after first publish, first OCR downloads models, no browser e2e suite, Alembic is forward-only, and anonymous GHCR pull is unverified until the first tagged publish on `main`.
 
 Until the first `v*` tag after merge succeeds, packages may not exist yet — the **workflow is present**; images are not automatically backfilled for older tags.
 
@@ -34,7 +34,7 @@ Until the first `v*` tag after merge succeeds, packages may not exist yet — th
 | Published image workflow | `.github/workflows/publish-images.yml` on `v*` |
 | Public Compose `image:` | `docker-compose.yml` |
 | Contributor `build:` | `compose.dev.yaml` + Makefile |
-| `FOLIUM_VERSION` at image build | Dockerfile ARG/ENV + OCI labels |
+| `LESSPAPER_NGL_VERSION` at image build | Dockerfile ARG/ENV + OCI labels |
 | Postgres password | `POSTGRES_PASSWORD` required interpolation |
 | `group_add: 10000` | Removed from public Compose |
 | DB host port | Dev overlay only |
@@ -63,11 +63,11 @@ Until the first `v*` tag after merge succeeds, packages may not exist yet — th
 
 | Question | After this work |
 |----------|-----------------|
-| 1. Obtain Folium | Yes — Release assets + GHCR (once packages are public and a tag has published) |
+| 1. Obtain lesspaper-ngl | Yes — Release assets + GHCR (once packages are public and a tag has published) |
 | 2. Configure it | Yes — `.env`; Postgres password required |
 | 3. Start it | Yes — `docker compose up -d` pulls images |
 | 4. Retain data across upgrades | Yes for volume + binds; migrations run on api start |
-| 5. Update it | `FOLIUM_VERSION=…` then `pull` + `up -d` |
+| 5. Update it | `LESSPAPER_NGL_VERSION=…` then `pull` + `up -d` |
 | 6. Diagnose failed startup | Logs + `/health`; worker healthcheck and `/health/worker` |
 | 7. Use without AI | **Yes** |
 | 8. Back up persistent data | Documented; no first-class backup tool |
@@ -100,4 +100,4 @@ Sources: package metadata / upstream licence files commonly published with these
 | nginx | `web` image | BSD-2-like | nginx.org | Routine |
 | Node / Python base images | Runtime | Various | Image OS | Routine |
 
-Folium’s project licence is **GNU AGPL v3.0** (`LICENSE` at the repository root), chosen to align with PyMuPDF’s typical AGPL-3.0 terms. That does **not** replace review of other dependency licences (Paddle wheels, base images). This is not legal advice.
+lesspaper-ngl’s project licence is **GNU AGPL v3.0** (`LICENSE` at the repository root), chosen to align with PyMuPDF’s typical AGPL-3.0 terms. That does **not** replace review of other dependency licences (Paddle wheels, base images). This is not legal advice.

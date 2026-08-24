@@ -7,8 +7,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from folium.ocr import paddle_engine
-from folium.ocr.paddle_engine import (
+from lesspaper_ngl.ocr import paddle_engine
+from lesspaper_ngl.ocr.paddle_engine import (
     clear_engine_cache,
     join_rec_texts,
     map_ocr_language,

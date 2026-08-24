@@ -9,7 +9,7 @@ import pytest
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from folium.models import (
+from lesspaper_ngl.models import (
     Document,
     Folder,
     FolderKind,
@@ -19,7 +19,7 @@ from folium.models import (
     ProcessingStatus,
     User,
 )
-from folium.services import jobs as job_service
+from lesspaper_ngl.services import jobs as job_service
 
 
 async def _owner_and_folder(db_session: AsyncSession) -> tuple[uuid.UUID, uuid.UUID]:

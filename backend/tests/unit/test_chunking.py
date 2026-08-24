@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from folium.services.chunking import (
+from lesspaper_ngl.services.chunking import (
     MAX_TOKENS,
     MIN_TOKENS,
     TARGET_MAX_TOKENS,

@@ -7,8 +7,8 @@ from pathlib import Path
 
 import pytest
 
-from folium.ocr.subprocess_client import OcrSubprocessError, run_ocr_subprocess
-from folium.ocr.subprocess_protocol import (
+from lesspaper_ngl.ocr.subprocess_client import OcrSubprocessError, run_ocr_subprocess
+from lesspaper_ngl.ocr.subprocess_protocol import (
     OcrDoneEvent,
     OcrErrorEvent,
     OcrPageEvent,
@@ -88,7 +88,7 @@ def test_run_ocr_subprocess_streams_pages(
         def read(self):
             return ""
 
-    monkeypatch.setattr("folium.ocr.subprocess_client.subprocess.Popen", _FakeProc)
+    monkeypatch.setattr("lesspaper_ngl.ocr.subprocess_client.subprocess.Popen", _FakeProc)
 
     progress: list[tuple[int, int]] = []
     pages: list[tuple[int, str]] = []
@@ -142,7 +142,7 @@ def test_run_ocr_subprocess_raises_on_error_event(
         def kill(self):
             pass
 
-    monkeypatch.setattr("folium.ocr.subprocess_client.subprocess.Popen", _FakeProc)
+    monkeypatch.setattr("lesspaper_ngl.ocr.subprocess_client.subprocess.Popen", _FakeProc)
 
     with pytest.raises(OcrSubprocessError, match="paddle failed"):
         run_ocr_subprocess(mode="image", path=image, language="eng")

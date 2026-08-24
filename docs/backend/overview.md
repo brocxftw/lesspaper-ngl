@@ -1,6 +1,6 @@
 # Backend overview
 
-The backend is the Python package `folium` (FastAPI, SQLAlchemy 2 asyncio, Alembic, Pydantic Settings). Python **≥ 3.13**. OCR extra (`paddleocr`) is installed in Docker, not in default CI.
+The backend is the Python package `lesspaper_ngl` (FastAPI, SQLAlchemy 2 asyncio, Alembic, Pydantic Settings). Python **≥ 3.13**. OCR extra (`paddleocr`) is installed in Docker, not in default CI.
 
 ---
 
@@ -42,7 +42,7 @@ OCR / chunking / embeddings / AI adapters
 | Area | Location |
 |------|----------|
 | App factory, CORS, logging middleware | `folium.main` |
-| Settings | `folium.core.config` |
+| Settings | `lesspaper_ngl.core.config` |
 | Auth | `folium.auth` |
 | HTTP API | `folium.api` |
 | ORM | `folium.models` |
@@ -53,7 +53,7 @@ OCR / chunking / embeddings / AI adapters
 | Job handlers | `folium.workers.processor` |
 | CLI | `folium.cli` (`reset-admin-password`) |
 
-Entrypoints from `pyproject.toml`: `folium`, `folium-api`, `folium-worker`.
+Entrypoints from `pyproject.toml`: `lesspaper_ngl`, `lesspaper-ngl-api`, `lesspaper-ngl-worker`.
 
 ---
 

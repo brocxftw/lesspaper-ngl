@@ -39,7 +39,7 @@ Privacy: `PrivacyGate.assert_can_embed`.
 
 ---
 
-## Ask Folium
+## Ask lesspaper-ngl
 
 ```text
 question
@@ -87,4 +87,4 @@ Effective context = min(profile, provider `context_window`) minus safety margin.
 
 ## Principle check
 
-Folium **can** run with all providers unset: ingest, OCR, Inbox, Process, keyword search, organisation. Ask, semantic search, suggestions, and summaries will not run. That matches “document management first” with the naming exceptions listed in the [inventory](../audit/repository-inventory.md).
+lesspaper-ngl **can** run with all providers unset: ingest, OCR, Inbox, Process, keyword search, organisation. Ask, semantic search, suggestions, and summaries will not run. That matches “document management first” with the naming exceptions listed in the [inventory](../audit/repository-inventory.md).

@@ -10,17 +10,17 @@ import pytest
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from folium.ai.base import EmbeddingResult
-from folium.ai.embeddings import pad_embedding
-from folium.models import (
+from lesspaper_ngl.ai.base import EmbeddingResult
+from lesspaper_ngl.ai.embeddings import pad_embedding
+from lesspaper_ngl.models import (
     ChunkEmbeddingStatus,
     Document,
     DocumentChunk,
     JobStatus,
     JobType,
 )
-from folium.services.embedding_pipeline import process_document_embeddings
-from folium.services.jobs import enqueue_job
+from lesspaper_ngl.services.embedding_pipeline import process_document_embeddings
+from lesspaper_ngl.services.jobs import enqueue_job
 
 
 def _make_chunk(
@@ -118,11 +118,11 @@ async def test_embedding_resume_skips_completed_chunks(
 
     with (
         patch(
-            "folium.services.embedding_pipeline.resolve_assignment",
+            "lesspaper_ngl.services.embedding_pipeline.resolve_assignment",
             AsyncMock(return_value=assignment),
         ),
         patch(
-            "folium.services.embedding_pipeline.ensure_ai_settings",
+            "lesspaper_ngl.services.embedding_pipeline.ensure_ai_settings",
             AsyncMock(return_value=SimpleNamespace(
                 active_embedding_provider=None,
                 active_embedding_model=None,
@@ -132,10 +132,10 @@ async def test_embedding_resume_skips_completed_chunks(
                 block_remote_ai=False,
             )),
         ),
-        patch("folium.services.embedding_pipeline.PrivacyGate") as privacy_cls,
-        patch("folium.services.embedding_pipeline.assert_ai_quota", AsyncMock()),
-        patch("folium.services.embedding_pipeline.get_adapter", return_value=adapter),
-        patch("folium.services.embedding_pipeline.record_usage", AsyncMock()),
+        patch("lesspaper_ngl.services.embedding_pipeline.PrivacyGate") as privacy_cls,
+        patch("lesspaper_ngl.services.embedding_pipeline.assert_ai_quota", AsyncMock()),
+        patch("lesspaper_ngl.services.embedding_pipeline.get_adapter", return_value=adapter),
+        patch("lesspaper_ngl.services.embedding_pipeline.record_usage", AsyncMock()),
     ):
         privacy_cls.return_value.assert_can_embed = MagicMock()
         result = await process_document_embeddings(db_session, job)
@@ -220,11 +220,11 @@ async def test_embedding_idempotent_re_run(
 
     with (
         patch(
-            "folium.services.embedding_pipeline.resolve_assignment",
+            "lesspaper_ngl.services.embedding_pipeline.resolve_assignment",
             AsyncMock(return_value=assignment),
         ),
         patch(
-            "folium.services.embedding_pipeline.ensure_ai_settings",
+            "lesspaper_ngl.services.embedding_pipeline.ensure_ai_settings",
             AsyncMock(
                 return_value=SimpleNamespace(
                     active_embedding_provider=None,
@@ -236,10 +236,10 @@ async def test_embedding_idempotent_re_run(
                 )
             ),
         ),
-        patch("folium.services.embedding_pipeline.PrivacyGate") as privacy_cls,
-        patch("folium.services.embedding_pipeline.assert_ai_quota", AsyncMock()),
-        patch("folium.services.embedding_pipeline.get_adapter", return_value=adapter),
-        patch("folium.services.embedding_pipeline.record_usage", AsyncMock()),
+        patch("lesspaper_ngl.services.embedding_pipeline.PrivacyGate") as privacy_cls,
+        patch("lesspaper_ngl.services.embedding_pipeline.assert_ai_quota", AsyncMock()),
+        patch("lesspaper_ngl.services.embedding_pipeline.get_adapter", return_value=adapter),
+        patch("lesspaper_ngl.services.embedding_pipeline.record_usage", AsyncMock()),
     ):
         privacy_cls.return_value.assert_can_embed = MagicMock()
         first = await process_document_embeddings(db_session, job)

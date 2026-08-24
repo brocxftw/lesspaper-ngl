@@ -13,7 +13,7 @@ Evidence labels used throughout this corpus: **Confirmed**, **Configuration-depe
 folium/
 ├── backend/                 Python FastAPI package + Alembic + tests
 │   ├── alembic/versions/    Schema migrations 001–011
-│   ├── src/folium/          Application code
+│   ├── src/lesspaper_ngl/          Application code
 │   └── tests/               unit / integration / eval
 ├── frontend/                Vite + React SPA
 │   └── src/                 routes, workspaces, domain UI, API client
@@ -29,7 +29,7 @@ folium/
 └── README.md                Public front door (derived from docs/)
 ```
 
-Not architectural source: `notes.md`, `documents-workspace-redesign.plan.md`, `.cursor/`, `docs/ui-ux/FOLIUM_UI_UX_AUDIT.md` (secondary; dated 2026-08-10 and stale on Ask conversations).
+Not architectural source: `notes.md`, `documents-workspace-redesign.plan.md`, `.cursor/`, `docs/ui-ux/LESSPAPER_NGL_UI_UX_AUDIT.md` (secondary; dated 2026-08-10 and stale on Ask conversations).
 
 `scripts/` exists and is empty (**Confirmed**). Project licence: GNU AGPL v3.0 (`LICENSE`) (**Confirmed**).
 
@@ -42,7 +42,7 @@ Not architectural source: `notes.md`, `documents-workspace-redesign.plan.md`, `.
 | Browser SPA | React UI; talks HTTP to API | `frontend/src/App.tsx`, nginx proxy |
 | `web` | nginx serving built SPA + reverse proxy `/api` `/health` | `docker/Dockerfile.frontend`, `docker/nginx.conf` |
 | `api` | FastAPI REST, sessions, enqueue jobs | `folium.main:app` |
-| `worker` | Claims jobs, consume poll, trash purge, AI probes | `folium-worker` |
+| `worker` | Claims jobs, consume poll, trash purge, AI probes | `lesspaper-ngl-worker` |
 | PostgreSQL + pgvector | Canonical metadata, FTS, vectors, jobs | `pgvector/pgvector:pg17` |
 | Host bind mounts | Originals, consume, export, Paddle cache | Compose volumes |
 | Optional AI providers | HTTP adapters; not required for health | `folium.ai.*` |
@@ -117,9 +117,9 @@ Ownership: library entities keyed by `owner_id`. Unique `(owner_id, checksum)` o
 | Service | Image | Built or pulled |
 |---------|-------|-----------------|
 | `db` | `pgvector/pgvector:pg17` | Pulled |
-| `api` | `ghcr.io/brocxftw/folium-backend` | Pulled (public); built via `compose.dev.yaml` |
-| `worker` | same backend image, `command: folium-worker` | Same as api |
-| `web` | `ghcr.io/brocxftw/folium-web` | Pulled (public); built via `compose.dev.yaml` |
+| `api` | `ghcr.io/brocxftw/lesspaper-ngl-backend` | Pulled (public); built via `compose.dev.yaml` |
+| `worker` | same backend image, `command: lesspaper-ngl-worker` | Same as api |
+| `web` | `ghcr.io/brocxftw/lesspaper-ngl-web` | Pulled (public); built via `compose.dev.yaml` |
 
 Public Compose uses `image:` only. GHCR publish is `.github/workflows/publish-images.yml` on `v*` tags. Postgres is not published on the host in public Compose; `5433` is the development overlay. Extra GIDs belong in an override file, not the public Compose.
 
@@ -141,7 +141,7 @@ Public Compose uses `image:` only. GHCR publish is `.github/workflows/publish-im
 |----------|--------|
 | Root `README.md` (pre-rewrite) | Useful but stale on Settings, Ask multi-turn, AI profile token numbers, consume nested paths |
 | `ubiquitous-language.md` | Canonical vocabulary; some entries lagged code (Ask conversations) |
-| `docs/ui-ux/FOLIUM_UI_UX_AUDIT.md` | UI reverse-engineering 2026-08-10; Ask described as single-turn only |
+| `docs/ui-ux/LESSPAPER_NGL_UI_UX_AUDIT.md` | UI reverse-engineering 2026-08-10; Ask described as single-turn only |
 | `backend/README.md` | Pointer only |
 | `backend/pyproject.toml` description | Says “AI-native” — contradicts product principle |
 
@@ -153,11 +153,11 @@ Public Compose uses `image:` only. GHCR publish is `.github/workflows/publish-im
 
 Works without any AI provider (**Confirmed**): upload/consume, local OCR/text extract, Inbox/Process, folders/tags, FTS keyword search, Jobs, Trash, users, quotas (storage).
 
-Requires AI when used: Ask Folium (chat assignment), embeddings/semantic/hybrid, filing suggestions (`auto_tagging` + indexing-role model), summaries (`auto_enrichment`).
+Requires AI when used: Ask lesspaper-ngl (chat assignment), embeddings/semantic/hybrid, filing suggestions (`auto_tagging` + indexing-role model), summaries (`auto_enrichment`).
 
 Exceptions / naming:
 
 1. Package metadata and `__init__` still say “AI-native”.
 2. `AIWorkloadRole.INDEXING` is a chat-like role for filing/summary, not chunk indexing.
 3. Search `hybrid`/`semantic` will call the embedding provider if assigned (retrieval AI, not chat).
-4. Worker periodically probes assigned providers; failure does not mark Folium unhealthy.
+4. Worker periodically probes assigned providers; failure does not mark lesspaper-ngl unhealthy.

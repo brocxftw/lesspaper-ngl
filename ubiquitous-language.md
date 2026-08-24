@@ -1,4 +1,4 @@
-# Folium ubiquitous language
+# lesspaper-ngl ubiquitous language
 
 Shared vocabulary for product, design, engineering, and operations.
 
@@ -14,7 +14,7 @@ Use these terms consistently in UI copy, API schemas, tickets, and docs. Prefer 
 |-------|---------|
 | **Canonical** | Preferred spoken/written term |
 | **Also** | Code identifiers, UI labels, or historical aliases |
-| **Means** | The Folium meaning (not the everyday English one) |
+| **Means** | The lesspaper-ngl meaning (not the everyday English one) |
 | **Not** | Common confusion to avoid |
 
 Terms marked *planned* are intentionally absent from the product until schema/API work is approved.
@@ -23,8 +23,9 @@ Terms marked *planned* are intentionally absent from the product until schema/AP
 
 ## 1. Product & philosophy
 
-### Folium
-**Means:** Self-hosted, AI-optional document management for private deployments (homelab, NAS-backed Docker). Organisation and evidence come first; AI is optional enhancement.
+### lesspaper-ngl
+**Also:** Folium (former product name)
+**Means:** Self-hosted, AI-optional document management for private deployments (homelab, NAS-backed Docker) — for people who want less paper, ngl. Organisation and evidence come first; AI is optional enhancement. Folium has been renamed to lesspaper-ngl.
 
 ### Library
 **Also:** entire library, documents corpus  
@@ -41,7 +42,7 @@ Terms marked *planned* are intentionally absent from the product until schema/AP
 **Means:** Finding evidence with keyword, semantic, or hybrid search — without calling a chat model.  
 **Not:** Ask / generation.
 
-### Ask Folium
+### Ask lesspaper-ngl
 **Also:** Ask, RAG, Q&A, document ask  
 **Means:** User-triggered reasoning over retrieved evidence with validated citations. Workspace Ask (`POST /api/ask`) is one request → one answer with no persisted thread. Document Ask persists a conversation (one per owner+document) and may send prior turns within the history token budget. Streaming is not implemented.  
 **Not:** Automatic background summarisation or silent LLM calls from search.
@@ -72,7 +73,7 @@ Terms marked *planned* are intentionally absent from the product until schema/AP
 **Means:** Can manage users, storage settings, AI providers/policy, and password resets.
 
 ### Session
-**Means:** Server-side cookie session. State-changing API calls require a **CSRF token**.
+**Means:** Server-side cookie session (cookie name default `folium_session`; CSRF cookie `folium_csrf` — intentional persistence). State-changing API calls require a **CSRF token**.
 
 ### Invite
 **Means:** Admin-created registration token, optionally carrying default quotas.
@@ -137,7 +138,7 @@ Terms marked *planned* are intentionally absent from the product until schema/AP
 **Means:**
 - **Created date** — business/document date of record  
 - **Effective date** — optional secondary business date  
-- **Added date** — when Folium ingested the document  
+- **Added date** — when lesspaper-ngl ingested the document  
 - **Modified date** — last metadata/content change  
 
 ### Archive serial
@@ -286,7 +287,7 @@ Terms marked *planned* are intentionally absent from the product until schema/AP
 **Means:** `text_extraction`, `ocr`, `thumbnail`, `indexing`, `embedding`, `summary`, `metadata_suggestion` (plus reserved `classification`).
 
 ### Worker
-**Also:** `folium-worker`  
+**Also:** `lesspaper-ngl-worker`  
 **Means:** Process that claims and runs jobs (OCR, indexing, embeddings, consume poll, etc.).
 
 ### Ingestion history
@@ -442,7 +443,7 @@ Terms marked *planned* are intentionally absent from the product until schema/AP
 
 ### No training / Zero retention
 **Means:** Provider *policy claims* shown in settings.  
-**Not:** Folium guarantees — Folium enforces **privacy mode** in code; provider flags are not proof.
+**Not:** lesspaper-ngl guarantees — lesspaper-ngl enforces **privacy mode** in code; provider flags are not proof.
 
 ### Chat / Embedding / Vision roles
 **Means:** Separate provider assignments on AI settings for each capability.
@@ -458,7 +459,7 @@ Terms marked *planned* are intentionally absent from the product until schema/AP
 **Means:** Policy flags that enable worker AI filing suggestions and related enrichment during preflight.
 
 ### Enforcement note
-**Means:** Explicit product copy that Folium enforces privacy in application code; provider retention claims are not Folium guarantees.
+**Means:** Explicit product copy that lesspaper-ngl enforces privacy in application code; provider retention claims are not lesspaper-ngl guarantees.
 
 ---
 
@@ -473,7 +474,7 @@ Terms marked *planned* are intentionally absent from the product until schema/AP
 **Means:** Library shell — explorer, header search, results (list/grid), modal viewer, AI drawer. Primary surface for find / organise / inspect / understand.
 
 ### Documents header
-**Means:** Title, dominant retrieval field, mode/coverage, Ask Folium, upload.
+**Means:** Title, dominant retrieval field, mode/coverage, Ask lesspaper-ngl, upload.
 
 ### Explorer sidebar
 **Also:** document explorer  
@@ -514,7 +515,7 @@ Terms marked *planned* are intentionally absent from the product until schema/AP
 
 ### AI drawer
 **Also:** AIChatDrawer, Ask panel  
-**Means:** Right-side sheet for scoped, single-turn Ask Folium with citations.
+**Means:** Right-side sheet for scoped, single-turn Ask lesspaper-ngl with citations.
 
 ### Search workspace / Ask workspace
 **Means:** Standalone `/search` and `/ask` routes kept for parity with the Documents-integrated workflow.
@@ -546,14 +547,14 @@ Terms marked *planned* are intentionally absent from the product until schema/AP
 
 ### Backup
 **Also:** `.folium` bundle  
-**Means:** A versioned recoverable snapshot of Folium canonical state (database dump + referenced originals + avatars).
+**Means:** A versioned recoverable snapshot of lesspaper-ngl canonical state (database dump + referenced originals + avatars).
 
 ### Backup repository
 **Also:** `/backups`  
-**Means:** Mounted filesystem directory where Folium writes backup bundles. Folium does not mount NFS/CIFS itself.
+**Means:** Mounted filesystem directory where lesspaper-ngl writes backup bundles. lesspaper-ngl does not mount NFS/CIFS itself.
 
 ### Restore
-**Means:** Replacement of Folium canonical state from a verified compatible backup.  
+**Means:** Replacement of lesspaper-ngl canonical state from a verified compatible backup.  
 **Not:** Document import, or Trash restore of a single document.
 
 ### Storage key
@@ -564,7 +565,7 @@ Terms marked *planned* are intentionally absent from the product until schema/AP
 **Means:** Writability of documents / consume / export mounts.
 
 ### NFS (host-mounted)
-**Means:** Folium never mounts NFS itself. The Docker host bind-mounts NFS (or local dirs) into containers. PostgreSQL stays on local Docker volume storage.
+**Means:** lesspaper-ngl never mounts NFS itself. The Docker host bind-mounts NFS (or local dirs) into containers. PostgreSQL stays on local Docker volume storage.
 
 ---
 
@@ -576,7 +577,7 @@ Terms marked *planned* are intentionally absent from the product until schema/AP
 4. **Logical folder move ≠ physical file move.**
 5. **Trash ≠ Archive.** Trash is soft-delete with purge; archive is a filter flag.
 6. **AI suggestions are non-canonical** until accepted; Process applies filing.
-7. **Provider no-training flags ≠ Folium privacy enforcement.**
+7. **Provider no-training flags ≠ lesspaper-ngl privacy enforcement.**
 8. **Ingestion history ≠ Activity feed.** Jobs on a document are technical history, not social activity.
 9. **Evidence search (non-empty `q`) ≠ Browse (empty `q`).**
 10. **Search-result Ask requires a typed snapshot** (query + mode + filters), not query text alone.
@@ -585,8 +586,8 @@ Terms marked *planned* are intentionally absent from the product until schema/AP
 
 ## 13. Alphabetical index
 
-Added date · Admin · AI drawer · AI monthly request quota · AI policy · AI profile · AI provider · AI suggestion · Ask Folium · Ask ready · Ask scope · Archive serial · Archived · Auto-enrichment · Auto-tagging · Browse · Bulk action · Checksum · Citation · Confirm remote · Consume · Content-addressed storage · Context budget · Correspondent · Created date · CSRF token · Custom fields · Document · Document chunk · Document page · Document total · Document type · Documents path · Documents root · Documents workspace · Duplicate · Effective date · Effective mode · Embedding · Embedding space · Enforcement note · Evidence search · Explorer sidebar · Export · Extracted text · Filter chips · Folder · Folder kind · Folium · Hybrid search · Include descendants · Inbox · Inbox status · Indexing · Ingestion · Ingestion history · Insufficient evidence · Invite · Is local · Job · Job type · Keyword search · Keyword ready · Layout mode · Library · Library view · Logical folder · Match total · Metadata · Metadata suggestion · Modified date · Needs review · NFS · Notes · OCR · OCR tab · Original filename · Overview · Owner · Passage · Path cache · Pending folder path · Preflight · Preview · Privacy mode · Process · Processing status · Purge · Quick Access · Recently added · Retrieval · Retrieval readiness · Reprocess · Retention days · Scope readiness · Search hit · Search match · Search scope snapshot · Search vector · Search workspace · Semantic available · Semantic coverage · Semantic ready · Semantic search · Session · Single-turn · Snippet · Starred *(planned)* · Storage health · Storage key · Storage quota · Suggestion status · Summary · Tag · Text extraction · Thumbnail · Title · Trash · Unprocessed · Usage · User · Viewer · Worker
+Added date · Admin · AI drawer · AI monthly request quota · AI policy · AI profile · AI provider · AI suggestion · Ask lesspaper-ngl · Ask ready · Ask scope · Archive serial · Archived · Auto-enrichment · Auto-tagging · Browse · Bulk action · Checksum · Citation · Confirm remote · Consume · Content-addressed storage · Context budget · Correspondent · Created date · CSRF token · Custom fields · Document · Document chunk · Document page · Document total · Document type · Documents path · Documents root · Documents workspace · Duplicate · Effective date · Effective mode · Embedding · Embedding space · Enforcement note · Evidence search · Explorer sidebar · Export · Extracted text · Filter chips · Folder · Folder kind · lesspaper-ngl · Hybrid search · Include descendants · Inbox · Inbox status · Indexing · Ingestion · Ingestion history · Insufficient evidence · Invite · Is local · Job · Job type · Keyword search · Keyword ready · Layout mode · Library · Library view · Logical folder · Match total · Metadata · Metadata suggestion · Modified date · Needs review · NFS · Notes · OCR · OCR tab · Original filename · Overview · Owner · Passage · Path cache · Pending folder path · Preflight · Preview · Privacy mode · Process · Processing status · Purge · Quick Access · Recently added · Retrieval · Retrieval readiness · Reprocess · Retention days · Scope readiness · Search hit · Search match · Search scope snapshot · Search vector · Search workspace · Semantic available · Semantic coverage · Semantic ready · Semantic search · Session · Single-turn · Snippet · Starred *(planned)* · Storage health · Storage key · Storage quota · Suggestion status · Summary · Tag · Text extraction · Thumbnail · Title · Trash · Unprocessed · Usage · User · Viewer · Worker
 
 ---
 
-*Source of truth: Folium codebase and product plan. When UI labels and API identifiers differ, keep both in this dictionary and prefer the canonical prose term in conversation.*
+*Source of truth: lesspaper-ngl codebase and product plan. When UI labels and API identifiers differ, keep both in this dictionary and prefer the canonical prose term in conversation.*

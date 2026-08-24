@@ -1,6 +1,6 @@
 # Architecture overview
 
-Folium is a **self-hosted document management system**. Organisation, OCR, and keyword search are core. Embeddings, filing suggestions, summaries, and Ask Folium are **optional enhancements** that run only when administrators configure providers and policy allows them.
+lesspaper-ngl is a **self-hosted document management system**. Organisation, OCR, and keyword search are core. Embeddings, filing suggestions, summaries, and Ask lesspaper-ngl are **optional enhancements** that run only when administrators configure providers and policy allows them.
 
 A new contributor should treat this document as the map; deeper pages in `docs/` are the atlas.
 
@@ -8,9 +8,9 @@ A new contributor should treat this document as the map; deeper pages in `docs/`
 
 ## Purpose
 
-Folium lets an **Owner** ingest files (upload or consume folder), extract text locally, review them in **Inbox**, **Process** them into the **Library**, organise them with **logical folders** and tags, search evidence, and optionally ask questions with **validated citations**.
+lesspaper-ngl lets an **Owner** ingest files (upload or consume folder), extract text locally, review them in **Inbox**, **Process** them into the **Library**, organise them with **logical folders** and tags, search evidence, and optionally ask questions with **validated citations**.
 
-It is designed to run as Docker Compose on a homelab or NAS-backed host. PostgreSQL stays on a local Docker volume. Document blobs are bind-mounted (often NFS mounted **on the Docker host**, never by Folium itself).
+It is designed to run as Docker Compose on a homelab or NAS-backed host. PostgreSQL stays on a local Docker volume. Document blobs are bind-mounted (often NFS mounted **on the Docker host**, never by lesspaper-ngl itself).
 
 ---
 
@@ -109,7 +109,7 @@ Evidence search (non-empty q)
 
 If embeddings are unavailable, hybrid/semantic **falls back to keyword** (`effective_mode`).
 
-### Ask Folium
+### Ask lesspaper-ngl
 
 **Workspace Ask** (`POST /api/ask`) — **Confirmed** single request/response; no persisted conversation:
 

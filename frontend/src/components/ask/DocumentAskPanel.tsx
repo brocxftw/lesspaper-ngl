@@ -335,7 +335,7 @@ export function DocumentAskPanel({
       <div className={cn("flex h-full flex-col p-4", className)}>
         <PanelHeader onClose={onClose} />
         <p className="mt-6 text-sm text-text-secondary">
-          Ask Folium is currently unavailable. The document remains fully accessible.
+          Ask lesspaper-ngl is currently unavailable. The document remains fully accessible.
         </p>
       </div>
     );
@@ -403,7 +403,7 @@ export function DocumentAskPanel({
           <div className="rounded-xl border border-surface-border bg-surface p-3.5">
             <div className="mb-2 flex items-center gap-2 text-xs text-text-muted">
               <Leaf className="h-3.5 w-3.5 text-accent" />
-              Folium
+              lesspaper-ngl
             </div>
             <p className="flex items-center gap-2 text-sm text-text-secondary" aria-live="polite">
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -620,8 +620,8 @@ function PanelHeader({
             size="icon"
             variant="ghost"
             className="h-8 w-8"
-            aria-label="Close Ask Folium"
-            title="Close Ask Folium"
+            aria-label="Close Ask lesspaper-ngl"
+            title="Close Ask lesspaper-ngl"
             onClick={onClose}
           >
             <X className="h-4 w-4" />
@@ -681,7 +681,7 @@ function MessageCard({
           ) : (
             <>
               <Leaf className="h-3.5 w-3.5 text-accent" />
-              Folium
+              lesspaper-ngl
             </>
           )}
         </span>

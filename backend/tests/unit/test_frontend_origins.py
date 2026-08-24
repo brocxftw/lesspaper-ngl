@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from folium.core.config import Settings
+from lesspaper_ngl.core.config import Settings
 
 
 def test_frontend_origins_comma_separated() -> None:
@@ -25,38 +25,38 @@ def test_frontend_origins_dedupes() -> None:
 
 def test_use_secure_cookies_https_origin() -> None:
     settings = Settings(
-        FOLIUM_ENV="production",
-        FRONTEND_ORIGIN="https://folium.example.com,http://192.168.1.1:9398",
+        env="production",
+        FRONTEND_ORIGIN="https://app.example.com,http://192.168.1.1:9398",
     )
     assert settings.use_secure_cookies is True
 
 
 def test_use_secure_cookies_http_only() -> None:
-    settings = Settings(FOLIUM_ENV="production", FRONTEND_ORIGIN="http://192.168.1.1:9398")
+    settings = Settings(env="production", FRONTEND_ORIGIN="http://192.168.1.1:9398")
     assert settings.use_secure_cookies is False
 
 
 def test_use_secure_cookies_explicit_override() -> None:
     settings = Settings(
-        FOLIUM_ENV="production",
+        env="production",
         FRONTEND_ORIGIN="http://192.168.1.1:9398",
-        FOLIUM_SECURE_COOKIES=True,
+        secure_cookies=True,
     )
     assert settings.use_secure_cookies is True
 
 
 def test_use_secure_cookies_dev() -> None:
     settings = Settings(
-        FOLIUM_ENV="development",
-        FRONTEND_ORIGIN="https://folium.example.com",
-        FOLIUM_SECURE_COOKIES=True,
+        env="development",
+        FRONTEND_ORIGIN="https://app.example.com",
+        secure_cookies=True,
     )
     assert settings.use_secure_cookies is False
 
 
 @pytest.fixture(autouse=True)
 def _clear_settings_cache() -> None:
-    from folium.core.config import get_settings
+    from lesspaper_ngl.core.config import get_settings
 
     get_settings.cache_clear()
     yield
@@ -65,6 +65,14 @@ def _clear_settings_cache() -> None:
 
 def test_settings_from_env(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("FRONTEND_ORIGIN", "https://a.test,http://b.test")
-    monkeypatch.setenv("FOLIUM_ENV", "production")
+    monkeypatch.setenv("LESSPAPER_NGL_ENV", "production")
     settings = Settings()
     assert settings.frontend_origins == ["https://a.test", "http://b.test"]
+    assert settings.env == "production"
+
+
+def test_settings_accepts_legacy_folium_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("LESSPAPER_NGL_ENV", raising=False)
+    monkeypatch.setenv("FOLIUM_ENV", "production")
+    settings = Settings()
+    assert settings.env == "production"

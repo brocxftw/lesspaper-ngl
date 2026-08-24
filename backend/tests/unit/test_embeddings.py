@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from folium.ai.embeddings import EMBEDDING_STORAGE_DIM, pad_embedding
+from lesspaper_ngl.ai.embeddings import EMBEDDING_STORAGE_DIM, pad_embedding
 
 
 def test_pad_embedding_extends_with_zeros() -> None:

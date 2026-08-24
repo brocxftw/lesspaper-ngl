@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# MCP UAT against a running Folium instance (API + worker + UI).
+# MCP UAT against a running lesspaper-ngl instance (API + worker + UI).
 # Usage:
 #   ./scripts/uat-mcp.sh
 #   ORIGIN=http://localhost:8000 ./scripts/uat-mcp.sh          # API port
@@ -7,8 +7,8 @@
 set -euo pipefail
 
 ORIGIN="${ORIGIN:-http://localhost:8080}"
-USER_NAME="${FOLIUM_ADMIN_USERNAME:-admin}"
-PASSWORD="${FOLIUM_ADMIN_PASSWORD:-changeme}"
+USER_NAME="${LESSPAPER_NGL_ADMIN_USERNAME:-admin}"
+PASSWORD="${LESSPAPER_NGL_ADMIN_PASSWORD:-changeme}"
 HANDSHAKE="${MCP_PROTOCOL_VERSION:-2025-11-25}"
 SAMPLE="${SAMPLE:-backend/tests/fixtures/sample.txt}"
 COOKIE_JAR="$(mktemp)"
@@ -20,7 +20,7 @@ ok() { echo "  PASS  $*"; pass=$((pass + 1)); }
 bad() { echo "  FAIL  $*"; fail=$((fail + 1)); }
 need() { [[ -n "${1:-}" ]] || { echo "missing: $2" >&2; exit 1; }; }
 
-echo "== Folium MCP UAT  origin=$ORIGIN"
+echo "== lesspaper-ngl MCP UAT  origin=$ORIGIN"
 
 csrf="$(
   curl -sS -c "$COOKIE_JAR" -b "$COOKIE_JAR" \

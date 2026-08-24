@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
 
-export function usePersistedState<T>(key: string, defaultValue: T) {
+export function usePersistedState<T>(
+  key: string,
+  defaultValue: T,
+  legacyKey?: string,
+) {
   const [value, setValue] = useState<T>(() => {
     try {
-      const raw = localStorage.getItem(key);
+      let raw = localStorage.getItem(key);
+      if (raw == null && legacyKey) {
+        raw = localStorage.getItem(legacyKey);
+        if (raw != null) {
+          localStorage.setItem(key, raw);
+        }
+      }
       if (raw == null) return defaultValue;
       return JSON.parse(raw) as T;
     } catch {

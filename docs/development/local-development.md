@@ -29,10 +29,10 @@ uv pip install -e ".[dev]"          # OCR extra optional; Docker image uses .[oc
 .venv/bin/alembic upgrade head
 .venv/bin/uvicorn folium.main:app --reload --port 8000
 # other terminal:
-.venv/bin/folium-worker
+.venv/bin/lesspaper-ngl-worker
 ```
 
-`FOLIUM_ENV=development` enables uvicorn reload when using `folium-api`.
+`LESSPAPER_NGL_ENV=development` enables uvicorn reload when using `lesspaper-ngl-api`.
 
 CLI: `folium reset-admin-password`.
 

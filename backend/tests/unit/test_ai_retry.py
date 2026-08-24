@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from folium.ai.base import AIProviderError
-from folium.ai.retry import (
+from lesspaper_ngl.ai.base import AIProviderError
+from lesspaper_ngl.ai.retry import (
     adapter_retry_delay_seconds,
     is_transient_ai_error,
     job_retry_delay_seconds,

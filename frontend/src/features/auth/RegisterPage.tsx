@@ -61,7 +61,7 @@ export function RegisterPage() {
           <div className="inline-flex items-center gap-2 mb-2">
             <Leaf className="h-7 w-7 text-accent" />
             <span className="text-2xl font-semibold text-text-primary tracking-tight">
-              Folium
+              lesspaper-ngl
             </span>
           </div>
           <p className="text-sm text-text-secondary">Create your private library</p>

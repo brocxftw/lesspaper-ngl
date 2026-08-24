@@ -6,8 +6,8 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from folium.ai.base import AIProviderError, ChatMessage
-from folium.ai.openai_compatible import OpenAICompatibleAdapter
+from lesspaper_ngl.ai.base import AIProviderError, ChatMessage
+from lesspaper_ngl.ai.openai_compatible import OpenAICompatibleAdapter
 
 
 def _adapter() -> OpenAICompatibleAdapter:
