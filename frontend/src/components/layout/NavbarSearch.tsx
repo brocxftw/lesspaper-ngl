@@ -230,3 +230,107 @@ export function NavbarSearch() {
     </form>
   );
 }
+
+/**
+ * Mobile entry point for the same global Library search used in the desktop navbar.
+ * It intentionally calls the shared /api/search retrieval endpoint with the same
+ * keyword ranking semantics; it is not an Inbox filter or an Ask entry point.
+ */
+export function MobileNavbarSearch() {
+  const navigate = useNavigate();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [open, setOpen] = useState(false);
+  const [draft, setDraft] = useState("");
+  const [debounced, setDebounced] = useState("");
+
+  useEffect(() => {
+    const handle = window.setTimeout(() => setDebounced(draft.trim()), DEBOUNCE_MS);
+    return () => window.clearTimeout(handle);
+  }, [draft]);
+
+  useEffect(() => {
+    if (!open) return;
+    const frame = window.requestAnimationFrame(() => inputRef.current?.focus());
+    return () => window.cancelAnimationFrame(frame);
+  }, [open]);
+
+  const { data, isLoading, isFetching, isError } = useSearch(
+    { query: debounced, mode: "keyword", inbox: false, page_size: 20 },
+    debounced.length > 0,
+  );
+  const hits = data?.items ?? [];
+  const searching = debounced.length > 0 && (isLoading || isFetching) && hits.length === 0 && !isError;
+
+  const openHit = (hit: SearchHit) => {
+    setOpen(false);
+    navigate(documentHref(hit.document.id, hit.page_number));
+  };
+
+  return (
+    <div>
+      <button
+        type="button"
+        className="flex h-11 w-11 items-center justify-center rounded-lg text-navbar-text transition-colors hover:bg-[rgba(148,163,184,0.08)]"
+        aria-label="Search library"
+        aria-controls="mobile-library-search"
+        aria-expanded={open}
+        onClick={() => setOpen((isOpen) => !isOpen)}
+      >
+        <Search className="h-5 w-5" aria-hidden="true" />
+      </button>
+      {open && (
+        <section
+          id="mobile-library-search"
+          role="dialog"
+          aria-label="Search library"
+          className="fixed top-[92px] right-3 left-3 z-[80] flex max-h-[calc(100vh-108px)] flex-col overflow-hidden rounded-[14px] border border-surface-border bg-surface shadow-[0_12px_32px_rgba(15,23,42,0.22)] md:hidden"
+        >
+          <div className="border-b border-surface-border px-3 py-3">
+            <form onSubmit={(event) => { event.preventDefault(); if (hits[0]) openHit(hits[0]); }}>
+              <label className="sr-only" htmlFor="mobile-library-search-input">Search documents</label>
+              <div className="relative">
+                <Search className="pointer-events-none absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 text-text-muted" aria-hidden="true" />
+                <input
+                  id="mobile-library-search-input"
+                  ref={inputRef}
+                  type="search"
+                  value={draft}
+                  onChange={(event) => setDraft(event.target.value)}
+                  placeholder="Search documents..."
+                  className="h-11 w-full rounded-[10px] border border-surface-border bg-surface px-10 pr-3 text-sm text-text-primary outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                />
+              </div>
+            </form>
+          </div>
+          <div className="min-h-0 flex-1 overflow-auto px-4 pb-6">
+            {draft.trim().length === 0 ? (
+              <p className="pt-4 text-sm text-text-muted">Search your Library by document name or contents.</p>
+            ) : searching ? (
+              <p className="py-4 text-sm text-text-muted">Searching…</p>
+            ) : isError ? (
+              <p className="py-4 text-sm text-text-muted">Couldn’t search the Library. Try again.</p>
+            ) : hits.length === 0 ? (
+              <p className="py-4 text-sm text-text-muted">No matching documents</p>
+            ) : (
+              <ul className="divide-y divide-surface-border">
+                {hits.map((hit) => (
+                  <li key={hit.document.id}>
+                    <button type="button" className="flex w-full items-start gap-3 py-3 text-left" onClick={() => openHit(hit)}>
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-surface-muted">
+                        {hit.document.has_thumbnail ? <img src={api.thumbnailUrl(hit.document.id)} alt="" className="h-full w-full object-cover" /> : <FileText className="h-5 w-5 text-text-muted" />}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-medium text-text-primary">{hit.document.title || hit.document.original_filename}</span>
+                        <span className="mt-0.5 block truncate text-xs text-text-secondary">{hit.document.mime_type?.split("/").pop()?.toUpperCase() ?? "Document"}{hit.document.folder_path ? ` · ${hit.document.folder_path}` : ""}</span>
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </section>
+      )}
+    </div>
+  );
+}

@@ -11,8 +11,9 @@ export function AskDock() {
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
   const inboxWorkspace = pathname.startsWith("/inbox");
+  const libraryWorkspace = pathname.startsWith("/documents");
   const settingsWorkspace = pathname.startsWith("/settings");
-  const hideFab = inboxWorkspace || settingsWorkspace;
+  const hideFab = inboxWorkspace || libraryWorkspace || settingsWorkspace;
 
   useEffect(() => {
     if (hideFab) setOpen(false);

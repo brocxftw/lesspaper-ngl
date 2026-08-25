@@ -131,6 +131,11 @@ function PresentationBadge({
   return badge;
 }
 
+function compactDate(date: string | null | undefined): string {
+  if (!date) return "—";
+  return new Intl.DateTimeFormat(undefined, { day: "numeric", month: "short" }).format(new Date(date));
+}
+
 interface InboxActivityTableProps {
   documents: InboxActivityItem[];
   justProcessedIds: Set<string>;
@@ -165,7 +170,42 @@ export function InboxActivityTable({
   }
 
   return (
-    <div className="min-h-0 flex-1 overflow-auto">
+    <>
+    <div className="divide-y divide-[#EDF1F3] md:hidden">
+      {documents.map((doc) => {
+        const justNow = justProcessedIds.has(doc.id);
+        return (
+          <article key={doc.id} className={cn("px-3 py-3", justNow && "border-l-2 border-l-[#22A06B] bg-row-selected")}>
+            <div className="flex min-w-0 items-start gap-2">
+              <span className="mt-0.5"><FileTypeIcon doc={doc} /></span>
+              <button type="button" className="min-w-0 flex-1 text-left" onClick={() => onPreview(doc.id)}>
+                <span className="block truncate text-[13px] font-medium text-[#14212B]">{doc.original_filename}</span>
+                <span className="mt-0.5 block truncate text-xs text-[#74828D]">{justNow ? "Just processed" : doc.title !== doc.original_filename ? doc.title : doc.inbox ? "Added to Inbox" : "In library"}</span>
+              </button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size="icon" variant="ghost" className="-mr-1 h-11 w-11 shrink-0 text-[#5D6B76]" aria-label="More actions">
+                    <MoreVertical className="h-4 w-4" strokeWidth={1.75} />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => onPreview(doc.id)}>View details</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onOpenDocument(doc)}>{doc.activity_status === "processed" ? "Open in Documents" : "Open in Review & File"}</DropdownMenuItem>
+                  {doc.activity_status === "failed" && <DropdownMenuItem onClick={() => onRetry(doc.id)}><RotateCcw className="h-3.5 w-3.5" />Retry</DropdownMenuItem>}
+                  {doc.inbox && <DropdownMenuItem className="text-danger" onClick={() => onRemove(doc.id)}><Trash2 className="h-3.5 w-3.5" />Remove from queue</DropdownMenuItem>}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <div className="mt-2 flex min-w-0 items-center gap-2 pl-6 text-xs text-[#42515D]">
+              <PresentationBadge doc={doc} justNow={justNow} />
+              <span className="truncate">{fileTypeLabel(doc)} · {formatBytes(doc.file_size)}</span>
+              <time className="ml-auto shrink-0 text-[#74828D]" title={formatDateTime(doc.added_date)}>{compactDate(doc.added_date)}</time>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+    <div className="hidden min-h-0 flex-1 overflow-auto md:block">
       <table className="w-full min-w-[900px] border-collapse text-sm">
         <thead className="sticky top-0 z-10 bg-[#F8FAFB]">
           <tr className="h-10 border-b border-[#EDF1F3] text-left text-[11px] font-semibold text-[#5D6B76]">
@@ -301,5 +341,6 @@ export function InboxActivityTable({
         </tbody>
       </table>
     </div>
+    </>
   );
 }

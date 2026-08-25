@@ -1,5 +1,5 @@
 import { NavLink, Navigate, Outlet, useLocation } from "react-router-dom";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import {
   Archive,
   Info,
@@ -8,12 +8,15 @@ import {
   Server,
   Sparkles,
   User,
+  ChevronDown,
+  X,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePasswordResetRequests, useSession } from "@/lib/api/hooks";
 import { ProfileSettings } from "@/components/settings/ProfileSettings";
 import { UsersSettings } from "@/components/settings/UsersSettings";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover";
 
 const SETTINGS_NAV: Array<{ to: string; label: string; adminOnly: boolean; icon: LucideIcon }> = [
   { to: "/settings/profile", label: "Profile", adminOnly: false, icon: User },
@@ -31,10 +34,13 @@ export function SettingsLayout() {
   const { data: resetRequests = [] } = usePasswordResetRequests(isAdmin);
   const pendingResets = isAdmin ? resetRequests.length : 0;
   const nav = SETTINGS_NAV.filter((item) => !item.adminOnly || isAdmin);
+  const location = useLocation();
+  const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
+  const activeSection = nav.find((item) => location.pathname === item.to) ?? nav[0];
 
   return (
     <div className="flex h-full min-w-0 flex-col md:flex-row">
-      <aside className="shrink-0 border-b border-surface-border bg-surface p-3 md:w-56 md:border-b-0 md:border-r md:p-4">
+      <aside className="hidden shrink-0 border-b border-surface-border bg-surface p-3 md:block md:w-56 md:border-b-0 md:border-r md:p-4">
         <h1 className="mb-4 text-base font-semibold text-text-primary">Settings</h1>
         <nav className="flex gap-1 overflow-x-auto md:block md:space-y-0.5" aria-label="Settings sections">
           {nav.map(({ to, label, icon: Icon }) => (
@@ -69,7 +75,57 @@ export function SettingsLayout() {
           ))}
         </nav>
       </aside>
-      <div className="min-w-0 flex-1 overflow-auto bg-surface-muted p-4 sm:p-6 lg:p-8">
+      <div className="min-w-0 flex-1 overflow-auto bg-surface-muted p-4 md:p-6 lg:p-8">
+        <div className="mb-6 md:hidden">
+          <h1 className="mb-3 text-[22px] font-bold leading-7 text-text-primary">Settings</h1>
+          <Popover open={mobileNavigationOpen} onOpenChange={setMobileNavigationOpen}>
+            {activeSection && (
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  className="flex min-h-11 w-full items-center gap-3 rounded-lg border border-surface-border bg-surface px-3 text-left text-sm font-medium text-text-primary shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  aria-label={`Choose settings section, currently ${activeSection.label}`}
+                >
+                  <activeSection.icon className="h-5 w-5 shrink-0 text-text-secondary" strokeWidth={1.75} aria-hidden="true" />
+                  <span className="min-w-0 flex-1 truncate">{activeSection.label}</span>
+                  <ChevronDown className="h-4 w-4 shrink-0 text-text-muted" aria-hidden="true" />
+                </button>
+              </PopoverTrigger>
+            )}
+            <PopoverContent align="start" side="bottom" className="w-[var(--radix-popover-trigger-width)] max-h-[min(70vh,520px)] overflow-y-auto p-2">
+              <div className="flex h-11 items-center justify-between px-2">
+                <p className="text-sm font-semibold text-text-primary">Settings</p>
+                <button type="button" className="-mr-1 flex h-11 w-11 items-center justify-center rounded-md text-text-muted hover:bg-surface-hover hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent" onClick={() => setMobileNavigationOpen(false)} aria-label="Close settings picker">
+                  <X className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </div>
+              <nav aria-label="Settings sections">
+                {nav.map(({ to, label, icon: Icon }) => {
+                  const isActive = location.pathname === to;
+                  return (
+                    <NavLink
+                      key={to}
+                      to={to}
+                      onClick={() => setMobileNavigationOpen(false)}
+                      className={cn(
+                        "flex min-h-11 items-center gap-3 rounded-md px-3 py-2.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
+                        isActive
+                          ? "bg-accent-muted font-medium text-accent"
+                          : "text-text-secondary hover:bg-surface-hover hover:text-text-primary",
+                      )}
+                    >
+                      <Icon className={cn("h-5 w-5 shrink-0", isActive ? "text-accent" : "text-text-muted")} strokeWidth={1.75} aria-hidden="true" />
+                      <span className="min-w-0 flex-1">{label}</span>
+                      {to === "/settings/profile" && pendingResets > 0 && (
+                        <span className="rounded bg-accent-muted px-1.5 py-0.5 text-[10px] font-medium text-accent">{pendingResets}</span>
+                      )}
+                    </NavLink>
+                  );
+                })}
+              </nav>
+            </PopoverContent>
+          </Popover>
+        </div>
         <Outlet />
       </div>
     </div>

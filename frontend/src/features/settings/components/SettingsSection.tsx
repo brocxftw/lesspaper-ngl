@@ -20,7 +20,6 @@ export function SettingsSection({
   id?: string;
   className?: string;
 }) {
-  const heading = index != null ? `${index}. ${title}` : title;
   return (
     <section id={id} className={cn("space-y-3", className)} aria-labelledby={id ? `${id}-heading` : undefined}>
       <div className="flex flex-wrap items-start justify-between gap-2">
@@ -30,7 +29,8 @@ export function SettingsSection({
               id={id ? `${id}-heading` : undefined}
               className="text-[15px] font-bold leading-[22px] text-text-primary"
             >
-              {heading}
+              {index != null && <span className="hidden md:inline" aria-hidden="true">{index}. </span>}
+              {title}
             </h2>
             {badge}
           </div>
