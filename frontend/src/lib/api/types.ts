@@ -995,3 +995,9 @@ export interface BootstrapStatus {
   instance_state: string;
   ready: boolean;
 }
+
+export interface OnboardingStatus {
+  required: boolean;
+  current_version: number;
+  completed_version: number;
+}

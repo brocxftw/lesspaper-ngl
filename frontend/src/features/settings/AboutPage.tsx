@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAbout, useSession } from "@/lib/api/hooks";
 import { Button } from "@/components/ui/Button";
 import { BrandMark } from "@/components/brand/BrandMark";
+import { useOnboardingTour } from "@/features/onboarding/OnboardingTour";
 import {
   SettingsCard,
   SettingsContent,
@@ -15,6 +16,7 @@ export function AboutPage() {
   const { data, isLoading, error } = useAbout();
   const { data: session } = useSession();
   const [copied, setCopied] = useState(false);
+  const { replay } = useOnboardingTour();
 
   const copyRevision = async (value: string) => {
     await navigator.clipboard.writeText(value);
@@ -83,6 +85,13 @@ export function AboutPage() {
           ) : (
             <p className="mt-4 text-sm text-text-muted">AI Policy is managed by your lesspaper-ngl administrator.</p>
           )}
+        </SettingsCard>
+      </SettingsSection>
+
+      <SettingsSection title="Getting started">
+        <SettingsCard>
+          <p className="text-sm text-text-secondary">Want a quick refresher on where everything is?</p>
+          <Button className="mt-3" variant="secondary" onClick={replay}>Replay welcome tour</Button>
         </SettingsCard>
       </SettingsSection>
 

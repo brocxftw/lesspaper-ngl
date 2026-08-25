@@ -73,6 +73,7 @@ import type {
   BackupInspect,
   BackupRestoreStatus,
   BootstrapStatus,
+  OnboardingStatus,
 } from "./types";
 
 // ---- Query keys ----
@@ -113,6 +114,7 @@ export const queryKeys = {
   backupRestoreStatus: ["backups", "restore-status"] as const,
   bootstrapStatus: ["bootstrap", "status"] as const,
   bootstrapBackups: ["bootstrap", "backups"] as const,
+  onboardingStatus: ["onboarding", "status"] as const,
   apiTokens: ["auth", "api-tokens"] as const,
 };
 
@@ -1271,6 +1273,23 @@ export function useBootstrapStatus() {
       const state = query.state.data?.instance_state;
       return state && state !== "ready" ? 2000 : false;
     },
+  });
+}
+
+export function useOnboardingStatus(enabled = true) {
+  return useQuery({
+    queryKey: queryKeys.onboardingStatus,
+    queryFn: () => api.get<OnboardingStatus>("/api/onboarding/status"),
+    enabled,
+    staleTime: 5_000,
+  });
+}
+
+export function useCompleteOnboarding() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.post<OnboardingStatus>("/api/onboarding/complete"),
+    onSuccess: (status) => qc.setQueryData(queryKeys.onboardingStatus, status),
   });
 }
 

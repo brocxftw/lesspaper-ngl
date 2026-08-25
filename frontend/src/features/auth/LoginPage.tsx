@@ -54,7 +54,14 @@ export function LoginPage() {
   const onSubmit = async (data: LoginForm) => {
     try {
       await login.mutateAsync(data);
-      navigate("/documents", { replace: true });
+      const from =
+        typeof location.state === "object" && location.state && "from" in location.state
+          ? (location.state as { from?: { pathname?: string; search?: string; hash?: string } }).from
+          : undefined;
+      const destination = from?.pathname
+        ? `${from.pathname}${from.search ?? ""}${from.hash ?? ""}`
+        : "/inbox";
+      navigate(destination, { replace: true });
     } catch (err) {
       const message =
         err instanceof ApiError

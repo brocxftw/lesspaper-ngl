@@ -67,6 +67,8 @@ vi.mock("@/lib/api/hooks", () => ({
       },
     ],
   }),
+  useOnboardingStatus: () => ({ data: { required: false } }),
+  useCompleteOnboarding: () => ({ mutateAsync: vi.fn(), isPending: false }),
 }));
 
 vi.mock("@/lib/api/upload", () => ({
