@@ -52,7 +52,7 @@ export function NavbarUpload() {
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button type="button" className={controlClassName} disabled={uploader.busy}>
+          <button type="button" data-tour="upload" className={controlClassName} disabled={uploader.busy}>
             <Upload className="h-4 w-4" />
             {uploader.busy ? "Uploading…" : "Upload"}
           </button>

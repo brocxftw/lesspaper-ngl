@@ -24,11 +24,11 @@ export function AuthGuard() {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return (
-    <AppShell>
-      <Outlet />
-    </AppShell>
-  );
+  return <Outlet />;
+}
+
+export function AppShellGuard() {
+  return <AppShell><Outlet /></AppShell>;
 }
 
 export function GuestGuard() {
@@ -39,7 +39,7 @@ export function GuestGuard() {
   if (isLoading) return <LoadingScreen />;
 
   if (session) {
-    return <Navigate to="/documents" replace />;
+    return <Navigate to="/inbox" replace />;
   }
 
   if (bootstrap && !bootstrap.ready && location.pathname !== "/setup") {

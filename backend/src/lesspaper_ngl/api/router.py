@@ -18,6 +18,7 @@ from lesspaper_ngl.api import (
     jobs,
     library,
     logs,
+    onboarding,
     search,
     system,
     tags,
@@ -28,6 +29,7 @@ from lesspaper_ngl.api import (
 api_router = APIRouter()
 api_router.include_router(health.router)
 api_router.include_router(bootstrap.router)
+api_router.include_router(onboarding.router)
 api_router.include_router(auth.router)
 api_router.include_router(users.router)
 api_router.include_router(folders.router)

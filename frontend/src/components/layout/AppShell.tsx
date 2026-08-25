@@ -12,6 +12,7 @@ import { AiStatusPill } from "@/components/layout/AiStatusPill";
 import { NavbarSearch } from "@/components/layout/NavbarSearch";
 import { NavbarUpload } from "@/components/layout/NavbarUpload";
 import { AskDock } from "@/components/ask/AskDock";
+import { OnboardingTourProvider } from "@/features/onboarding/OnboardingTour";
 import { BrandMark, BrandWordmark } from "@/components/brand/BrandMark";
 import { TooltipProvider } from "@/components/ui/Tooltip";
 import {
@@ -46,6 +47,7 @@ export function AppShell({ children }: AppShellProps) {
 
   return (
     <TooltipProvider delayDuration={400}>
+      <OnboardingTourProvider>
       <div className="flex h-screen flex-col overflow-hidden bg-surface-muted">
         <header className="relative z-50 m-3 flex min-h-[72px] w-[calc(100%-24px)] shrink-0 flex-nowrap items-stretch overflow-x-auto rounded-[14px] border border-[rgba(148,163,184,0.10)] bg-navbar pl-4 pr-5 text-navbar-text shadow-[0_8px_20px_rgba(2,6,23,0.18)] sm:pl-[19px] sm:pr-6 lg:pl-[26px] lg:pr-8">
           <div className="flex items-center gap-[7px]">
@@ -71,6 +73,7 @@ export function AppShell({ children }: AppShellProps) {
                 <NavLink
                   key={to}
                   to={to}
+                  data-tour={label.toLowerCase()}
                   className={({ isActive }) =>
                     cn(
                       "relative flex h-full items-center px-1 text-sm font-semibold text-navbar-muted transition-colors duration-150 ease-out hover:text-navbar-text",
@@ -150,6 +153,7 @@ export function AppShell({ children }: AppShellProps) {
         </main>
         <AskDock />
       </div>
+      </OnboardingTourProvider>
     </TooltipProvider>
   );
 }

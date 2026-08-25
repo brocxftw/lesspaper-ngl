@@ -145,6 +145,7 @@ class User(Base, TimestampMixin):
     storage_quota_bytes: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
     ai_monthly_request_quota: Mapped[int | None] = mapped_column(Integer, nullable=True)
     avatar_key: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    onboarding_version: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
 
     sessions: Mapped[list[Session]] = relationship(
         back_populates="user", cascade="all, delete-orphan"

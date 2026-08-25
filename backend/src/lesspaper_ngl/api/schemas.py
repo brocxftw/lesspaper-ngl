@@ -891,6 +891,12 @@ class BootstrapStatusOut(BaseModel):
     ready: bool
 
 
+class OnboardingStatusOut(BaseModel):
+    required: bool
+    current_version: int
+    completed_version: int
+
+
 class BootstrapRestoreIn(BaseModel):
     filename: str
     confirm: bool = False

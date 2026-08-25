@@ -134,6 +134,7 @@ export function NavbarSearch() {
     <form
       ref={rootRef}
       role="search"
+      data-tour="search"
       onSubmit={handleSubmit}
       className="relative w-[clamp(252px,25.2vw,306px)] shrink-0 lg:w-[clamp(288px,25.2vw,450px)]"
     >

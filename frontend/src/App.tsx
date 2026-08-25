@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AuthGuard, GuestGuard } from "@/features/auth/AuthGuard";
+import { AppShellGuard, AuthGuard, GuestGuard } from "@/features/auth/AuthGuard";
 import { LoginPage } from "@/features/auth/LoginPage";
 import { RegisterPage } from "@/features/auth/RegisterPage";
 import { ForgotPasswordPage } from "@/features/auth/ForgotPasswordPage";
@@ -50,7 +50,9 @@ export default function App() {
           </Route>
 
           <Route element={<AuthGuard />}>
-            <Route path="/" element={<Navigate to="/documents" replace />} />
+            <Route element={<AppShellGuard />}>
+            <Route path="/" element={<Navigate to="/inbox" replace />} />
+            <Route path="/onboarding" element={<Navigate to="/inbox" replace />} />
             <Route path="/inbox" element={<InboxPage />} />
             <Route path="/documents" element={<DocumentsPage />} />
             <Route
@@ -86,6 +88,7 @@ export default function App() {
               <Route path="ai-profiles" element={<Navigate to="/settings/artificial-intelligence?tab=controls" replace />} />
             </Route>
             <Route path="*" element={<NotFoundPage />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

@@ -31,6 +31,8 @@ vi.mock("@/lib/api/hooks", () => ({
     isLoading: false,
     error: null,
   }),
+  useOnboardingStatus: () => ({ data: { required: false } }),
+  useCompleteOnboarding: () => ({ mutateAsync: vi.fn(), isPending: false }),
 }));
 
 describe("Settings workspace navigation", () => {

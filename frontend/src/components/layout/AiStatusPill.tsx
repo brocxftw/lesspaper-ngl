@@ -128,6 +128,7 @@ export function AiStatusPill() {
       <TooltipTrigger asChild>
         <button
           type="button"
+          data-tour="ai"
           className={cn(
             "inline-flex h-[41px] items-center gap-2 rounded-md px-1.5",
             "text-[#F8FAFC] transition-opacity duration-150 ease-out hover:opacity-80",
