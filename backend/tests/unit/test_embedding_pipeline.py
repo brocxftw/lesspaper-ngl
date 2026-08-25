@@ -84,10 +84,14 @@ async def test_call_embed_retries_transient_then_succeeds() -> None:
             EmbeddingResult(embeddings=[[0.1, 0.2]], model="m", input_tokens=3),
         ]
     )
-    vectors, tokens, model = await _call_embed_with_retries(adapter, ["hi"], model="m")
+    vectors, tokens, model, reported_cost, cost_currency = await _call_embed_with_retries(
+        adapter, ["hi"], model="m"
+    )
     assert vectors == [[0.1, 0.2]]
     assert tokens == 3
     assert model == "m"
+    assert reported_cost is None
+    assert cost_currency is None
     assert adapter.embed.await_count == 2
 
 
