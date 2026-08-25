@@ -759,7 +759,7 @@ class AISuggestion(Base, TimestampMixin):
 
 
 class AskConversation(Base, TimestampMixin):
-    """One active Ask lesspaper-ngl conversation per owner+document (V1)."""
+    """One active Ask AI conversation per owner+document (V1)."""
 
     __tablename__ = "ask_conversations"
     __table_args__ = (

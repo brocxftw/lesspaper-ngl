@@ -11,14 +11,14 @@ interface AskFabProps {
   className?: string;
 }
 
-/** Round Ask lesspaper-ngl control used in document preview and the global dock. */
+/** Round Ask AI control used in document preview and the global dock. */
 export function AskFab({ onClick, className }: AskFabProps) {
   return (
     <Tooltip delayDuration={200}>
       <TooltipTrigger asChild>
         <button
           type="button"
-          aria-label="Ask lesspaper-ngl AI"
+          aria-label="Ask AI"
           onClick={onClick}
           className={cn(
             "flex h-12 w-12 items-center justify-center",
@@ -31,7 +31,7 @@ export function AskFab({ onClick, className }: AskFabProps) {
           <BrandMark variant="on-light" size={22} />
         </button>
       </TooltipTrigger>
-      <TooltipContent side="left">Ask lesspaper-ngl AI</TooltipContent>
+      <TooltipContent side="left">Ask AI</TooltipContent>
     </Tooltip>
   );
 }

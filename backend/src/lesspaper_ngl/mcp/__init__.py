@@ -33,7 +33,7 @@ mcp = MCPServer(
     instructions=(
         "Read-only lesspaper-ngl library: search_evidence, search_documents, "
         "get_document, list_folder. Keyword search works without AI. "
-        "Do not ask lesspaper-ngl; reason over returned evidence."
+        "Do not ask the AI; reason over returned evidence."
     ),
 )
 

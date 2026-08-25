@@ -4,7 +4,7 @@ import type { LucideIcon } from "lucide-react";
 
 export const WORKLOAD_LABELS: Record<string, string> = {
   indexing: "Filing suggestions",
-  chat: "Ask lesspaper-ngl",
+  chat: "Ask AI",
   embeddings: "Embeddings",
   embedding: "Embeddings",
 };
@@ -28,7 +28,7 @@ export const WORKLOAD_COPY: Record<
     icon: Layers,
   },
   chat: {
-    title: "Ask lesspaper-ngl",
+    title: "Ask AI",
     subtitle: "Answers questions using retrieved evidence",
     icon: MessageCircleQuestion,
   },

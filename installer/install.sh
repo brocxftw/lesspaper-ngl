@@ -1085,7 +1085,7 @@ Existing admin credentials were kept and are not displayed."
   if [[ "${LESSPAPER_NGL_HEALTHY:-1}" == "1" ]]; then
     local verb="installed"
     [[ "${LESSPAPER_NGL_MODE}" == "update" ]] && verb="updated"
-    ui_msgbox "Folium ${LESSPAPER_NGL_VERSION} is ${verb} and healthy.
+    ui_msgbox "lesspaper-ngl ${LESSPAPER_NGL_VERSION} is ${verb} and healthy.
 
 Open: ${LESSPAPER_NGL_FRONTEND_ORIGIN}${mcp_note}${api_note}
 Install dir: ${LESSPAPER_NGL_INSTALL_DIR}

@@ -19,6 +19,8 @@ class ChatResult:
     model: str
     input_tokens: int | None = None
     output_tokens: int | None = None
+    reported_cost: float | None = None
+    cost_currency: str | None = None
     finish_reason: str | None = None
     raw: dict[str, Any] = field(default_factory=dict, repr=False)
 
@@ -28,6 +30,8 @@ class EmbeddingResult:
     embeddings: list[list[float]]
     model: str
     input_tokens: int | None = None
+    reported_cost: float | None = None
+    cost_currency: str | None = None
     raw: dict[str, Any] = field(default_factory=dict, repr=False)
 
 

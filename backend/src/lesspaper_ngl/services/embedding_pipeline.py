@@ -124,6 +124,8 @@ async def process_document_embeddings(
     result = EmbeddingRunResult(resumed=resumed)
     started = time.perf_counter()
     total_input_tokens = 0
+    total_reported_cost: float | None = None
+    cost_currency: str | None = None
     last_dimension: int | None = None
 
     try:
@@ -186,6 +188,10 @@ async def process_document_embeddings(
             result.embedded += batch_result.embedded
             result.failed += batch_result.failed
             total_input_tokens += batch_result.input_tokens
+            if batch_result.reported_cost is not None:
+                total_reported_cost = (total_reported_cost or 0.0) + batch_result.reported_cost
+            if batch_result.cost_currency:
+                cost_currency = batch_result.cost_currency
             if batch_result.dimension is not None:
                 last_dimension = batch_result.dimension
 
@@ -228,6 +234,9 @@ async def process_document_embeddings(
                 model=model,
                 operation="embedding",
                 input_tokens=total_input_tokens or None,
+                reported_cost=total_reported_cost,
+                cost_currency=cost_currency,
+                cost_source="provider" if total_reported_cost is not None else None,
                 is_local=provider.is_local,
                 document_id=doc.id,
                 duration_ms=duration_ms,
@@ -260,6 +269,8 @@ class _BatchOutcome:
     embedded: int = 0
     failed: int = 0
     input_tokens: int = 0
+    reported_cost: float | None = None
+    cost_currency: str | None = None
     dimension: int | None = None
 
 
@@ -289,7 +300,7 @@ async def _embed_batch_with_isolation(
     try:
         # Space identity uses the assigned/requested model ID, not the provider
         # response echo (e.g. OpenRouter may return an unprefixed name).
-        vectors, input_tokens, _used_model = await _call_embed_with_retries(
+        vectors, input_tokens, _used_model, reported_cost, cost_currency = await _call_embed_with_retries(
             adapter, texts, model=model
         )
     except AIProviderError as exc:
@@ -329,6 +340,8 @@ async def _embed_batch_with_isolation(
                 embedded=left.embedded + right.embedded,
                 failed=left.failed + right.failed,
                 input_tokens=left.input_tokens + right.input_tokens,
+                reported_cost=(left.reported_cost or 0) + (right.reported_cost or 0) or None,
+                cost_currency=left.cost_currency or right.cost_currency,
                 dimension=left.dimension or right.dimension,
             )
         if is_non_retryable_ai_error(exc) and len(chunks) > 1 and depth < MAX_ISOLATION_DEPTH:
@@ -358,6 +371,8 @@ async def _embed_batch_with_isolation(
                 embedded=left.embedded + right.embedded,
                 failed=left.failed + right.failed,
                 input_tokens=left.input_tokens + right.input_tokens,
+                reported_cost=(left.reported_cost or 0) + (right.reported_cost or 0) or None,
+                cost_currency=left.cost_currency or right.cost_currency,
                 dimension=left.dimension or right.dimension,
             )
         force_failed = is_non_retryable_ai_error(exc) or (
@@ -384,6 +399,8 @@ async def _embed_batch_with_isolation(
         embedded=len(chunks),
         failed=0,
         input_tokens=input_tokens or 0,
+        reported_cost=reported_cost,
+        cost_currency=cost_currency,
         dimension=dimension,
     )
 
@@ -393,7 +410,13 @@ async def _call_embed_with_retries(adapter, texts: list[str], *, model: str):
     for attempt in range(1, ADAPTER_RETRY_ATTEMPTS + 1):
         try:
             result = await adapter.embed(texts, model=model)
-            return result.embeddings, result.input_tokens, result.model
+            return (
+                result.embeddings,
+                result.input_tokens,
+                result.model,
+                result.reported_cost,
+                result.cost_currency,
+            )
         except AIProviderError as exc:
             last_exc = exc
             if is_oversized_input_error(exc) or is_non_retryable_ai_error(exc):

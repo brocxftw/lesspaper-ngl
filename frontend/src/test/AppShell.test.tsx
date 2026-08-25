@@ -275,30 +275,30 @@ describe("AppShell top navbar", () => {
     });
   });
 
-  it("exposes Ask lesspaper-ngl as a floating control", () => {
+  it("exposes Ask AI as a floating control", () => {
     renderShell();
-    expect(screen.getByRole("button", { name: "Ask lesspaper-ngl AI" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Ask AI" })).toBeInTheDocument();
   });
 
-  it("hides the Ask lesspaper-ngl button in the inbox workspace", () => {
+  it("hides the Ask AI button in the inbox workspace", () => {
     renderShell("/inbox");
-    expect(screen.queryByRole("button", { name: "Ask lesspaper-ngl AI" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Ask AI" })).not.toBeInTheDocument();
   });
 
-  it("hides the Ask lesspaper-ngl button in Settings", () => {
+  it("hides the Ask AI button in Settings", () => {
     renderShell("/settings");
-    expect(screen.queryByRole("button", { name: "Ask lesspaper-ngl AI" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Ask AI" })).not.toBeInTheDocument();
   });
 
-  it("hides the Ask lesspaper-ngl button on nested Settings routes", () => {
+  it("hides the Ask AI button on nested Settings routes", () => {
     renderShell("/settings/library");
-    expect(screen.queryByRole("button", { name: "Ask lesspaper-ngl AI" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Ask AI" })).not.toBeInTheDocument();
   });
 
   it("opens a compact Ask dock with in-composer context and send", () => {
     renderShell("/documents");
-    fireEvent.click(screen.getByRole("button", { name: "Ask lesspaper-ngl AI" }));
-    expect(screen.getByRole("dialog", { name: "Ask lesspaper-ngl" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Ask AI" }));
+    expect(screen.getByRole("dialog", { name: "Ask AI" })).toBeInTheDocument();
     expect(
       screen.queryByText("Single-turn answers with citations from the selected scope."),
     ).not.toBeInTheDocument();

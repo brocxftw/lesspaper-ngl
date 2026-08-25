@@ -48,13 +48,13 @@ export function AskDock() {
         <div
           className="fixed right-4 bottom-4 z-50 flex h-[50vh] w-[min(440px,calc(100vw-2rem))] flex-col overflow-hidden rounded-[14px] border border-surface-border bg-surface shadow-[0_10px_30px_rgba(15,23,42,0.18)]"
           role="dialog"
-          aria-label="Ask lesspaper-ngl"
+          aria-label="Ask AI"
         >
           <Button
             size="icon"
             variant="ghost"
             className="absolute top-2.5 right-2.5 z-10 h-8 w-8"
-            aria-label="Close Ask lesspaper-ngl"
+            aria-label="Close Ask AI"
             onClick={() => setOpen(false)}
           >
             <X className="h-4 w-4" />

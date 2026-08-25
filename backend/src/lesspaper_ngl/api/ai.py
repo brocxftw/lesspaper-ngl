@@ -819,7 +819,7 @@ async def get_usage(
     ).all()
     workload_names = {
         "embedding": ("embeddings", "Embeddings"),
-        "qa": ("chat", "Ask lesspaper-ngl"),
+        "qa": ("chat", "Ask AI"),
         "summary": ("indexing", "Filing suggestions"),
         "metadata_suggestion": ("indexing", "Filing suggestions"),
     }

@@ -335,7 +335,7 @@ export function DocumentAskPanel({
       <div className={cn("flex h-full flex-col p-4", className)}>
         <PanelHeader onClose={onClose} />
         <p className="mt-6 text-sm text-text-secondary">
-          Ask lesspaper-ngl is currently unavailable. The document remains fully accessible.
+          Ask AI is currently unavailable. The document remains fully accessible.
         </p>
       </div>
     );
@@ -620,8 +620,8 @@ function PanelHeader({
             size="icon"
             variant="ghost"
             className="h-8 w-8"
-            aria-label="Close Ask lesspaper-ngl"
-            title="Close Ask lesspaper-ngl"
+            aria-label="Close Ask AI"
+            title="Close Ask AI"
             onClick={onClose}
           >
             <X className="h-4 w-4" />

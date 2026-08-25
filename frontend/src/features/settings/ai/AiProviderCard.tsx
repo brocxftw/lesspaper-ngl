@@ -22,37 +22,31 @@ import { cn } from "@/lib/utils";
 
 const KIND_META: Record<
   AIProviderKind,
-  { label: string; icon: LucideIcon; iconWrap: string }
+  { label: string; icon: LucideIcon }
 > = {
   ollama: {
     label: "Ollama",
     icon: Server,
-    iconWrap: "bg-emerald-50 text-emerald-700",
   },
   openai_compatible: {
     label: "OpenAI Compatible",
     icon: Monitor,
-    iconWrap: "bg-violet-50 text-violet-700",
   },
   openai: {
     label: "OpenAI",
     icon: Sparkles,
-    iconWrap: "bg-emerald-50 text-emerald-700",
   },
   openrouter: {
     label: "OpenRouter",
     icon: Network,
-    iconWrap: "bg-slate-100 text-slate-600",
   },
   anthropic: {
     label: "Anthropic",
     icon: Cloud,
-    iconWrap: "bg-orange-50 text-orange-700",
   },
   gemini: {
     label: "Google Gemini",
     icon: Sparkles,
-    iconWrap: "bg-sky-50 text-sky-700",
   },
 };
 
@@ -108,7 +102,6 @@ export function AiProviderCard({
   const kind = KIND_META[provider.kind as AIProviderKind] ?? {
     label: provider.kind.replace(/_/g, " "),
     icon: Server,
-    iconWrap: "bg-surface-muted text-text-secondary",
   };
   const KindIcon = kind.icon;
   const usedByLine = [
@@ -121,12 +114,7 @@ export function AiProviderCard({
   return (
     <SettingsCard padding="sm">
       <div className="flex flex-wrap items-start gap-3">
-        <div
-          className={cn(
-            "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg",
-            kind.iconWrap,
-          )}
-        >
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-surface-muted text-text-muted">
           <KindIcon className="h-5 w-5" strokeWidth={1.75} aria-hidden />
         </div>
 

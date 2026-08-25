@@ -18,7 +18,6 @@ import {
 } from "@/features/settings/components";
 import { AiProfileOption } from "./AiProfileOption";
 import { AiToggleRow } from "./AiToggleRow";
-import { VisionAssignmentPanel } from "./VisionAssignmentPanel";
 import { PRIVACY_MODE_COPY, PROFILE_OPTIONS } from "./workloadCopy";
 
 function effectivePrivacyMode(
@@ -144,7 +143,7 @@ export function ControlsPanel() {
                 Remote AI
               </p>
               <AiToggleRow
-                label="Ask lesspaper-ngl"
+                label="Ask AI"
                 checked={remote.allow_remote_qa}
                 disabled={remoteLocked}
                 onCheckedChange={(checked) =>
@@ -207,7 +206,7 @@ export function ControlsPanel() {
 
       <SettingsSection
         title="Response profile"
-        description="Controls Ask lesspaper-ngl retrieval depth and output limits, not which model is used."
+        description="Controls Ask AI retrieval depth and output limits, not which model is used."
       >
         <SettingsCard>
           <div className="space-y-2">
@@ -245,10 +244,6 @@ export function ControlsPanel() {
           )}
         </SettingsCard>
       </SettingsSection>
-
-      <SettingsDisclosure title="Advanced: experimental vision">
-        <VisionAssignmentPanel />
-      </SettingsDisclosure>
 
       <div className="flex flex-wrap items-center justify-end gap-3">
         {saveError && (

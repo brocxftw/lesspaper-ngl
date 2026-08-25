@@ -47,6 +47,23 @@ async def test_chat_falls_back_to_reasoning_content_when_finished() -> None:
 
 
 @pytest.mark.asyncio
+async def test_chat_preserves_provider_reported_cost() -> None:
+    adapter = _adapter()
+    adapter._request = AsyncMock(  # type: ignore[method-assign]
+        return_value={
+            "model": "test-model",
+            "choices": [{"message": {"content": "Done"}, "finish_reason": "stop"}],
+            "usage": {"prompt_tokens": 10, "completion_tokens": 20, "cost": 0.00042},
+        }
+    )
+
+    result = await adapter.chat([ChatMessage(role="user", content="hi")])
+
+    assert result.reported_cost == pytest.approx(0.00042)
+    assert result.cost_currency == "USD"
+
+
+@pytest.mark.asyncio
 async def test_chat_raises_when_truncated_with_empty_content() -> None:
     """Thinking models that exhaust max_tokens mid-reason must not silently succeed."""
     adapter = _adapter()
