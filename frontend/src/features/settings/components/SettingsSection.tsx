@@ -30,7 +30,8 @@ export function SettingsSection({
               id={id ? `${id}-heading` : undefined}
               className="text-[15px] font-bold leading-[22px] text-text-primary"
             >
-              {heading}
+              <span className="md:hidden">{title}</span>
+              <span className="hidden md:inline">{heading}</span>
             </h2>
             {badge}
           </div>

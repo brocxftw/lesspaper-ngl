@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   ChevronRight,
   Gauge,
@@ -157,7 +157,7 @@ export function ProfileSettings() {
     <SettingsContent>
       <SettingsPageHeader
         title="Profile"
-        description="Manage your account, security, sessions and API access."
+        description={<><span className="md:hidden">Manage your account and security.</span><span className="hidden md:inline">Manage your account, security, sessions and API access.</span></>}
         actions={
           <Button type="button" variant="outline" size="sm" onClick={() => setEditing(true)} disabled={editing}>
             <Pencil className="h-3.5 w-3.5" strokeWidth={1.75} />
@@ -200,7 +200,7 @@ export function ProfileSettings() {
                   </span>
                 </div>
                 {usage && (
-                  <p className="text-xs text-text-muted">
+                  <p className="hidden text-xs text-text-muted md:block">
                     Storage {formatBytes(usage.storage_used_bytes)}
                     {usage.storage_quota_bytes != null
                       ? ` / ${formatBytes(usage.storage_quota_bytes)}`
@@ -271,6 +271,17 @@ export function ProfileSettings() {
                 />
               </div>
             </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="self-start md:hidden"
+              onClick={() => setEditing(true)}
+              disabled={editing}
+            >
+              <Pencil className="h-3.5 w-3.5" strokeWidth={1.75} />
+              Edit account
+            </Button>
           </div>
           {profileMsg && <p className="mt-4 text-xs text-text-secondary">{profileMsg}</p>}
           {editing && (
@@ -283,9 +294,35 @@ export function ProfileSettings() {
         </SettingsCard>
       </SettingsSection>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <SettingsSection title="Usage" description="Your current storage and AI request allowance." className="md:hidden">
+        <div className="grid gap-3 min-[380px]:grid-cols-2">
+          <SettingsCard padding="sm">
+            <p className="text-xs font-medium text-text-secondary">Storage</p>
+            <p className="mt-1 text-lg font-semibold text-text-primary">
+              {usage ? formatBytes(usage.storage_used_bytes) : "—"}
+            </p>
+            <p className="mt-0.5 text-xs text-text-muted">
+              {usage?.storage_quota_bytes != null ? `${formatBytes(usage.storage_quota_bytes)} limit` : "Unlimited"}
+            </p>
+          </SettingsCard>
+          <SettingsCard padding="sm">
+            <p className="text-xs font-medium text-text-secondary">AI requests</p>
+            <p className="mt-1 text-lg font-semibold text-text-primary">
+              {usage ? usage.ai_requests_this_month.toLocaleString() : "—"}
+            </p>
+            <p className="mt-0.5 text-xs text-text-muted">
+              {usage?.ai_monthly_request_quota != null ? `${usage.ai_monthly_request_quota.toLocaleString()} monthly limit` : "Unlimited"}
+            </p>
+          </SettingsCard>
+        </div>
+      </SettingsSection>
+
+      <div className="grid gap-6 md:gap-4 lg:grid-cols-2">
         <SettingsSection index={2} title="Security" description="Protect this account.">
-          <SettingsCard>
+          <SettingsCard padding="none" className="md:p-6">
+            <MobileActionRow icon={Lock} title="Password" description="Change your password" onClick={() => setPasswordOpen(true)} />
+            <MobileActionRow icon={Monitor} title="Active sessions" description={sessionsLoading ? "Loading sessions…" : `${sessionCount} active session${sessionCount === 1 ? "" : "s"}`} onClick={() => setSessionsOpen(true)} />
+            <div className="hidden md:block">
             <SettingsRow
               icon={Lock}
               title="Password"
@@ -311,11 +348,14 @@ export function ProfileSettings() {
                 </Button>
               }
             />
+            </div>
           </SettingsCard>
         </SettingsSection>
 
         <SettingsSection index={3} title="API Access" description="Tokens for non-browser clients.">
-          <SettingsCard>
+          <SettingsCard padding="none" className="md:p-6">
+            <MobileActionRow icon={KeyRound} title="API tokens" description={tokensLoading ? "Loading tokens…" : `${tokenCount} active token${tokenCount === 1 ? "" : "s"}`} onClick={() => setTokensOpen(true)} />
+            <div className="hidden md:block">
             <SettingsRow
               icon={KeyRound}
               title="API tokens"
@@ -330,6 +370,7 @@ export function ProfileSettings() {
                 </Button>
               }
             />
+            </div>
             <SettingsInfoBanner className="mt-3" tone="muted">
               Treat tokens like passwords. The secret is shown only once when a token is created.
             </SettingsInfoBanner>
@@ -344,7 +385,15 @@ export function ProfileSettings() {
           description="Manage people and access for this deployment."
           badge={<SettingsStatusBadge tone="info">Admin only</SettingsStatusBadge>}
         >
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="divide-y divide-surface-border rounded-lg border border-surface-border bg-surface md:hidden">
+            {[
+              { to: "/settings/profile/users#users", icon: Users, title: "Users", description: "Roles and account status" },
+              { to: "/settings/profile/users#invitations", icon: Mail, title: "Invitations", description: "Invite people to lesspaper-ngl" },
+              { to: "/settings/profile/users#password-resets", icon: RotateCcw, title: "Password resets", description: "Approve reset requests" },
+              { to: "/settings/profile/users#quotas", icon: Gauge, title: "Quotas", description: "Storage and AI limits" },
+            ].map((item) => <MobileLinkRow key={item.to} {...item} />)}
+          </div>
+          <div className="hidden gap-3 md:grid md:grid-cols-2 xl:grid-cols-4">
             {[
               {
                 to: "/settings/profile/users#users",
@@ -603,5 +652,35 @@ export function ProfileSettings() {
         </DialogContent>
       </Dialog>
     </SettingsContent>
+  );
+}
+
+function MobileActionRow({
+  icon: Icon,
+  title,
+  description,
+  onClick,
+}: {
+  icon: typeof Lock;
+  title: string;
+  description: string;
+  onClick: () => void;
+}) {
+  return (
+    <button type="button" onClick={onClick} className="flex min-h-16 w-full items-center gap-3 px-4 py-2 text-left first:rounded-t-lg last:rounded-b-lg hover:bg-surface-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-accent">
+      <Icon className="h-5 w-5 shrink-0 text-text-secondary" strokeWidth={1.75} aria-hidden="true" />
+      <span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-text-primary">{title}</span><span className="mt-0.5 block text-xs text-text-secondary">{description}</span></span>
+      <ChevronRight className="h-5 w-5 shrink-0 text-text-muted" aria-hidden="true" />
+    </button>
+  );
+}
+
+function MobileLinkRow({ icon: Icon, title, description, to }: { icon: typeof Users; title: string; description: string; to: string }) {
+  return (
+    <Link to={to} className="flex min-h-16 w-full items-center gap-3 px-4 py-2 text-left hover:bg-surface-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-accent">
+      <Icon className="h-5 w-5 shrink-0 text-text-secondary" strokeWidth={1.75} aria-hidden="true" />
+      <span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-text-primary">{title}</span><span className="mt-0.5 block text-xs text-text-secondary">{description}</span></span>
+      <ChevronRight className="h-5 w-5 shrink-0 text-text-muted" aria-hidden="true" />
+    </Link>
   );
 }

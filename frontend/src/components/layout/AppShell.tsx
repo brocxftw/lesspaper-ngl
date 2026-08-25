@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { LogOut } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 import { cn, getInitials } from "@/lib/utils";
 import { api } from "@/lib/api/client";
 import {
@@ -9,7 +10,7 @@ import {
   useTrashCount,
 } from "@/lib/api/hooks";
 import { AiStatusPill } from "@/components/layout/AiStatusPill";
-import { NavbarSearch } from "@/components/layout/NavbarSearch";
+import { MobileNavbarSearch, NavbarSearch } from "@/components/layout/NavbarSearch";
 import { NavbarUpload } from "@/components/layout/NavbarUpload";
 import { AskDock } from "@/components/ask/AskDock";
 import { OnboardingTourProvider } from "@/features/onboarding/OnboardingTour";
@@ -35,6 +36,7 @@ const NAV_ITEMS = [
 
 export function AppShell({ children }: AppShellProps) {
   const navigate = useNavigate();
+  const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
   const { data: session } = useSession();
   const logout = useLogout();
   const { data: inboxCount = 0 } = useInboxCount();
@@ -49,17 +51,17 @@ export function AppShell({ children }: AppShellProps) {
     <TooltipProvider delayDuration={400}>
       <OnboardingTourProvider>
       <div className="flex h-screen flex-col overflow-hidden bg-surface-muted">
-        <header className="relative z-50 m-3 flex min-h-[72px] w-[calc(100%-24px)] shrink-0 flex-nowrap items-stretch overflow-x-auto rounded-[14px] border border-[rgba(148,163,184,0.10)] bg-navbar pl-4 pr-5 text-navbar-text shadow-[0_8px_20px_rgba(2,6,23,0.18)] sm:pl-[19px] sm:pr-6 lg:pl-[26px] lg:pr-8">
-          <div className="flex items-center gap-[7px]">
-            <BrandMark variant="on-dark" size={36} />
+        <header className="relative z-50 m-3 flex min-h-[72px] w-[calc(100%-24px)] shrink-0 items-stretch rounded-[14px] border border-[rgba(148,163,184,0.10)] bg-navbar pl-4 pr-5 text-navbar-text shadow-[0_8px_20px_rgba(2,6,23,0.18)] max-[360px]:px-3 sm:pl-[19px] sm:pr-6 lg:pl-[26px] lg:pr-8">
+          <div className="flex min-w-0 items-center gap-[7px] max-[360px]:gap-1">
+            <BrandMark variant="on-dark" size={36} className="max-[360px]:!h-7 max-[360px]:!w-7" />
             <BrandWordmark
               variant="on-dark"
-              className="text-[22px] leading-none font-bold max-sm:sr-only lg:text-[26px]"
+              className="text-[clamp(14px,5.5vw,22px)] leading-none font-bold tracking-[-0.04em] max-[360px]:text-[14px] lg:text-[26px]"
             />
           </div>
 
           <nav
-            className="ml-6 flex items-stretch gap-6 lg:ml-10 lg:gap-9"
+            className="ml-6 hidden items-stretch gap-6 md:flex lg:ml-10 lg:gap-9"
             aria-label="Primary"
           >
             {NAV_ITEMS.map(({ to, label, badge }) => {
@@ -95,7 +97,7 @@ export function AppShell({ children }: AppShellProps) {
             })}
           </nav>
 
-          <div className="ml-4 flex min-w-0 flex-1 items-center justify-end gap-3 pl-2 sm:gap-4 lg:gap-5">
+          <div className="ml-4 hidden min-w-0 flex-1 items-center justify-end gap-3 pl-2 md:flex sm:gap-4 lg:gap-5">
             <NavbarSearch />
             <NavbarUpload />
 
@@ -108,44 +110,96 @@ export function AppShell({ children }: AppShellProps) {
               aria-hidden="true"
             />
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  type="button"
-                  className="flex items-center gap-2.5 rounded-lg px-1 text-left transition-colors duration-150 ease-out hover:bg-[rgba(148,163,184,0.08)]"
-                  aria-label="Account menu"
-                >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-navbar-accent/40 bg-[#172033] text-sm font-bold text-navbar-text lg:h-12 lg:w-12">
-                    {session?.user?.has_avatar ? (
-                      <img
-                        src={api.avatarUrl(session.user.id)}
-                        alt=""
-                        className="h-full w-full object-cover"
-                      />
-                    ) : session?.user ? (
-                      getInitials(session.user.display_name)
-                    ) : (
-                      "?"
-                    )}
-                  </div>
-                  <div className="min-w-0 max-lg:hidden">
-                    <p className="truncate text-sm font-semibold text-navbar-text">
-                      {session?.user.display_name ?? "User"}
-                    </p>
-                    <p className="truncate text-[13px] font-normal text-navbar-muted">
-                      {session?.user.is_admin ? "Admin" : "User"}
-                    </p>
-                  </div>
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => void handleLogout()}>
-                  <LogOut className="h-3.5 w-3.5" />
-                  Log out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
+
+          <div className="ml-auto flex items-center self-center md:hidden">
+            <MobileNavbarSearch />
+            <button
+              type="button"
+              className="flex h-11 w-11 items-center justify-center rounded-lg text-navbar-text transition-colors hover:bg-[rgba(148,163,184,0.08)]"
+              aria-label={mobileNavigationOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-controls="mobile-primary-navigation"
+              aria-expanded={mobileNavigationOpen}
+              onClick={() => setMobileNavigationOpen((open) => !open)}
+            >
+              {mobileNavigationOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
+
+          {mobileNavigationOpen && (
+            <nav
+              id="mobile-primary-navigation"
+              className="absolute top-[calc(100%+8px)] right-0 left-0 overflow-hidden rounded-[14px] border border-[rgba(148,163,184,0.10)] bg-navbar p-2 shadow-[0_12px_32px_rgba(2,6,23,0.24)] md:hidden"
+              aria-label="Mobile primary"
+            >
+              {NAV_ITEMS.map(({ to, label, badge }) => {
+                const badgeCount =
+                  badge === "inbox"
+                    ? inboxCount
+                    : badge === "trash"
+                      ? (trashCount?.total ?? 0)
+                      : 0;
+                return (
+                  <NavLink
+                    key={to}
+                    to={to}
+                    onClick={() => setMobileNavigationOpen(false)}
+                    className={({ isActive }) =>
+                      cn(
+                        "flex min-h-11 items-center justify-between rounded-lg px-3 text-sm font-semibold text-navbar-muted transition-colors hover:bg-[rgba(148,163,184,0.08)] hover:text-navbar-text",
+                        isActive && "bg-[rgba(148,163,184,0.12)] text-navbar-text",
+                      )
+                    }
+                  >
+                    {label}
+                    {badgeCount > 0 && (
+                      <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-navbar-accent/20 px-1.5 text-[11px] font-medium text-navbar-accent">
+                        {badgeCount > 99 ? "99+" : badgeCount}
+                      </span>
+                    )}
+                  </NavLink>
+                );
+              })}
+            </nav>
+          )}
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                className="ml-2 flex items-center gap-2.5 self-center rounded-lg px-1 text-left transition-colors duration-150 ease-out hover:bg-[rgba(148,163,184,0.08)] max-[360px]:ml-1 md:ml-4"
+                aria-label="Account menu"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-navbar-accent/40 bg-[#172033] text-sm font-bold text-navbar-text lg:h-12 lg:w-12">
+                  {session?.user?.has_avatar ? (
+                    <img
+                      src={api.avatarUrl(session.user.id)}
+                      alt=""
+                      className="h-full w-full object-cover"
+                    />
+                  ) : session?.user ? (
+                    getInitials(session.user.display_name)
+                  ) : (
+                    "?"
+                  )}
+                </div>
+                <div className="hidden min-w-0 lg:block">
+                  <p className="truncate text-sm font-semibold text-navbar-text">
+                    {session?.user.display_name ?? "User"}
+                  </p>
+                  <p className="truncate text-[13px] font-normal text-navbar-muted">
+                    {session?.user.is_admin ? "Admin" : "User"}
+                  </p>
+                </div>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => void handleLogout()}>
+                <LogOut className="h-3.5 w-3.5" />
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </header>
 
         <main className="flex min-h-0 flex-1 flex-col overflow-hidden bg-surface">

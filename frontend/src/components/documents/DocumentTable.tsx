@@ -11,6 +11,7 @@ import {
   documentListRowClass,
 } from "@/features/documents/documentListColumns";
 import { cn } from "@/lib/utils";
+import { MobileDocumentList } from "./MobileDocumentList";
 
 interface DocumentTableProps {
   documents: Document[];
@@ -91,8 +92,18 @@ export function DocumentTable({
   }
 
   return (
+    <>
+      <MobileDocumentList
+        documents={documents}
+        selectedIds={selectedIds}
+        folders={folders}
+        tags={tags}
+        onSelect={onSelect}
+        onOpen={onActiveChange}
+        onActionComplete={onActionComplete}
+      />
     <div
-      className="flex min-h-0 flex-1 flex-col outline-none"
+      className="hidden min-h-0 flex-1 flex-col outline-none md:flex"
       tabIndex={0}
       role="grid"
       aria-multiselectable
@@ -196,5 +207,6 @@ export function DocumentTable({
         </div>
       )}
     </div>
+    </>
   );
 }

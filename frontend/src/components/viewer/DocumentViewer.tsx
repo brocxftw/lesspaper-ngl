@@ -42,6 +42,8 @@ export function DocumentViewer({
   className,
 }: DocumentViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const readerRef = useRef<HTMLDivElement>(null);
+  const touchStartRef = useRef<{ x: number; y: number; distance?: number } | null>(null);
   const pdfRef = useRef<pdfjsLib.PDFDocumentProxy | null>(null);
   const renderTaskRef = useRef<pdfjsLib.RenderTask | null>(null);
 
@@ -54,6 +56,7 @@ export function DocumentViewer({
   const [fallbackUrl, setFallbackUrl] = useState<string | null>(null);
   const [highlightRects, setHighlightRects] = useState<HighlightRect[]>([]);
   const [canvasCssSize, setCanvasCssSize] = useState({ width: 0, height: 0 });
+  const [readerSize, setReaderSize] = useState({ width: 0, height: 0 });
 
   const currentPage = externalPage ?? page;
   const docId = document?.id;
@@ -146,6 +149,22 @@ export function DocumentViewer({
     };
   }, [docId, mime]);
 
+  // Mobile PDFs should open fully visible, not at a fixed intrinsic scale. Keep
+  // the available reader area in state so rotations and browser chrome changes
+  // re-render the page at the correct fit scale.
+  useLayoutEffect(() => {
+    const reader = readerRef.current;
+    if (!reader) return;
+
+    const updateSize = () => {
+      setReaderSize({ width: reader.clientWidth, height: reader.clientHeight });
+    };
+    updateSize();
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(reader);
+    return () => observer.disconnect();
+  }, []);
+
   useLayoutEffect(() => {
     if (!pdf || mime !== "application/pdf") return;
 
@@ -160,7 +179,15 @@ export function DocumentViewer({
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const scale = (zoom / 100) * 1.25;
+        const unscaledViewport = pdfPage.getViewport({ scale: 1 });
+        const mobile = window.innerWidth < 768;
+        const fitScale = Math.min(
+          (readerSize.width - 8) / unscaledViewport.width,
+          (readerSize.height - 8) / unscaledViewport.height,
+        );
+        const scale = mobile && readerSize.width && readerSize.height
+          ? Math.max(0.1, fitScale) * (zoom / 100)
+          : (zoom / 100) * 1.25;
         const viewport = pdfPage.getViewport({ scale });
         const outputScale = window.devicePixelRatio || 1;
 
@@ -263,7 +290,7 @@ export function DocumentViewer({
       cancelled = true;
       renderTaskRef.current?.cancel();
     };
-  }, [pdf, mime, currentPage, zoom, highlightQuote]);
+  }, [pdf, mime, currentPage, zoom, highlightQuote, readerSize]);
 
   const goToPage = (p: number) => {
     const next = Math.max(1, Math.min(totalPages, p));
@@ -329,7 +356,7 @@ export function DocumentViewer({
 
   return (
     <div className={cn("flex flex-col bg-white min-h-0", className)}>
-      <div className="flex items-center gap-1 border-b border-surface-border bg-surface px-2 py-1.5 text-text-secondary shrink-0">
+      <div className="hidden items-center gap-1 border-b border-surface-border bg-surface px-2 py-1.5 text-text-secondary shrink-0 md:flex">
         <span className="flex-1 truncate text-xs text-text-primary">{document.title}</span>
         {isPdf && pdf && (
           <>
@@ -410,7 +437,24 @@ export function DocumentViewer({
         </button>
       </div>
 
-      <div className="relative flex-1 min-h-0 overflow-auto bg-white">
+      <div ref={readerRef} className="relative flex-1 min-h-0 overflow-auto bg-white" onTouchStart={(event) => {
+        if (window.innerWidth >= 768) return;
+        const first = event.touches[0];
+        const second = event.touches[1];
+        touchStartRef.current = first ? { x: first.clientX, y: first.clientY, distance: second ? Math.hypot(first.clientX - second.clientX, first.clientY - second.clientY) : undefined } : null;
+      }} onTouchMove={(event) => {
+        if (window.innerWidth >= 768 || event.touches.length !== 2 || !touchStartRef.current?.distance) return;
+        const [first, second] = [event.touches[0], event.touches[1]];
+        const distance = Math.hypot(first.clientX - second.clientX, first.clientY - second.clientY);
+        const factor = distance / touchStartRef.current.distance;
+        setZoom((value) => Math.max(50, Math.min(200, Math.round(value * factor))));
+        touchStartRef.current.distance = distance;
+      }} onTouchEnd={(event) => {
+        if (window.innerWidth >= 768 || !touchStartRef.current || event.changedTouches.length !== 1) return;
+        const start = touchStartRef.current; const end = event.changedTouches[0]; touchStartRef.current = null;
+        const dx = end.clientX - start.x; const dy = end.clientY - start.y;
+        if (!start.distance && Math.abs(dx) > 80 && Math.abs(dx) > Math.abs(dy) * 1.5) goToPage(currentPage + (dx < 0 ? 1 : -1));
+      }}>
         {loading && (
           <p className="absolute inset-0 z-10 flex items-center justify-center text-text-muted text-sm bg-white/80">
             Loading…
@@ -423,7 +467,7 @@ export function DocumentViewer({
         )}
 
         {showCanvas && (
-          <div className="flex min-h-full justify-center p-4">
+          <div className="flex min-h-full items-center justify-center p-1 md:items-start md:p-4">
             <div
               className="relative shadow-sm border border-surface-border bg-white"
               style={
@@ -432,7 +476,7 @@ export function DocumentViewer({
                   : undefined
               }
             >
-              <canvas ref={canvasRef} className="max-w-full block" />
+              <canvas ref={canvasRef} className={cn("block", zoom > 100 ? "max-w-none" : "max-w-full")} />
               {highlightRects.map((rect, i) => (
                 <div
                   key={`hl-${i}-${rect.left}-${rect.top}`}
@@ -485,6 +529,13 @@ export function DocumentViewer({
           </div>
         )}
       </div>
+      {isPdf && pdf && (
+        <div className="flex h-14 shrink-0 items-center justify-between border-t border-surface-border bg-surface px-2 pb-[env(safe-area-inset-bottom)] md:hidden">
+          <button type="button" className="flex h-11 min-w-11 items-center justify-center rounded-md text-text-secondary hover:bg-surface-hover disabled:opacity-40" onClick={() => goToPage(currentPage - 1)} disabled={currentPage <= 1} aria-label="Previous page">‹</button>
+          <span className="text-sm tabular-nums text-text-primary">Page {currentPage} of {totalPages}</span>
+          <button type="button" className="flex h-11 min-w-11 items-center justify-center rounded-md text-text-secondary hover:bg-surface-hover disabled:opacity-40" onClick={() => goToPage(currentPage + 1)} disabled={currentPage >= totalPages} aria-label="Next page">›</button>
+        </div>
+      )}
     </div>
   );
 }

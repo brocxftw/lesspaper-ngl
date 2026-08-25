@@ -117,8 +117,14 @@ export function InboxActivityPanel({
   })();
 
   return (
-    <section className="mt-4 overflow-hidden rounded-[10px] border border-[#DCE3E8] bg-white">
-      <div className="flex flex-wrap items-center gap-3 border-b border-[#E7ECEF] px-4 py-3">
+    <section className="mt-6 overflow-hidden rounded-[10px] border border-[#DCE3E8] bg-white md:mt-4">
+      <div className="flex items-center justify-between px-3 pt-3 md:hidden">
+        <h2 className="text-base font-bold text-[#14212B]">Recent activity</h2>
+        <Button size="icon" variant="ghost" className="h-11 w-11" aria-label="Refresh activity" disabled={isFetching} onClick={() => void refetch()}>
+          <RefreshCw className={cn("h-4 w-4", isFetching && "animate-spin")} strokeWidth={1.75} />
+        </Button>
+      </div>
+      <div className="flex flex-wrap items-center gap-3 border-b border-[#E7ECEF] px-3 pb-3 pt-2 md:px-4 md:py-3">
         <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
           {TABS.map((t) => (
             <button
@@ -129,19 +135,19 @@ export function InboxActivityPanel({
                 setPage(1);
               }}
               className={cn(
-                "border-b-2 px-2.5 py-1.5 text-xs font-medium transition-colors",
+                "border-b-2 px-2.5 py-2 text-xs font-medium transition-colors md:py-1.5",
                 tab === t.id
                   ? "border-accent text-accent"
                   : "border-transparent text-[#5D6B76] hover:text-[#14212B]",
               )}
             >
-              {t.label}
+              {t.id === "recent" ? <><span className="md:hidden">All</span><span className="hidden md:inline">{t.label}</span></> : t.label}
             </button>
           ))}
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="relative w-[280px] max-w-full">
+        <div className="flex w-full items-center gap-2 md:w-auto md:flex-wrap">
+          <div className="relative min-w-0 flex-1 md:w-[280px] md:flex-none">
             <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#74828D]" />
             <Input
               value={search}
@@ -149,8 +155,8 @@ export function InboxActivityPanel({
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              placeholder="Search documents..."
-              className="h-[30px] pl-8 text-xs"
+              placeholder="Filter activity..."
+              className="h-11 pl-8 text-sm md:h-[30px] md:text-xs"
             />
           </div>
 
@@ -160,12 +166,12 @@ export function InboxActivityPanel({
                 size="sm"
                 variant="outline"
                 className={cn(
-                  "h-[30px]",
+                  "h-11 shrink-0 px-3 md:h-[30px] md:px-2",
                   statusFilter !== "all" && "border-accent text-accent",
                 )}
               >
                 <Filter className="h-3.5 w-3.5" strokeWidth={1.75} />
-                Filter
+                <span className="md:hidden">Filter</span><span className="hidden md:inline">Filter</span>
               </Button>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-48 p-1">
@@ -192,7 +198,7 @@ export function InboxActivityPanel({
           <Button
             size="icon"
             variant="outline"
-            className="h-[30px] w-[30px]"
+            className="hidden h-[30px] w-[30px] md:inline-flex"
             aria-label="Refresh"
             title="Refresh"
             disabled={isFetching}
@@ -227,8 +233,8 @@ export function InboxActivityPanel({
         }
       />
 
-      <div className="flex items-center justify-between border-t border-[#E7ECEF] px-4 py-2.5 text-xs text-[#74828D]">
-        <span>
+      <div className="flex items-center justify-between border-t border-[#E7ECEF] px-3 py-2.5 text-xs text-[#74828D] md:px-4">
+        <span className="min-w-0 truncate">
           {total === 0
             ? "Showing 0 documents"
             : `Showing ${(safePage - 1) * PAGE_SIZE + 1} to ${Math.min(safePage * PAGE_SIZE, total)} of ${total} documents`}
@@ -243,7 +249,7 @@ export function InboxActivityPanel({
                   type="button"
                   onClick={() => setPage(p)}
                   className={cn(
-                    "flex h-[30px] min-w-[30px] items-center justify-center rounded px-2 text-xs font-medium",
+                    "flex h-11 min-w-11 items-center justify-center rounded px-2 text-xs font-medium md:h-[30px] md:min-w-[30px]",
                     p === safePage
                       ? "bg-accent text-accent-foreground"
                       : "text-[#5D6B76] hover:bg-surface-hover",

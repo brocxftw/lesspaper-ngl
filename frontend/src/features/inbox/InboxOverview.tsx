@@ -118,7 +118,7 @@ export function InboxOverview({ uploader }: InboxOverviewProps) {
 
   return (
     <div className="h-full overflow-auto bg-[#F8FAFB]">
-      <div className="px-5 pb-6 pt-[18px]">
+      <div className="px-4 pb-6 pt-4 md:px-5 md:pt-[18px]">
         <InboxIngestionHero uploader={uploader} onBrowse={() => goWork(true)} />
 
         <InboxOverviewMetrics metrics={metrics} />

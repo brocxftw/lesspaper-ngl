@@ -30,6 +30,10 @@ import {
 } from "./DocumentBulkToolbar";
 import { DocumentGrid } from "./DocumentGrid";
 import { DocumentViewerModal } from "./DocumentViewerModal";
+import { MobileLibraryExplorer } from "./MobileLibraryExplorer";
+import { DocumentViewTabs } from "./DocumentViewTabs";
+import { Button } from "@/components/ui/Button";
+import { Sparkles } from "lucide-react";
 import {
   DOCUMENTS_LAYOUT_PREF_KEY,
   DOCUMENTS_LAYOUT_PREF_KEY_LEGACY,
@@ -246,6 +250,22 @@ export function DocumentsPage() {
             onViewChange={(view) => patch({ view })}
           />
 
+          <div className="border-b border-surface-border bg-surface px-4 py-4 md:hidden">
+            <h1 className="mb-3 text-xl font-bold text-text-primary">Library</h1>
+            <MobileLibraryExplorer
+              folders={folders}
+              tags={tags}
+              view={state.view}
+              folderId={state.folderId}
+              tagIds={state.tagIds}
+              total={docList?.total ?? 0}
+              onViewChange={(view) => patch({ view, folderId: undefined })}
+              onFolderSelect={(folderId) => patch({ folderId, view: folderId ? "all" : state.view })}
+              onTagToggle={handleTagToggle}
+            />
+            <DocumentViewTabs view={state.view} onChange={(view) => patch({ view, folderId: undefined })} className="mt-4 grid grid-cols-3 gap-1 rounded-[10px] border border-surface-border p-1 [&>button]:min-h-10 [&>button]:justify-center" />
+          </div>
+
           <UploadStatusBar
             busy={uploader.busy}
             progress={uploader.progress}
@@ -411,6 +431,15 @@ export function DocumentsPage() {
               )}
             </div>
           </div>
+          {!isEvidenceSearch && selectedIds.size === 0 && (
+            <Button
+              type="button"
+              className="fixed right-5 bottom-5 z-30 h-12 rounded-full px-4 shadow-lg md:hidden"
+              onClick={() => openAsk(state.folderId ? { kind: "folder_tree", folderId: state.folderId } : { kind: "library" })}
+            >
+              <Sparkles className="h-4 w-4" /> Ask AI
+            </Button>
+          )}
         </div>
       </div>
 

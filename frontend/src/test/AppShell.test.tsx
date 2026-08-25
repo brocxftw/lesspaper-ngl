@@ -155,6 +155,37 @@ describe("AppShell top navbar", () => {
     expect(screen.getAllByRole("link", { name: "Settings" })).toHaveLength(1);
   });
 
+  it("provides an expandable mobile navigation menu with every primary route", () => {
+    renderShell();
+
+    const trigger = screen.getByRole("button", { name: "Open navigation menu" });
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+    fireEvent.click(trigger);
+
+    const navigation = screen.getByRole("navigation", { name: "Mobile primary" });
+    expect(within(navigation).getAllByRole("link").map((link) => link.getAttribute("href"))).toEqual([
+      "/inbox",
+      "/documents",
+      "/trash",
+      "/settings",
+    ]);
+    expect(screen.getByRole("button", { name: "Close navigation menu" })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
+  });
+
+  it("closes the mobile navigation menu after selecting a route", () => {
+    renderShell();
+    fireEvent.click(screen.getByRole("button", { name: "Open navigation menu" }));
+
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Mobile primary" })).getByRole("link", { name: "Settings" }));
+
+    expect(screen.getByTestId("location")).toHaveTextContent("/settings");
+    expect(screen.queryByRole("navigation", { name: "Mobile primary" })).not.toBeInTheDocument();
+  });
+
   it("places Upload immediately left of the AI status control", () => {
     renderShell();
     const upload = screen.getByRole("button", { name: "Upload" });
@@ -275,9 +306,33 @@ describe("AppShell top navbar", () => {
     });
   });
 
-  it("exposes Ask AI as a floating control", () => {
+  it("opens the mobile Library search panel and uses the shared keyword results", async () => {
+    searchHits.splice(0, searchHits.length, {
+      document: {
+        id: "doc-1",
+        title: "Q3 contracts",
+        original_filename: "contracts.pdf",
+        has_thumbnail: false,
+        folder_path: "/Legal",
+        mime_type: "application/pdf",
+      },
+      score: 1,
+      snippet: "indemnity clause",
+      page_number: 2,
+      chunk_id: null,
+    } as SearchHit);
+
     renderShell();
-    expect(screen.getByRole("button", { name: "Ask AI" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Search library" }));
+    const input = await screen.findByRole("searchbox", { name: "Search documents" });
+    fireEvent.change(input, { target: { value: "contracts" } });
+
+    expect(await screen.findByRole("button", { name: /Q3 contracts/ })).toBeInTheDocument();
+  });
+
+  it("does not expose the global Ask AI dock in the Library", () => {
+    renderShell();
+    expect(screen.queryByRole("button", { name: "Ask AI" })).not.toBeInTheDocument();
   });
 
   it("hides the Ask AI button in the inbox workspace", () => {
@@ -295,8 +350,8 @@ describe("AppShell top navbar", () => {
     expect(screen.queryByRole("button", { name: "Ask AI" })).not.toBeInTheDocument();
   });
 
-  it("opens a compact Ask dock with in-composer context and send", () => {
-    renderShell("/documents");
+  it("opens a compact Ask dock outside the Library", () => {
+    renderShell("/trash");
     fireEvent.click(screen.getByRole("button", { name: "Ask AI" }));
     expect(screen.getByRole("dialog", { name: "Ask AI" })).toBeInTheDocument();
     expect(
