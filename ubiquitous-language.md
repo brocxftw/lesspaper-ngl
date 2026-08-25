@@ -42,7 +42,7 @@ Terms marked *planned* are intentionally absent from the product until schema/AP
 **Means:** Finding evidence with keyword, semantic, or hybrid search — without calling a chat model.  
 **Not:** Ask / generation.
 
-### Ask lesspaper-ngl
+### Ask AI
 **Also:** Ask, RAG, Q&A, document ask  
 **Means:** User-triggered reasoning over retrieved evidence with validated citations. Workspace Ask (`POST /api/ask`) is one request → one answer with no persisted thread. Document Ask persists a conversation (one per owner+document) and may send prior turns within the history token budget. Streaming is not implemented.  
 **Not:** Automatic background summarisation or silent LLM calls from search.
@@ -474,7 +474,7 @@ Terms marked *planned* are intentionally absent from the product until schema/AP
 **Means:** Library shell — explorer, header search, results (list/grid), modal viewer, AI drawer. Primary surface for find / organise / inspect / understand.
 
 ### Documents header
-**Means:** Title, dominant retrieval field, mode/coverage, Ask lesspaper-ngl, upload.
+**Means:** Title, dominant retrieval field, mode/coverage, Ask AI, upload.
 
 ### Explorer sidebar
 **Also:** document explorer  
@@ -515,7 +515,7 @@ Terms marked *planned* are intentionally absent from the product until schema/AP
 
 ### AI drawer
 **Also:** AIChatDrawer, Ask panel  
-**Means:** Right-side sheet for scoped, single-turn Ask lesspaper-ngl with citations.
+**Means:** Right-side sheet for scoped, single-turn Ask AI with citations.
 
 ### Search workspace / Ask workspace
 **Means:** Standalone `/search` and `/ask` routes kept for parity with the Documents-integrated workflow.
@@ -586,7 +586,7 @@ Terms marked *planned* are intentionally absent from the product until schema/AP
 
 ## 13. Alphabetical index
 
-Added date · Admin · AI drawer · AI monthly request quota · AI policy · AI profile · AI provider · AI suggestion · Ask lesspaper-ngl · Ask ready · Ask scope · Archive serial · Archived · Auto-enrichment · Auto-tagging · Browse · Bulk action · Checksum · Citation · Confirm remote · Consume · Content-addressed storage · Context budget · Correspondent · Created date · CSRF token · Custom fields · Document · Document chunk · Document page · Document total · Document type · Documents path · Documents root · Documents workspace · Duplicate · Effective date · Effective mode · Embedding · Embedding space · Enforcement note · Evidence search · Explorer sidebar · Export · Extracted text · Filter chips · Folder · Folder kind · lesspaper-ngl · Hybrid search · Include descendants · Inbox · Inbox status · Indexing · Ingestion · Ingestion history · Insufficient evidence · Invite · Is local · Job · Job type · Keyword search · Keyword ready · Layout mode · Library · Library view · Logical folder · Match total · Metadata · Metadata suggestion · Modified date · Needs review · NFS · Notes · OCR · OCR tab · Original filename · Overview · Owner · Passage · Path cache · Pending folder path · Preflight · Preview · Privacy mode · Process · Processing status · Purge · Quick Access · Recently added · Retrieval · Retrieval readiness · Reprocess · Retention days · Scope readiness · Search hit · Search match · Search scope snapshot · Search vector · Search workspace · Semantic available · Semantic coverage · Semantic ready · Semantic search · Session · Single-turn · Snippet · Starred *(planned)* · Storage health · Storage key · Storage quota · Suggestion status · Summary · Tag · Text extraction · Thumbnail · Title · Trash · Unprocessed · Usage · User · Viewer · Worker
+Added date · Admin · AI drawer · AI monthly request quota · AI policy · AI profile · AI provider · AI suggestion · Ask AI · Ask ready · Ask scope · Archive serial · Archived · Auto-enrichment · Auto-tagging · Browse · Bulk action · Checksum · Citation · Confirm remote · Consume · Content-addressed storage · Context budget · Correspondent · Created date · CSRF token · Custom fields · Document · Document chunk · Document page · Document total · Document type · Documents path · Documents root · Documents workspace · Duplicate · Effective date · Effective mode · Embedding · Embedding space · Enforcement note · Evidence search · Explorer sidebar · Export · Extracted text · Filter chips · Folder · Folder kind · lesspaper-ngl · Hybrid search · Include descendants · Inbox · Inbox status · Indexing · Ingestion · Ingestion history · Insufficient evidence · Invite · Is local · Job · Job type · Keyword search · Keyword ready · Layout mode · Library · Library view · Logical folder · Match total · Metadata · Metadata suggestion · Modified date · Needs review · NFS · Notes · OCR · OCR tab · Original filename · Overview · Owner · Passage · Path cache · Pending folder path · Preflight · Preview · Privacy mode · Process · Processing status · Purge · Quick Access · Recently added · Retrieval · Retrieval readiness · Reprocess · Retention days · Scope readiness · Search hit · Search match · Search scope snapshot · Search vector · Search workspace · Semantic available · Semantic coverage · Semantic ready · Semantic search · Session · Single-turn · Snippet · Starred *(planned)* · Storage health · Storage key · Storage quota · Suggestion status · Summary · Tag · Text extraction · Thumbnail · Title · Trash · Unprocessed · Usage · User · Viewer · Worker
 
 ---
 

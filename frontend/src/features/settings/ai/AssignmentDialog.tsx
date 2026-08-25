@@ -18,6 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/Dialog";
+import { Input } from "@/components/ui/Input";
 import {
   Select,
   SelectContent,
@@ -71,7 +72,7 @@ function roleRecommendation(role: AIWorkloadRole): string {
     return "Prefer models marked Embedding. Chat models usually cannot produce vectors.";
   }
   if (role === "chat") {
-    return "Prefer models marked Chat. Embedding models are ranked lower for Ask lesspaper-ngl.";
+    return "Prefer models marked Chat. Embedding models are ranked lower for Ask AI.";
   }
   return "Prefer models marked Chat for filing suggestions. Embedding models are ranked lower.";
 }
@@ -87,6 +88,7 @@ export function AssignmentDialog({
   const mutation = useUpdateAIAssignment();
   const [providerId, setProviderId] = useState(assignment.provider_id || "");
   const [model, setModel] = useState(assignment.model || "");
+  const [modelSearch, setModelSearch] = useState("");
   const { data: discovery, isFetching } = useProviderModels(providerId || null);
   const copy = WORKLOAD_COPY[assignment.role];
   const compatible = assignmentProviderChoices(providers);
@@ -97,6 +99,16 @@ export function AssignmentDialog({
   );
   const modelIds = useMemo(() => new Set(rankedModels.map((item) => item.id)), [rankedModels]);
   const selectedValid = Boolean(model && modelIds.has(model));
+  const matchingModels = useMemo(() => {
+    const query = modelSearch.trim().toLocaleLowerCase();
+    const matches = query
+      ? rankedModels.filter((item) => item.id.toLocaleLowerCase().includes(query))
+      : rankedModels;
+    const selected = rankedModels.find((item) => item.id === model);
+    return selected && !matches.some((item) => item.id === selected.id)
+      ? [selected, ...matches]
+      : matches;
+  }, [model, modelSearch, rankedModels]);
 
   const save = async () => {
     await mutation.mutateAsync({
@@ -121,6 +133,7 @@ export function AssignmentDialog({
               onValueChange={(value) => {
                 setProviderId(value === "none" ? "" : value);
                 setModel("");
+                setModelSearch("");
               }}
             >
               <SelectTrigger className="mt-1">
@@ -143,26 +156,45 @@ export function AssignmentDialog({
                 {isFetching ? (
                   <p className="mt-2 text-xs text-text-muted">Discovering models…</p>
                 ) : rankedModels.length ? (
-                  <Select
-                    value={selectedValid ? model : undefined}
-                    onValueChange={setModel}
-                  >
-                    <SelectTrigger className="mt-1">
-                      <SelectValue placeholder="Select a discovered model" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {rankedModels.map((item) => (
-                        <SelectItem key={item.id} value={item.id}>
-                          <span className="flex items-center gap-2">
-                            <span className="font-mono text-xs">{item.id}</span>
+                  <div className="mt-1 space-y-2">
+                    <Input
+                      aria-label="Filter discovered models"
+                      value={modelSearch}
+                      onChange={(event) => setModelSearch(event.target.value)}
+                      placeholder="Filter models by ID"
+                    />
+                    <p className="text-xs text-text-muted" aria-live="polite">
+                      {matchingModels.length} {matchingModels.length === 1 ? "model" : "models"} shown
+                    </p>
+                    <div
+                      className="max-h-60 overflow-y-auto rounded-md border border-surface-border p-1"
+                      role="listbox"
+                      aria-label="Discovered models"
+                    >
+                      {matchingModels.length ? (
+                        matchingModels.map((item) => (
+                          <button
+                            key={item.id}
+                            type="button"
+                            role="option"
+                            aria-selected={model === item.id}
+                            onClick={() => setModel(item.id)}
+                            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left hover:bg-surface-hover focus:bg-surface-hover focus:outline-none"
+                          >
+                            <span className="font-mono text-xs text-text-primary">{item.id}</span>
                             <span className="rounded bg-surface-muted px-1.5 py-0.5 text-[10px] font-medium text-text-secondary">
                               {kindLabel(item.kind)}
                             </span>
-                          </span>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                          </button>
+                        ))
+                      ) : (
+                        <p className="px-2 py-3 text-xs text-text-muted">No models match this filter.</p>
+                      )}
+                    </div>
+                    <p className="text-xs text-text-secondary">
+                      {selectedValid ? `Selected: ${model}` : "Select a discovered model"}
+                    </p>
+                  </div>
                 ) : (
                   <p className="mt-2 text-xs text-warning">
                     {discovery?.message ||

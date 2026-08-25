@@ -411,6 +411,14 @@ else
   FAILED=$((FAILED + 1))
   printf 'FAIL packed installer missing expected markers\n'
 fi
+if grep -q 'lesspaper-ngl .* is .* and healthy' "${PACK}" \
+  && ! grep -q 'Folium .* is .* and healthy' "${PACK}"; then
+  PASSED=$((PASSED + 1))
+  printf 'ok  packed installer uses current product name in success screen\n'
+else
+  FAILED=$((FAILED + 1))
+  printf 'FAIL packed installer has stale success-screen product name\n'
+fi
 rm -rf "${PACK_DIR}"
 
 printf '\n%d passed, %d failed\n' "${PASSED}" "${FAILED}"

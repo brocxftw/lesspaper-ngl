@@ -69,6 +69,21 @@ def _extract_error_message(response: httpx.Response) -> str:
     return str(payload)
 
 
+def _usage_cost(usage: dict[str, Any]) -> float | None:
+    """Read the optional OpenRouter/OpenAI-compatible cost field safely."""
+    value = usage.get("cost")
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    if isinstance(value, str):
+        try:
+            return float(value)
+        except ValueError:
+            return None
+    return None
+
+
 class OpenAICompatibleAdapter(AIProviderAdapter):
     """Async client for /v1/chat/completions and /v1/embeddings APIs."""
 
@@ -247,12 +262,15 @@ class OpenAICompatibleAdapter(AIProviderAdapter):
                 raise AIProviderError("Chat completion response missing content.")
 
         usage = data.get("usage") if isinstance(data.get("usage"), dict) else {}
+        reported_cost = _usage_cost(usage)
 
         return ChatResult(
             content=content,
             model=str(data.get("model", resolved_model)),
             input_tokens=_coerce_int(usage.get("prompt_tokens")),
             output_tokens=_coerce_int(usage.get("completion_tokens")),
+            reported_cost=reported_cost,
+            cost_currency="USD" if reported_cost is not None else None,
             finish_reason=finish_reason_str,
             raw=data,
         )
@@ -292,11 +310,14 @@ class OpenAICompatibleAdapter(AIProviderAdapter):
             embeddings.append([float(value) for value in vector])
 
         usage = data.get("usage") if isinstance(data.get("usage"), dict) else {}
+        reported_cost = _usage_cost(usage)
 
         return EmbeddingResult(
             embeddings=embeddings,
             model=str(data.get("model", resolved_model)),
             input_tokens=_coerce_int(usage.get("prompt_tokens") or usage.get("total_tokens")),
+            reported_cost=reported_cost,
+            cost_currency="USD" if reported_cost is not None else None,
             raw=data,
         )
 

@@ -39,7 +39,7 @@ Privacy: `PrivacyGate.assert_can_embed`.
 
 ---
 
-## Ask lesspaper-ngl
+## Ask AI
 
 ```text
 question

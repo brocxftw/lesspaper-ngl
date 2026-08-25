@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 import { ArtificialIntelligencePage } from "@/features/settings/ArtificialIntelligencePage";
+import type { AIUsageSummary } from "@/lib/api/types";
 
 const { idleMutation, policy, usageSummary, health, assignments } = vi.hoisted(() => ({
   idleMutation: {
@@ -52,7 +53,7 @@ const { idleMutation, policy, usageSummary, health, assignments } = vi.hoisted((
     time_series: [],
     by_provider: [],
     by_workload: [],
-  },
+  } as AIUsageSummary,
   health: {
     ocr: { status: "available", provider: null, model: null, latency_ms: null, last_checked: null, error: null },
     indexing: { status: "available", provider: "Local", model: "gemma", latency_ms: 5, last_checked: null, error: null },
@@ -145,6 +146,33 @@ describe("Artificial Intelligence settings tabs", () => {
     expect(screen.getByText("Local models")).toBeInTheDocument();
   });
 
+  it("renders a point when usage has only one time bucket", () => {
+    usageSummary.totals.requests = 1;
+    usageSummary.time_series = [
+      {
+        bucket: "2026-08-18T12:00:00Z",
+        requests: 1,
+        input_tokens: 10,
+        output_tokens: 5,
+        duration_ms: 100,
+      },
+    ];
+    renderPage();
+    const point = screen.getByTestId("usage-chart-point");
+    expect(point).toBeInTheDocument();
+    expect(screen.getByTestId("usage-chart-y-axis-label")).toHaveTextContent("Requests");
+    expect(screen.getByTestId("usage-chart-x-axis-label")).toHaveTextContent("Time (UTC)");
+    expect(screen.getAllByTestId("usage-chart-y-tick")).toHaveLength(2);
+    expect(screen.getByTestId("usage-chart-x-tick")).toHaveTextContent("18 Aug");
+    fireEvent.mouseEnter(point);
+    expect(screen.getByTestId("usage-chart-tooltip")).toHaveTextContent("18 Aug 2026, 12:00 UTC");
+    expect(screen.getByTestId("usage-chart-tooltip")).toHaveTextContent("Requests: 1");
+    expect(screen.getAllByText("Average")).toHaveLength(3);
+    expect(screen.getByText("Completed")).toBeInTheDocument();
+    usageSummary.totals.requests = 0;
+    usageSummary.time_series = [];
+  });
+
   it("places workloads and providers in separate Models sections", () => {
     renderPage("?tab=models");
     expect(screen.getByRole("tab", { name: "Models" })).toHaveAttribute("data-state", "active");
@@ -156,7 +184,7 @@ describe("Artificial Intelligence settings tabs", () => {
       ) & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
     expect(screen.getByText("Filing suggestions")).toBeInTheDocument();
-    expect(screen.getByText("Ask lesspaper-ngl")).toBeInTheDocument();
+    expect(screen.getByText("Ask AI")).toBeInTheDocument();
     expect(document.getElementById("providers")).toBeTruthy();
   });
 
@@ -169,6 +197,7 @@ describe("Artificial Intelligence settings tabs", () => {
     expect(screen.getByRole("button", { name: "Save changes" })).toBeInTheDocument();
     expect(document.getElementById("ai-policy")).toBeTruthy();
     expect(screen.queryByText("Block all remote AI")).not.toBeInTheDocument();
+    expect(screen.queryByText("Advanced: experimental vision")).not.toBeInTheDocument();
   });
 
   it("locks remote AI toggles in local-only mode", async () => {
@@ -176,7 +205,7 @@ describe("Artificial Intelligence settings tabs", () => {
     renderPage("?tab=controls");
     const switches = screen.getAllByRole("switch");
     const remoteSwitches = switches.filter((node) =>
-      ["Ask lesspaper-ngl", "Embeddings", "Vision"].includes(node.getAttribute("aria-label") ?? ""),
+      ["Ask AI", "Embeddings", "Vision"].includes(node.getAttribute("aria-label") ?? ""),
     );
     for (const toggle of remoteSwitches) {
       expect(toggle).toBeDisabled();

@@ -195,7 +195,7 @@ export function AIChatPanel({
   onCitationClick,
   showScopeSelector = true,
   className,
-  title = "Ask lesspaper-ngl",
+  title = "Ask AI",
   description = "Single-turn answers with citations from the selected scope.",
   compactComposer = false,
 }: AIChatPanelProps) {

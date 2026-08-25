@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import {
   AssignmentDialog,
@@ -96,5 +96,17 @@ describe("AssignmentDialog discovered models", () => {
       ),
     ).toBeInTheDocument();
     expect(screen.getByText("Select a discovered model")).toBeInTheDocument();
+  });
+
+  it("filters a large discovered-model list by ID", () => {
+    render(<AssignmentDialog assignment={assignment} onClose={vi.fn()} />);
+
+    fireEvent.change(screen.getByLabelText("Filter discovered models"), {
+      target: { value: "claude" },
+    });
+
+    expect(screen.getByText("1 model shown")).toBeInTheDocument();
+    expect(screen.getByText("anthropic/claude-3.5-sonnet")).toBeInTheDocument();
+    expect(screen.queryByText("openai/gpt-4o-mini")).not.toBeInTheDocument();
   });
 });

@@ -153,7 +153,7 @@ Public Compose uses `image:` only. GHCR publish is `.github/workflows/publish-im
 
 Works without any AI provider (**Confirmed**): upload/consume, local OCR/text extract, Inbox/Process, folders/tags, FTS keyword search, Jobs, Trash, users, quotas (storage).
 
-Requires AI when used: Ask lesspaper-ngl (chat assignment), embeddings/semantic/hybrid, filing suggestions (`auto_tagging` + indexing-role model), summaries (`auto_enrichment`).
+Requires AI when used: Ask AI (chat assignment), embeddings/semantic/hybrid, filing suggestions (`auto_tagging` + indexing-role model), summaries (`auto_enrichment`).
 
 Exceptions / naming:
 

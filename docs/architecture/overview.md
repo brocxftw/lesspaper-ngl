@@ -1,6 +1,6 @@
 # Architecture overview
 
-lesspaper-ngl is a **self-hosted document management system**. Organisation, OCR, and keyword search are core. Embeddings, filing suggestions, summaries, and Ask lesspaper-ngl are **optional enhancements** that run only when administrators configure providers and policy allows them.
+lesspaper-ngl is a **self-hosted document management system**. Organisation, OCR, and keyword search are core. Embeddings, filing suggestions, summaries, and Ask AI are **optional enhancements** that run only when administrators configure providers and policy allows them.
 
 A new contributor should treat this document as the map; deeper pages in `docs/` are the atlas.
 
@@ -109,7 +109,7 @@ Evidence search (non-empty q)
 
 If embeddings are unavailable, hybrid/semantic **falls back to keyword** (`effective_mode`).
 
-### Ask lesspaper-ngl
+### Ask AI
 
 **Workspace Ask** (`POST /api/ask`) — **Confirmed** single request/response; no persisted conversation:
 
