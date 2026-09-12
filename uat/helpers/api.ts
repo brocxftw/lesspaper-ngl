@@ -45,9 +45,10 @@ export class UatApi {
   document(id: string) { return this.get<Document>(`/api/documents/${id}`); }
   jobs(id: string) { return this.get<Array<{ status: string; job_type: string; error?: string }>>(`/api/jobs?document_id=${id}`); }
   async folder(name: string) { return this.post<{ id: string }>("/api/folders", { name }); }
+  async trashFolder(id: string) { return this.post(`/api/folders/${id}/trash`); }
   async setMetadata(id: string, folder_id: string) { return this.patch<Document>(`/api/documents/${id}/metadata`, { folder_id, needs_review: false }); }
   async process(id: string) { return this.post("/api/documents/process", { document_ids: [id] }); }
-  async search(query: string) { return this.post<{ items: Array<{ document_id?: string; id?: string; snippet?: string }> }>("/api/search", { query, mode: "keyword" }); }
+  async search(query: string) { return this.post<{ items: Array<{ document?: { id: string }; snippet?: string }> }>("/api/search", { query, mode: "keyword" }); }
   async trash(id: string) { return this.post<Document>(`/api/documents/${id}/trash`); }
   async restore(id: string) { return this.post<Document>(`/api/documents/${id}/restore`); }
   async remove(id: string) { return this.post(`/api/documents/${id}/remove-from-queue`); }

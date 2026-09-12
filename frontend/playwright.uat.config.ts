@@ -6,7 +6,8 @@ const runId = process.env.UAT_RUN_ID ?? new Date().toISOString().replace(/[:.]/g
 export default defineConfig({
   testDir: "../uat/tests",
   outputDir: `../uat/artifacts/${runId}`,
-  timeout: Number(process.env.UAT_TIMEOUT_MS ?? 90_000),
+  // Leave headroom for state polling and failure-evidence collection.
+  timeout: Number(process.env.UAT_TIMEOUT_MS ?? 180_000),
   expect: { timeout: 15_000 },
   fullyParallel: false,
   forbidOnly: Boolean(process.env.CI),

@@ -8,7 +8,7 @@ type Finding = { id: string; name: string; status: string; classification: strin
 const severityFor = (id: string) => ["UAT-001", "UAT-002", "UAT-010", "UAT-020", "UAT-021", "UAT-030", "UAT-050"].includes(id) ? "critical" : "high";
 function classification(error = "") {
   if (/No CSRF|ECONNREFUSED|net::ERR|shared libraries|browserType\.launch|UAT credentials rejected|Expected:.*Pending\/failed jobs/.test(error)) return "ENVIRONMENT_FAILURE";
-  if (/Timeout.*locator|strict mode violation/.test(error)) return "TEST_DEFECT";
+  if (/Timeout.*locator|strict mode violation|ENOENT: no such file/.test(error)) return "TEST_DEFECT";
   return "APPLICATION_DEFECT";
 }
 function uatIds(title: string) { return title.match(/UAT-\d{3}/g) ?? ["UAT-UNKNOWN"]; }
@@ -18,7 +18,7 @@ export default class UatReporter implements Reporter {
   private findings: Finding[] = []; private runId = process.env.UAT_RUN_ID ?? new Date().toISOString().replace(/[:.]/g, "-");
   onBegin(_config: FullConfig) { console.log(`lesspaper-ngl UAT run ${this.runId}`); }
   onTestEnd(test: TestCase, result: TestResult) {
-    const failed = result.status === "failed";
+    const failed = result.status !== "passed" && result.status !== "skipped";
     for (const id of uatIds(test.title)) this.findings.push({ id, name: test.title, status: failed ? "FAIL" : result.status === "skipped" ? "SKIPPED" : "PASS", classification: failed ? classification(result.error?.message) : result.status === "skipped" ? "EXPECTED_SKIP" : "", severity: severityFor(id), confidence: failed ? "medium" : "", error: result.error?.message, artifacts: result.attachments.map((a) => a.path).filter(Boolean) as string[] });
   }
   async onEnd(result: FullResult) {

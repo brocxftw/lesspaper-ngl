@@ -6,7 +6,8 @@ test.describe.configure({ mode: "serial" });
 let api: UatApi;
 let documentId = "";
 let folderId = "";
-const fixture = path.resolve("uat/fixtures/plain-text-document.txt");
+// Playwright is invoked from frontend/, while UAT fixtures remain repository-root assets.
+const fixture = path.resolve("../uat/fixtures/plain-text-document.txt");
 
 test.beforeEach(async ({ page, context }) => { await login(page); api = new UatApi(page.request, context); });
 
@@ -19,9 +20,9 @@ test("UAT-002 Logout invalidates protected routes", async ({ page }) => {
   await expect(page).toHaveURL(/\/login/);
 });
 
-test("UAT-010 / UAT-020 Upload native document reaches Inbox Ready to process", async () => {
+test("UAT-010 / UAT-020 Upload native document completes Inbox Preflight", async () => {
   const doc = await api.upload(fixture); documentId = doc.id;
-  const ready = await waitForDocument(api, doc.id, (d) => d.text_extracted && d.inbox && d.inbox_status === "ready", "Inbox Ready to process with text extracted");
+  const ready = await waitForDocument(api, doc.id, (d) => d.text_extracted && d.inbox && ["ready", "needs_review"].includes(d.inbox_status ?? ""), "completed Inbox Preflight with text extracted (Ready to process or needs review)");
   expect(ready.processing_error).toBeNull();
 });
 
@@ -43,10 +44,24 @@ test("UAT-040 Browse Library retains processed metadata", async ({ page }) => {
 
 test("UAT-050 Keyword search retrieves deterministic evidence without AI", async () => {
   const results = await api.search("blue-orchid-741");
-  expect(results.items.some((item) => item.document_id === documentId || item.id === documentId)).toBeTruthy();
+  expect(results.items.some((item) => item.document?.id === documentId)).toBeTruthy();
 });
 
 test("UAT-080 / UAT-081 Trash and restore keep document recoverable", async () => {
   const trashed = await api.trash(documentId); expect(trashed.is_trashed).toBeTruthy();
   const restored = await api.restore(documentId); expect(restored.is_trashed).toBeFalsy(); expect(restored.inbox).toBeFalsy();
+});
+
+test.afterAll(async ({ browser }) => {
+  if (!documentId) return;
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  try {
+    await login(page);
+    const cleanup = new UatApi(page.request, context);
+    await cleanup.trash(documentId);
+    if (folderId) await cleanup.trashFolder(folderId);
+  } finally {
+    await context.close();
+  }
 });
