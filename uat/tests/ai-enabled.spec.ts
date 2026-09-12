@@ -12,7 +12,7 @@ const enabled = process.env.UAT_AI_PROFILE === "enabled";
 
 async function processedDocument(requireEmbeddings = false) {
   const doc = await api.upload(semanticFixture); documentId = doc.id; documentIds.push(doc.id);
-  await waitForDocument(api, doc.id, (d) => d.text_extracted && d.inbox, "completed Inbox Preflight");
+  await waitForDocument(api, doc.id, (d) => d.text_extracted && d.inbox && ["ready", "needs_review"].includes(d.inbox_status ?? ""), "completed Inbox Preflight");
   const folder = await api.folder(`UAT-AI-${Date.now()}`);
   await api.setMetadata(doc.id, folder.id);
   await api.process(doc.id);
@@ -79,5 +79,5 @@ test("UAT-071 AI enabled Ask reports insufficient evidence", async () => {
 test.afterAll(async ({ browser }) => {
   if (!documentIds.length) return;
   const context = await browser.newContext(); const page = await context.newPage();
-  try { await login(page); const cleanup = new UatApi(page.request, context); for (const id of documentIds) await cleanup.permanentlyDelete(id); } finally { await context.close(); }
+  try { await login(page); const cleanup = new UatApi(page.request, context); for (const id of documentIds) { await cleanup.trash(id); await cleanup.permanentlyDelete(id); } } finally { await context.close(); }
 });

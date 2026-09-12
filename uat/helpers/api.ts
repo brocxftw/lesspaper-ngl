@@ -40,8 +40,12 @@ export class UatApi {
   }
 
   async upload(file: string): Promise<Document> {
+    const fixture = await (await import("node:fs/promises")).readFile(file);
+    // Preserve deterministic fixture assertions while avoiding checksum collisions
+    // with documents from an interrupted earlier UAT run.
+    const data = Buffer.concat([fixture, Buffer.from(`\nUAT run: ${process.env.UAT_RUN_ID ?? "local"}\n`)]);
     const response = await this.request.post("/api/documents/upload", {
-      multipart: { file: { name: file.split("/").pop()!, mimeType: "text/plain", buffer: Buffer.from(await (await import("node:fs/promises")).readFile(file)) } },
+      multipart: { file: { name: file.split("/").pop()!, mimeType: "text/plain", buffer: data } },
       headers: { "X-CSRF-Token": await this.csrf() },
     });
     expect(response.status(), `upload: ${await response.text()}`).toBe(201);
