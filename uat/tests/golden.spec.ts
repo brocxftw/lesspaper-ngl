@@ -59,7 +59,7 @@ test.afterAll(async ({ browser }) => {
   try {
     await login(page);
     const cleanup = new UatApi(page.request, context);
-    await cleanup.trash(documentId);
+    await cleanup.permanentlyDelete(documentId);
     if (folderId) await cleanup.trashFolder(folderId);
   } finally {
     await context.close();

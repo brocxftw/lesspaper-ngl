@@ -22,6 +22,7 @@ if [[ -n "$journey" ]]; then
   # Dependent journeys include the smallest deterministic setup journey.
   case "$journey" in
     UAT-021|UAT-030|UAT-040|UAT-050|UAT-080|UAT-081) args+=(--grep "UAT-010|UAT-021|$journey") ;;
+    UAT-052|UAT-070|UAT-071) args+=(--grep "UAT-051|$journey") ;;
     *) args+=(--grep "$journey") ;;
   esac
 fi

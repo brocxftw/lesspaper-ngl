@@ -27,6 +27,12 @@ export class UatApi {
     return response.json() as Promise<T>;
   }
 
+  async delete<T>(path: string): Promise<T> {
+    const response = await this.request.delete(path, { headers: { "X-CSRF-Token": await this.csrf() } });
+    expect(response.ok(), `DELETE ${path}: ${response.status()} ${await response.text()}`).toBeTruthy();
+    return response.json() as Promise<T>;
+  }
+
   async patch<T>(path: string, data?: unknown): Promise<T> {
     const response = await this.request.patch(path, { data, headers: { "X-CSRF-Token": await this.csrf() } });
     expect(response.ok(), `PATCH ${path}: ${response.status()} ${await response.text()}`).toBeTruthy();
@@ -48,10 +54,17 @@ export class UatApi {
   async trashFolder(id: string) { return this.post(`/api/folders/${id}/trash`); }
   async setMetadata(id: string, folder_id: string) { return this.patch<Document>(`/api/documents/${id}/metadata`, { folder_id, needs_review: false }); }
   async process(id: string) { return this.post("/api/documents/process", { document_ids: [id] }); }
-  async search(query: string) { return this.post<{ items: Array<{ document?: { id: string }; snippet?: string }> }>("/api/search", { query, mode: "keyword" }); }
+  async search(query: string, mode: "keyword" | "semantic" | "hybrid" = "keyword") { return this.post<{ items: Array<{ document?: { id: string }; snippet?: string }>; effective_mode?: string }>("/api/search", { query, mode }); }
+  capabilities() { return this.get<{ chat_available: boolean; embeddings_available: boolean; auto_tagging: boolean; warn_before_remote_chat: boolean }>("/api/ai/capabilities"); }
+  assignments() { return this.get<Array<{ role: string; status: string }>>("/api/ai/assignments"); }
+  usage() { return this.get<{ by_workload: Array<{ key: string; requests: number }> }>("/api/ai/usage?range=today"); }
+  suggestions(id: string) { return this.get<Array<{ id: string; status: string; field: string; value: Record<string, unknown> }>>(`/api/ai/suggestions?document_id=${id}`); }
+  acceptSuggestion(id: string) { return this.post<{ status: string }>(`/api/ai/suggestions/${id}/accept`); }
+  ask(data: unknown) { return this.post<{ answer: string; citations: Array<{ document_id: string }>; insufficient_evidence: boolean }>("/api/ask", data); }
   async trash(id: string) { return this.post<Document>(`/api/documents/${id}/trash`); }
   async restore(id: string) { return this.post<Document>(`/api/documents/${id}/restore`); }
   async remove(id: string) { return this.post(`/api/documents/${id}/remove-from-queue`); }
+  async permanentlyDelete(id: string) { return this.delete(`/api/documents/${id}`); }
 }
 
 export async function login(page: Page): Promise<void> {

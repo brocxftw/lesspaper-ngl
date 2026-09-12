@@ -1,0 +1,6 @@
+LESSPAPER NGL AI SUGGESTION UAT FIXTURE
+
+This synthetic document is a quarterly stationery invoice for Deterministic Test Company.
+Invoice reference: UAT-SUGGEST-2026-001.
+Total: RM 77.70.
+Use only as controlled test evidence; it contains no personal data.

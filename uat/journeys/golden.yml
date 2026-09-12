@@ -39,3 +39,23 @@
   name: Restore document
   area: Trash
   severity_if_failed: high
+- id: UAT-022
+  name: AI filing suggestion remains non-canonical until accepted
+  area: Inbox
+  severity_if_failed: high
+- id: UAT-051
+  name: Semantic search retrieves Semantic ready evidence
+  area: Retrieval
+  severity_if_failed: high
+- id: UAT-052
+  name: Evidence search does not invoke Ask
+  area: Retrieval
+  severity_if_failed: high
+- id: UAT-070
+  name: Ask current document returns cited evidence
+  area: Ask
+  severity_if_failed: high
+- id: UAT-071
+  name: Ask reports insufficient evidence
+  area: Ask
+  severity_if_failed: high

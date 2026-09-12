@@ -1,0 +1,8 @@
+LESSPAPER NGL AI RETRIEVAL UAT FIXTURE
+
+Invoice number: UAT-SEM-2026-001.
+Customer: Deterministic Test Company.
+Amount due: RM 123.45.
+The semantic retrieval phrase is blue orchid retrieval code.
+
+This synthetic document contains no personal or copyrighted data.
