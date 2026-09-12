@@ -862,9 +862,10 @@ def _require_suggestion_json(content: str, *, finish_reason: str | None) -> dict
     )
 
 
-# Filing JSON is small; cap output so runaway generations fail fast instead of
-# producing ~6k tokens of prose that truncates before valid JSON.
-_METADATA_SUGGESTION_MAX_TOKENS = 2048
+# Filing JSON is small, but reasoning models may consume output budget before
+# emitting their final object. Keep a bounded ceiling while leaving enough room
+# for configured thinking models (the provider/profile limit still applies).
+_METADATA_SUGGESTION_MAX_TOKENS = 8192
 
 
 def _coerce_confidence(value: object) -> float | None:
