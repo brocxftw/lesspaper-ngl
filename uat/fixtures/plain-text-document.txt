@@ -1,0 +1,8 @@
+LESSPAPER NGL UAT FIXTURE
+
+Invoice number: UAT-INV-2026-001
+Customer: Deterministic Test Company
+Amount due: RM 123.45
+The retrieval keyword is blue-orchid-741.
+
+This fixture is synthetic and contains no personal or copyrighted material.

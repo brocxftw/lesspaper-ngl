@@ -1,0 +1,41 @@
+# Product intent catalogue. Tests remain the executable source for low-level actions.
+- id: UAT-001
+  name: Login
+  area: Authentication
+  severity_if_failed: critical
+- id: UAT-002
+  name: Logout invalidates protected routes
+  area: Authentication
+  severity_if_failed: critical
+- id: UAT-010
+  name: Upload native document and complete Preflight
+  area: Inbox
+  severity_if_failed: critical
+- id: UAT-020
+  name: Inbox preflight reaches Ready to process
+  area: Inbox
+  severity_if_failed: critical
+- id: UAT-021
+  name: Manual filing without AI
+  area: Inbox / Process
+  severity_if_failed: critical
+- id: UAT-030
+  name: Process Inbox document
+  area: Process
+  severity_if_failed: critical
+- id: UAT-040
+  name: Browse Library
+  area: Library
+  severity_if_failed: high
+- id: UAT-050
+  name: Keyword search retrieves evidence without AI
+  area: Retrieval
+  severity_if_failed: critical
+- id: UAT-080
+  name: Trash document
+  area: Trash
+  severity_if_failed: high
+- id: UAT-081
+  name: Restore document
+  area: Trash
+  severity_if_failed: high
